@@ -143,3 +143,17 @@ body {
   color: var(--text-main);
   overflow-wrap: anywhere;
 }
+
+/* =========================================
+   PREFERÊNCIA GLOBAL — BOTÕES GRANDES
+   ========================================= */
+
+html[data-large-buttons="true"] .btn,
+html[data-large-buttons="true"] button {
+    min-height: 3.5rem;
+}
+
+html[data-large-buttons="true"] .btn {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+}

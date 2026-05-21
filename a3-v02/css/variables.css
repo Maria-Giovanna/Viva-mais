@@ -92,15 +92,32 @@
   --status-confirmed: #7EFFD5;
 }
 
+
+/* =========================================
+   ESCALONAMENTO DE TIPOGRAFIA
+   ========================================= */
+
 html {
-  font-size: 100%;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 100%;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+/* Pequeno */
+html[data-fontsize="small"] {
+    font-size: 87.5%;
+}
+
+/* Padrão */
+html[data-fontsize="standard"] {
+    font-size: 100%;
+}
+
+/* Compatibilidade com versão antiga */
 html[data-fontsize="medium"] {
-  font-size: 112.5%;
+    font-size: 112.5%;
 }
 
+/* Grande */
 html[data-fontsize="large"] {
-  font-size: 125%;
+    font-size: 125%;
 }
