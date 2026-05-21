@@ -97,27 +97,35 @@
    ESCALONAMENTO DE TIPOGRAFIA
    ========================================= */
 
+/* =========================================
+   ESCALONAMENTO DE TIPOGRAFIA
+   O tamanho base do sistema é controlado pelo usuário
+   em Perfil > Acessibilidade > Tamanho do texto.
+   ========================================= */
+
+/* Padrão do sistema: 16px */
 html {
     font-size: 100%;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Pequeno */
+/* Pequeno: 14px */
 html[data-fontsize="small"] {
     font-size: 87.5%;
 }
 
-/* Padrão */
+/* Padrão: 16px */
 html[data-fontsize="standard"] {
     font-size: 100%;
 }
 
-/* Compatibilidade com versão antiga */
+/* Compatibilidade com versão antiga.
+   Caso algum usuário esteja salvo como medium, o sistema trata como padrão. */
 html[data-fontsize="medium"] {
-    font-size: 112.5%;
+    font-size: 100%;
 }
 
-/* Grande */
+/* Grande: 20px */
 html[data-fontsize="large"] {
     font-size: 125%;
 }

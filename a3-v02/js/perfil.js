@@ -43,22 +43,11 @@
     return normalizarUsuario(usuario);
   }
 
-  function normalizarUsuario(usuario) {
-    return {
-      ...usuario,
-      preferencias: {
-        tema: usuario.preferencias?.tema || localStorage.getItem("viva_theme") || "light",
-        tamanhoFonte:
-          usuario.preferencias?.tamanhoFonte ||
-          localStorage.getItem("viva_fontsize") ||
-          "standard",
-        leitorTela: usuario.preferencias?.leitorTela || false,
-        botoesGrandes:
-          usuario.preferencias?.botoesGrandes ||
-          localStorage.getItem("viva_large_buttons") === "true",
-      },
-    };
-  }
+  tamanhoFonte: normalizarTamanhoFonte(
+  usuario.preferencias?.tamanhoFonte ||
+  localStorage.getItem("viva_fontsize") ||
+  "standard"
+),
 
   function configurarEventos() {
     document.querySelectorAll("[data-profile-target]").forEach((botao) => {
@@ -276,7 +265,9 @@
 
  function sincronizarPreferenciasNaTela() {
   const tema = localStorage.getItem("viva_theme") || "light";
-  const tamanhoFonte = localStorage.getItem("viva_fontsize") || "standard";
+  const tamanhoFonte = normalizarTamanhoFonte(
+  localStorage.getItem("viva_fontsize") || "standard"
+);
   const leitorTela =
     localStorage.getItem("viva_screen_reader") === "true" ||
     estadoPerfil.usuario.preferencias?.leitorTela ||
@@ -532,4 +523,16 @@
 
     return telefone || "Telefone não informado";
   }
+
+  function normalizarTamanhoFonte(tamanho) {
+  if (tamanho === "medium") {
+    return "standard";
+  }
+
+  if (["small", "standard", "large"].includes(tamanho)) {
+    return tamanho;
+  }
+
+  return "standard";
+}
 })();

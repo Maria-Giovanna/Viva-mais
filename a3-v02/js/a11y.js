@@ -58,21 +58,24 @@
     Aplica o tamanho da fonte no elemento <html>.
     O CSS reage ao atributo data-fontsize.
   */
-  function aplicarTamanhoFonte(tamanho, deveSalvarUsuario = true) {
-    const tamanhosPermitidos = ["small", "standard", "medium", "large"];
-    const tamanhoFinal = tamanhosPermitidos.includes(tamanho)
-      ? tamanho
-      : "standard";
+  function aplicarTamanhoFonte(tamanho) {
+  const tamanhosPermitidos = ["small", "standard", "large"];
 
-    document.documentElement.setAttribute("data-fontsize", tamanhoFinal);
-    localStorage.setItem("viva_fontsize", tamanhoFinal);
+  let tamanhoFinal = tamanhosPermitidos.includes(tamanho)
+    ? tamanho
+    : "standard";
 
-    if (deveSalvarUsuario) {
-      salvarPreferenciasNoUsuario({
-        tamanhoFonte: tamanhoFinal,
-      });
-    }
+  /*
+    Compatibilidade com versões anteriores.
+    Antes o sistema usava "medium", agora o equivalente correto é "standard".
+  */
+  if (tamanho === "medium") {
+    tamanhoFinal = "standard";
   }
+
+  document.documentElement.setAttribute("data-fontsize", tamanhoFinal);
+  localStorage.setItem("viva_fontsize", tamanhoFinal);
+}
 
   /*
     Ativa ou desativa botões grandes no sistema inteiro.
