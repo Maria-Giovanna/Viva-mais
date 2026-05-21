@@ -1,0 +1,212 @@
+/* =========================================
+   BOTÕES REUTILIZÁVEIS
+   ========================================= */
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 1rem 1.125rem;
+  border-radius: var(--radius-sm);
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--text-button);
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background-color: var(--hover-color);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.25);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border-color: var(--secondary-border);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+  background-color: var(--subcard-secondary-bg);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0.5rem 0;
+  text-decoration: none;
+}
+
+.btn-back img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-secondary-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  color: #FFFFFF;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-secondary-small:hover,
+.btn-secondary-small:focus-visible {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
+/* =========================================
+   FORMULÁRIOS E INPUTS
+   ========================================= */
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.form-input {
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 1rem 1.125rem;
+  font-size: 1.125rem;
+  background-color: var(--card-bg);
+  border: 2px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.input-container .form-input[type="password"],
+.input-container .form-input.has-password-toggle {
+  padding-right: 4.75rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.18);
+}
+
+.form-input[aria-invalid="true"] {
+  border-color: var(--error);
+  background-color: #FFF5F5;
+}
+
+[data-theme="dark"] .form-input[aria-invalid="true"],
+[data-theme="high-contrast"] .form-input[aria-invalid="true"] {
+  background-color: #271111;
+}
+
+.input-readonly {
+  background-color: var(--subcard-secondary-bg);
+  border-color: var(--secondary-border);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+.field-error {
+  color: var(--error);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+.field-error a {
+  color: var(--hyperlink);
+  text-decoration: underline;
+}
+
+.btn-toggle-password {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  bottom: 4px;
+  width: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--subcard-secondary-bg);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.btn-toggle-password img {
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+
+.btn-toggle-password[aria-pressed="false"] .olho-fechado {
+  display: none;
+}
+
+.btn-toggle-password[aria-pressed="false"] .olho-aberto {
+  display: block;
+}
+
+.btn-toggle-password[aria-pressed="true"] .olho-aberto {
+  display: none;
+}
+
+.btn-toggle-password[aria-pressed="true"] .olho-fechado {
+  display: block;
+}

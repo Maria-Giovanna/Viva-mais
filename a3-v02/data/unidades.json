@@ -1,0 +1,342 @@
+[
+  {
+    "id": "clinica-jardim-esperanca",
+    "nome": "Clínica Jardim Esperança",
+    "tipoUnidade": "UBS",
+    "descricao": "Consultas básicas, vacinação, odontologia, coleta de exames laboratoriais, curativos e acompanhamento de pré-natal.",
+    "endereco": "Rua Frei Xisto Teuber, 50 - Campo Limpo, São Paulo",
+    "coordenadas": {
+    "lat": -23.6405,
+    "lon": -46.7589
+  },
+    "profissionais": [
+      {
+        "id": "dra-carla-mendes",
+        "nome": "Dra. Carla Mendes",
+        "especialidade": "Clínico Geral"
+      },
+      {
+        "id": "dr-joao-oliveira",
+        "nome": "Dr. João Oliveira",
+        "especialidade": "Clínico Geral"
+      },
+      {
+        "id": "dra-renata-souza",
+        "nome": "Dra. Renata Souza",
+        "especialidade": "Ginecologia"
+      },
+      {
+        "id": "dr-paulo-nascimento",
+        "nome": "Dr. Paulo Nascimento",
+        "especialidade": "Pediatria"
+      }
+    ],
+    "servicosAgendaveis": [
+      {
+        "id": "consulta-clinico-geral",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Clínico Geral",
+        "profissionaisDisponiveis": ["dra-carla-mendes", "dr-joao-oliveira"],
+        "horariosDisponiveis": ["08:00", "09:30", "10:00", "13:30", "15:00"]
+      },
+      {
+        "id": "consulta-pediatria",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Pediatria",
+        "profissionaisDisponiveis": ["dr-paulo-nascimento"],
+        "horariosDisponiveis": ["08:30", "10:30", "14:00"]
+      },
+      {
+        "id": "consulta-ginecologia",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Ginecologia",
+        "profissionaisDisponiveis": ["dra-renata-souza"],
+        "horariosDisponiveis": ["09:00", "11:00", "14:30"]
+      },
+      {
+        "id": "exame-sangue",
+        "categoria": "exame",
+        "nome": "Exame de sangue",
+        "especialidade": "Coleta laboratorial",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["07:00", "07:30", "08:00", "08:30"]
+      },
+      {
+        "id": "vacina-gripe",
+        "categoria": "vacina",
+        "nome": "Gripe",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:00", "10:30", "14:00", "15:30"]
+      },
+      {
+        "id": "vacina-covid-19",
+        "categoria": "vacina",
+        "nome": "COVID-19",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:00", "10:30", "14:00", "15:30"]
+      },
+      {
+        "id": "vacina-febre-amarela",
+        "categoria": "vacina",
+        "nome": "Febre amarela",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:00", "10:30", "14:00", "15:30"]
+      }
+    ]
+  },
+  {
+    "id": "centro-especializado-itaquera",
+    "nome": "Centro Especializado Itaquera",
+    "tipoUnidade": "Centro Especializado",
+    "descricao": "Cardiologia, dermatologia, ortopedia, angiologia e exames de apoio diagnóstico.",
+    "endereco": "Rua Base Hungara, 75 - Itaquera, São Paulo",
+    "coordenadas": {
+    "lat": -23.5403,
+    "lon": -46.4559
+  },
+    "profissionais": [
+      {
+        "id": "dr-ricardo-almeida",
+        "nome": "Dr. Ricardo Almeida",
+        "especialidade": "Cardiologia"
+      },
+      {
+        "id": "dra-helena-prado",
+        "nome": "Dra. Helena Prado",
+        "especialidade": "Dermatologia"
+      },
+      {
+        "id": "dr-felipe-costa",
+        "nome": "Dr. Felipe Costa",
+        "especialidade": "Ortopedia"
+      },
+      {
+        "id": "dra-luciana-ribeiro",
+        "nome": "Dra. Luciana Ribeiro",
+        "especialidade": "Angiologia"
+      }
+    ],
+    "servicosAgendaveis": [
+      {
+        "id": "consulta-cardiologia",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Cardiologia",
+        "profissionaisDisponiveis": ["dr-ricardo-almeida"],
+        "horariosDisponiveis": ["08:30", "10:00", "13:30"]
+      },
+      {
+        "id": "consulta-dermatologia",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Dermatologia",
+        "profissionaisDisponiveis": ["dra-helena-prado"],
+        "horariosDisponiveis": ["09:00", "11:00", "15:00"]
+      },
+      {
+        "id": "consulta-ortopedia",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Ortopedia",
+        "profissionaisDisponiveis": ["dr-felipe-costa"],
+        "horariosDisponiveis": ["08:00", "09:30", "14:00", "16:00"]
+      },
+      {
+        "id": "consulta-angiologia",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Angiologia",
+        "profissionaisDisponiveis": ["dra-luciana-ribeiro"],
+        "horariosDisponiveis": ["10:30", "13:00", "15:30"]
+      },
+      {
+        "id": "ultrassom",
+        "categoria": "exame",
+        "nome": "Ultrassom",
+        "especialidade": "Diagnóstico por imagem",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:00", "10:00", "14:00"]
+      },
+      {
+        "id": "raio-x",
+        "categoria": "exame",
+        "nome": "Raio-X",
+        "especialidade": "Diagnóstico por imagem",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:30", "11:30", "13:30", "15:30"]
+      }
+    ]
+  },
+  {
+    "id": "hospital-santa-aurora-tatuape",
+    "nome": "Hospital Santa Aurora Tatuapé",
+    "tipoUnidade": "Hospital",
+    "descricao": "Urgência, emergência, internações, cirurgias e exames diagnósticos.",
+    "endereco": "Avenida Celso Garcia, 4415 - Tatuapé, São Paulo",
+    "coordenadas": {
+    "lat": -23.5399,
+    "lon": -46.5768
+  },
+    "profissionais": [
+      {
+        "id": "dr-marcelo-azevedo",
+        "nome": "Dr. Marcelo Azevedo",
+        "especialidade": "Clínica Médica"
+      },
+      {
+        "id": "dra-patricia-lima",
+        "nome": "Dra. Patrícia Lima",
+        "especialidade": "Cirurgia Geral"
+      },
+      {
+        "id": "dr-andre-martins",
+        "nome": "Dr. André Martins",
+        "especialidade": "Ortopedia"
+      },
+      {
+        "id": "dra-juliana-freitas",
+        "nome": "Dra. Juliana Freitas",
+        "especialidade": "Neurologia"
+      }
+    ],
+    "servicosAgendaveis": [
+      {
+        "id": "consulta-clinica-medica",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Clínica Médica",
+        "profissionaisDisponiveis": ["dr-marcelo-azevedo"],
+        "horariosDisponiveis": ["08:00", "09:00", "10:30", "14:00", "16:00"]
+      },
+      {
+        "id": "consulta-neurologia",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Neurologia",
+        "profissionaisDisponiveis": ["dra-juliana-freitas"],
+        "horariosDisponiveis": ["09:00", "11:00", "15:00"]
+      },
+      {
+        "id": "consulta-ortopedia",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Ortopedia",
+        "profissionaisDisponiveis": ["dr-andre-martins"],
+        "horariosDisponiveis": ["08:30", "10:00", "13:30", "15:30"]
+      },
+      {
+        "id": "consulta-cirurgia-geral",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Cirurgia Geral",
+        "profissionaisDisponiveis": ["dra-patricia-lima"],
+        "horariosDisponiveis": ["10:00", "14:30"]
+      },
+      {
+        "id": "ultrassom",
+        "categoria": "exame",
+        "nome": "Ultrassom",
+        "especialidade": "Diagnóstico por imagem",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:30", "11:00", "13:30"]
+      },
+      {
+        "id": "exame-sangue",
+        "categoria": "exame",
+        "nome": "Exame de sangue",
+        "especialidade": "Coleta laboratorial",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["07:00", "07:30", "08:00", "08:30", "09:00"]
+      }
+    ]
+  },
+  {
+    "id": "hospital-vila-nova-leste",
+    "nome": "Hospital Vila Nova Leste",
+    "tipoUnidade": "Hospital",
+    "descricao": "Urgência clínica, atendimento hospitalar geral, internação e exames diagnósticos básicos.",
+    "endereco": "Rua Álvares Machado, 38 - Vila Formosa, São Paulo",
+    "coordenadas": {
+    "lat": -23.5602,
+    "lon": -46.5364
+  },
+    "profissionais": [
+      {
+        "id": "dra-mariana-lopes",
+        "nome": "Dra. Mariana Lopes",
+        "especialidade": "Clínica Médica"
+      },
+      {
+        "id": "dr-bruno-tavares",
+        "nome": "Dr. Bruno Tavares",
+        "especialidade": "Ortopedia"
+      },
+      {
+        "id": "dra-camila-ferreira",
+        "nome": "Dra. Camila Ferreira",
+        "especialidade": "Pediatria"
+      },
+      {
+        "id": "dr-eduardo-rezende",
+        "nome": "Dr. Eduardo Rezende",
+        "especialidade": "Cirurgia Geral"
+      }
+    ],
+    "servicosAgendaveis": [
+      {
+        "id": "consulta-clinica-medica",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Clínica Médica",
+        "profissionaisDisponiveis": ["dra-mariana-lopes"],
+        "horariosDisponiveis": ["08:00", "09:30", "13:00", "14:30"]
+      },
+      {
+        "id": "consulta-pediatria",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Pediatria",
+        "profissionaisDisponiveis": ["dra-camila-ferreira"],
+        "horariosDisponiveis": ["08:30", "10:30", "15:00"]
+      },
+      {
+        "id": "consulta-ortopedia",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Ortopedia",
+        "profissionaisDisponiveis": ["dr-bruno-tavares"],
+        "horariosDisponiveis": ["09:00", "11:00", "14:00"]
+      },
+      {
+        "id": "consulta-cirurgia-geral",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Cirurgia Geral",
+        "profissionaisDisponiveis": ["dr-eduardo-rezende"],
+        "horariosDisponiveis": ["10:00", "13:30"]
+      },
+      {
+        "id": "exame-sangue",
+        "categoria": "exame",
+        "nome": "Exame de sangue",
+        "especialidade": "Coleta laboratorial",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["07:00", "08:00", "09:00"]
+      },
+      {
+        "id": "raio-x",
+        "categoria": "exame",
+        "nome": "Raio-X",
+        "especialidade": "Diagnóstico por imagem",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:30", "10:30", "14:30"]
+      }
+    ]
+  }
+]

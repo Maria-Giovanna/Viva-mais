@@ -1,0 +1,34 @@
+[
+  {
+    "cpf": "12345678909",
+    "nomeCompleto": "Maria da Silva",
+    "dataNascimento": "05/03/1968",
+    "endereco": "Rua Exemplo, 123 - Centro, Barueri/SP",
+    "telefone": "11947139955",
+    "planoAtivo": true
+  },
+  {
+    "cpf": "98765432100",
+    "nomeCompleto": "João de Souza",
+    "dataNascimento": "12/10/1955",
+    "endereco": "Av. Brasil, 456 - Bela Vista, São Paulo/SP",
+    "telefone": "11988887777",
+    "planoAtivo": true
+  },
+  {
+    "cpf": "55566677788",
+    "nomeCompleto": "Ana Oliveira",
+    "dataNascimento": "22/07/1945",
+    "endereco": "Rua das Flores, 89 - Pinheiros, São Paulo/SP",
+    "telefone": "11911112222",
+    "planoAtivo": true
+  },
+  {
+    "cpf": "32165498700",
+    "nomeCompleto": "Roberto Costa",
+    "dataNascimento": "30/11/1950",
+    "endereco": "Rua do Comércio, 900 - Tatuapé, São Paulo/SP",
+    "telefone": "11977776666",
+    "planoAtivo": false
+  }
+]
