@@ -165,7 +165,7 @@
                         </div>
                     </div>
 
-                    <div class="profile-alert">
+                    <div class="profile-alert" role="status" aria-live="polite">
                         <span>!</span>
                         <p>Nome completo e CPF não podem ser alterados.</p>
                     </div>
@@ -234,9 +234,9 @@
                         </div>
                     </div>
 
-                    <span class="field-error" id="erro-dados" hidden></span>
+                    <span class="field-error" id="erro-dados" role="alert" hidden></span>
 
-                    <div class="profile-alert">
+                    <div class="profile-alert" role="status" aria-live="polite">
                         <span>!</span>
                         <p>Nome completo e CPF não podem ser alterados.</p>
                     </div>
@@ -327,7 +327,7 @@
                             <small>Ative cores com maior contraste para leitura.</small>
                         </span>
 
-                        <button type="button" class="switch" id="toggle-contraste" role="switch" aria-checked="false">
+                        <button type="button" class="switch" id="toggle-contraste" role="switch" aria-checked="false" aria-label="Ativar alto contraste">
                             <span></span>
                         </button>
                     </div>
@@ -344,7 +344,7 @@
                             <small>Ative o modo escuro.</small>
                         </span>
 
-                        <button type="button" class="switch" id="toggle-escuro" role="switch" aria-checked="false">
+                        <button type="button" class="switch" id="toggle-escuro" role="switch" aria-checked="false" aria-label="Ativar tema escuro">
                             <span></span>
                         </button>
                     </div>
@@ -361,11 +361,11 @@
                         </span>
 
                         <span class="accessibility-text">
-                            <strong>Leitor de tela</strong>
-                            <small>Salva preferência para leitura assistida.</small>
+                            <strong>Leitura em voz alta</strong>
+                            <small>Lê botões, campos e opções quando você interage com eles.</small>
                         </span>
 
-                        <button type="button" class="switch" id="toggle-leitor" role="switch" aria-checked="false">
+                        <button type="button" class="switch" id="toggle-leitor" role="switch" aria-checked="false" aria-label="Ativar leitura em voz alta">
                             <span></span>
                         </button>
                     </div>
@@ -382,13 +382,13 @@
                             <small>Aumenta o tamanho dos botões para facilitar toque.</small>
                         </span>
 
-                        <button type="button" class="switch" id="toggle-botoes" role="switch" aria-checked="false">
+                        <button type="button" class="switch" id="toggle-botoes" role="switch" aria-checked="false" aria-label="Ativar botões grandes">
                             <span></span>
                         </button>
                     </div>
                 </div>
 
-                <div class="profile-alert">
+                <div class="profile-alert" role="status" aria-live="polite">
                     <span>!</span>
                     <p>Suas preferências são salvas automaticamente.</p>
                 </div>
@@ -426,7 +426,7 @@
     </button>
 </div>
 
-                <div class="profile-alert">
+                <div class="profile-alert" role="status" aria-live="polite">
                     <span>!</span>
                     <p>Essa configuração será aplicada em todas as telas do sistema.</p>
                 </div>
@@ -465,7 +465,7 @@
                         </div>
                     </div>
 
-                    <span class="field-error" id="erro-senha" hidden></span>
+                    <span class="field-error" id="erro-senha" role="alert" hidden></span>
 
                     <button type="submit" class="btn btn-primary">
                         Salvar nova senha

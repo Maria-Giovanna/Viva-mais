@@ -566,3 +566,16 @@ body {
         height: 2.6rem;
     }
 }
+
+/* Garante que cliques nos textos/ícones internos dos cards sejam tratados pelo botão pai */
+.profile-menu-card > *,
+.accessibility-card > *,
+.font-size-card > * {
+    pointer-events: none;
+}
+
+/* Mantém switches clicáveis mesmo dentro dos cards de acessibilidade */
+.accessibility-card .switch,
+.accessibility-card .switch * {
+    pointer-events: auto;
+}

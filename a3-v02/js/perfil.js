@@ -1,6 +1,14 @@
 (function () {
   "use strict";
 
+  /*
+    Controla toda a página de Perfil:
+    - menu de perfil;
+    - visualização e edição de dados;
+    - preferências de acessibilidade;
+    - alteração de senha;
+    - saída da conta.
+  */
   const estadoPerfil = {
     usuario: null,
     usuarioEditado: null,
@@ -29,8 +37,13 @@
     return JSON.parse(sessionStorage.getItem("viva_usuario_logado") || "null");
   }
 
+  /*
+    Junta os dados da sessão com os dados salvos no localStorage.
+    Isso garante que alterações de perfil apareçam mesmo após navegar entre páginas.
+  */
   function obterUsuarioCompleto(usuarioLogado) {
     const usuarios = JSON.parse(localStorage.getItem("viva_usuarios") || "[]");
+
     const usuarioLocal = usuarios.find((usuario) => {
       return usuario.cpf === usuarioLogado.cpf;
     });
@@ -43,17 +56,50 @@
     return normalizarUsuario(usuario);
   }
 
-  tamanhoFonte: normalizarTamanhoFonte(
-  usuario.preferencias?.tamanhoFonte ||
-  localStorage.getItem("viva_fontsize") ||
-  "standard"
-),
+  /*
+    Corrige/garante a estrutura esperada do usuário.
+    O erro principal do seu arquivo anterior estava aqui:
+    havia um trecho solto com "tamanhoFonte:" fora de qualquer função,
+    causando erro de execução e impedindo os cliques do perfil.
+  */
+  function normalizarUsuario(usuario) {
+    const preferencias = usuario.preferencias || {};
 
+    return {
+      ...usuario,
+      preferencias: {
+        tema: preferencias.tema || localStorage.getItem("viva_theme") || "light",
+        tamanhoFonte: normalizarTamanhoFonte(
+          preferencias.tamanhoFonte || localStorage.getItem("viva_fontsize") || "standard",
+        ),
+        leitorTela:
+          preferencias.leitorTela ||
+          localStorage.getItem("viva_screen_reader") === "true" ||
+          false,
+        botoesGrandes:
+          preferencias.botoesGrandes ||
+          localStorage.getItem("viva_large_buttons") === "true" ||
+          false,
+      },
+    };
+  }
+
+  /*
+    Configura todos os eventos.
+    A navegação por data-profile-target usa delegação de evento para ser mais resistente:
+    mesmo clicando em ícones/textos internos do card, o clique funciona.
+  */
   function configurarEventos() {
-    document.querySelectorAll("[data-profile-target]").forEach((botao) => {
-      botao.addEventListener("click", () => {
-        mostrarEtapa(botao.dataset.profileTarget);
-      });
+    document.addEventListener("click", (evento) => {
+      const botaoComAlvo = evento.target.closest("[data-profile-target]");
+
+      if (botaoComAlvo) {
+        const idEtapa = botaoComAlvo.dataset.profileTarget;
+
+        if (idEtapa) {
+          mostrarEtapa(idEtapa);
+        }
+      }
     });
 
     escutarClique("btn-voltar", voltar);
@@ -141,13 +187,15 @@
   }
 
   function preencherFormularioEdicao() {
-    document.getElementById("edit-cpf").value = formatarCPF(estadoPerfil.usuario.cpf);
-    document.getElementById("edit-nome").value =
-      estadoPerfil.usuario.nomeCompleto || "";
-    document.getElementById("edit-endereco").value =
-      estadoPerfil.usuario.endereco || "";
-    document.getElementById("edit-telefone").value =
-      estadoPerfil.usuario.telefone || "";
+    const cpfInput = document.getElementById("edit-cpf");
+    const nomeInput = document.getElementById("edit-nome");
+    const enderecoInput = document.getElementById("edit-endereco");
+    const telefoneInput = document.getElementById("edit-telefone");
+
+    if (cpfInput) cpfInput.value = formatarCPF(estadoPerfil.usuario.cpf);
+    if (nomeInput) nomeInput.value = estadoPerfil.usuario.nomeCompleto || "";
+    if (enderecoInput) enderecoInput.value = estadoPerfil.usuario.endereco || "";
+    if (telefoneInput) telefoneInput.value = estadoPerfil.usuario.telefone || "";
   }
 
   function prepararAlteracaoDados(evento) {
@@ -263,26 +311,26 @@
     return crescente || decrescente;
   }
 
- function sincronizarPreferenciasNaTela() {
-  const tema = localStorage.getItem("viva_theme") || "light";
-  const tamanhoFonte = normalizarTamanhoFonte(
-  localStorage.getItem("viva_fontsize") || "standard"
-);
-  const leitorTela =
-    localStorage.getItem("viva_screen_reader") === "true" ||
-    estadoPerfil.usuario.preferencias?.leitorTela ||
-    false;
-  const botoesGrandes = localStorage.getItem("viva_large_buttons") === "true";
+  function sincronizarPreferenciasNaTela() {
+    const tema = localStorage.getItem("viva_theme") || "light";
+    const tamanhoFonte = normalizarTamanhoFonte(
+      localStorage.getItem("viva_fontsize") || estadoPerfil.usuario.preferencias?.tamanhoFonte || "standard",
+    );
+    const leitorTela =
+      localStorage.getItem("viva_screen_reader") === "true" ||
+      estadoPerfil.usuario.preferencias?.leitorTela ||
+      false;
+    const botoesGrandes = localStorage.getItem("viva_large_buttons") === "true";
 
-  estadoPerfil.tamanhoFonteSelecionado = tamanhoFonte;
+    estadoPerfil.tamanhoFonteSelecionado = tamanhoFonte;
 
-  atualizarSwitch("toggle-contraste", tema === "high-contrast");
-  atualizarSwitch("toggle-escuro", tema === "dark");
-  atualizarSwitch("toggle-leitor", leitorTela);
-  atualizarSwitch("toggle-botoes", botoesGrandes);
+    atualizarSwitch("toggle-contraste", tema === "high-contrast");
+    atualizarSwitch("toggle-escuro", tema === "dark");
+    atualizarSwitch("toggle-leitor", leitorTela);
+    atualizarSwitch("toggle-botoes", botoesGrandes);
 
-  marcarTamanhoFonte(tamanhoFonte);
-}
+    marcarTamanhoFonte(tamanhoFonte);
+  }
 
   function alternarAltoContraste() {
     const temaAtual = localStorage.getItem("viva_theme") || "light";
@@ -301,32 +349,32 @@
   }
 
   function alternarLeitorTela() {
-  const atual = localStorage.getItem("viva_screen_reader") === "true";
-  const novoValor = !atual;
+    const atual = localStorage.getItem("viva_screen_reader") === "true";
+    const novoValor = !atual;
 
-  if (window.setVivaScreenReader) {
-    window.setVivaScreenReader(novoValor, true);
-  } else {
-    document.documentElement.setAttribute(
-      "data-screen-reader",
-      novoValor ? "true" : "false",
-    );
+    if (window.setVivaScreenReader) {
+      window.setVivaScreenReader(novoValor, true);
+    } else {
+      document.documentElement.setAttribute(
+        "data-screen-reader",
+        novoValor ? "true" : "false",
+      );
 
-    localStorage.setItem("viva_screen_reader", novoValor ? "true" : "false");
+      localStorage.setItem("viva_screen_reader", novoValor ? "true" : "false");
+    }
+
+    const usuarioAtualizado = {
+      ...estadoPerfil.usuario,
+      preferencias: {
+        ...estadoPerfil.usuario.preferencias,
+        leitorTela: novoValor,
+      },
+    };
+
+    salvarUsuario(usuarioAtualizado);
+    estadoPerfil.usuario = usuarioAtualizado;
+    sincronizarPreferenciasNaTela();
   }
-
-  const usuarioAtualizado = {
-    ...estadoPerfil.usuario,
-    preferencias: {
-      ...estadoPerfil.usuario.preferencias,
-      leitorTela: novoValor,
-    },
-  };
-
-  salvarUsuario(usuarioAtualizado);
-  estadoPerfil.usuario = usuarioAtualizado;
-  sincronizarPreferenciasNaTela();
-}
 
   function alternarBotoesGrandes() {
     const atual = localStorage.getItem("viva_large_buttons") === "true";
@@ -376,20 +424,22 @@
   }
 
   function selecionarTamanhoFonte(tamanho) {
-    estadoPerfil.tamanhoFonteSelecionado = tamanho;
-    marcarTamanhoFonte(tamanho);
+    estadoPerfil.tamanhoFonteSelecionado = normalizarTamanhoFonte(tamanho);
+    marcarTamanhoFonte(estadoPerfil.tamanhoFonteSelecionado);
   }
 
   function marcarTamanhoFonte(tamanho) {
+    const tamanhoNormalizado = normalizarTamanhoFonte(tamanho);
+
     document.querySelectorAll("[data-font-option]").forEach((botao) => {
-      const selecionado = botao.dataset.fontOption === tamanho;
+      const selecionado = botao.dataset.fontOption === tamanhoNormalizado;
       botao.classList.toggle("selected", selecionado);
       botao.setAttribute("aria-pressed", selecionado ? "true" : "false");
     });
   }
 
   function salvarTamanhoFonte() {
-    const tamanho = estadoPerfil.tamanhoFonteSelecionado || "standard";
+    const tamanho = normalizarTamanhoFonte(estadoPerfil.tamanhoFonteSelecionado || "standard");
 
     if (window.setVivaFontSize) {
       window.setVivaFontSize(tamanho);
@@ -475,14 +525,24 @@
   }
 
   function mostrarEtapa(idEtapa) {
+    const etapa = document.getElementById(idEtapa);
+
+    if (!etapa) {
+      console.error(`Etapa não encontrada: #${idEtapa}`);
+      return;
+    }
+
     document.querySelectorAll(".profile-step").forEach((secao) => {
       secao.hidden = true;
     });
 
-    const etapa = document.getElementById(idEtapa);
+    etapa.hidden = false;
 
-    if (etapa) {
-      etapa.hidden = false;
+    const titulo = etapa.querySelector("h1, h2");
+
+    if (titulo) {
+      titulo.setAttribute("tabindex", "-1");
+      titulo.focus();
     }
 
     window.scrollTo({
@@ -525,14 +585,14 @@
   }
 
   function normalizarTamanhoFonte(tamanho) {
-  if (tamanho === "medium") {
+    if (tamanho === "medium") {
+      return "standard";
+    }
+
+    if (["small", "standard", "large"].includes(tamanho)) {
+      return tamanho;
+    }
+
     return "standard";
   }
-
-  if (["small", "standard", "large"].includes(tamanho)) {
-    return tamanho;
-  }
-
-  return "standard";
-}
 })();

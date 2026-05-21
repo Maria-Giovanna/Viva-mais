@@ -523,12 +523,13 @@ body {
     opacity: 0;
 }
 
-.nav-link.active,
-.nav-link[aria-current="page"] {
-    color: var(--primary-color);
-    font-weight: 700;
+.nav-icon-cutout {
+    fill: var(--card-bg);
+    stroke: none;
+    opacity: 0;
 }
 
+/* Estado ativo */
 .nav-link.active .nav-icon-outline,
 .nav-link[aria-current="page"] .nav-icon-outline {
     opacity: 0;
@@ -536,6 +537,11 @@ body {
 
 .nav-link.active .nav-icon-fill,
 .nav-link[aria-current="page"] .nav-icon-fill {
+    opacity: 1;
+}
+
+.nav-link.active .nav-icon-cutout,
+.nav-link[aria-current="page"] .nav-icon-cutout {
     opacity: 1;
 }
 
@@ -594,6 +600,8 @@ body {
         margin-left: auto;
         margin-right: auto;
     }
+
+    
 }
 
 @media (max-width: 420px) {
@@ -622,4 +630,61 @@ body {
     .agenda-card-line {
         font-size: 0.85rem;
     }
+}
+
+/* =========================================
+   CORREÇÃO DEFINITIVA DO MENU ATIVO
+   Mantém o ícone normal em stroke e o ativo em fill.
+   ========================================= */
+
+.app-nav .nav-link {
+    color: var(--text-muted);
+}
+
+.app-nav .nav-link:hover,
+.app-nav .nav-link:focus-visible {
+    color: var(--primary-color);
+}
+
+.app-nav .nav-link.active,
+.app-nav .nav-link[aria-current="page"] {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+}
+
+.app-nav .nav-link.active span,
+.app-nav .nav-link[aria-current="page"] span {
+    color: var(--primary-color) !important;
+}
+
+.app-nav .nav-icon {
+    width: 24px;
+    height: 24px;
+    color: currentColor;
+    flex-shrink: 0;
+}
+
+.app-nav .nav-icon-outline {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 1;
+}
+
+.app-nav .nav-icon-fill {
+    fill: currentColor;
+    stroke: none;
+    opacity: 0;
+}
+
+.app-nav .nav-link.active .nav-icon-outline,
+.app-nav .nav-link[aria-current="page"] .nav-icon-outline {
+    opacity: 0;
+}
+
+.app-nav .nav-link.active .nav-icon-fill,
+.app-nav .nav-link[aria-current="page"] .nav-icon-fill {
+    opacity: 1;
 }
