@@ -1,0 +1,461 @@
+/* =========================================================
+   VIVA+ — SISTEMA GLOBAL DE ÍCONES
+   ---------------------------------------------------------
+   Este arquivo centraliza o tamanho e o comportamento visual
+   dos ícones do sistema inteiro.
+
+   Decisão de UX/UI:
+   - ícones em rem acompanham o tamanho do texto definido em
+     Perfil > Acessibilidade;
+   - menu, cards, listas, abas, alertas e detalhes usam tokens
+     comuns, para evitar que Home, Agenda e Perfil pareçam
+     telas feitas por pessoas diferentes.
+   ========================================================= */
+
+:root {
+    /* Menu principal */
+    --viva-icon-nav: 1.5rem;
+
+    /* Cards grandes da Home */
+    --viva-icon-action-circle: 4rem;
+    --viva-icon-action: 2.15rem;
+
+    /* Cards de lista: Perfil e listas do agendamento */
+    --viva-icon-list-column: 3.25rem;
+    --viva-icon-list-box: 3.25rem;
+    --viva-icon-list: 2rem;
+    --viva-icon-list-lock-width: 1.75rem;
+    --viva-icon-list-lock-height: 2.35rem;
+
+    /* Ícones pequenos: voltar, abas, linhas e botões */
+    --viva-icon-inline: 1.35rem;
+    --viva-icon-arrow: 1.55rem;
+
+    /* Alertas e campos de detalhes */
+    --viva-icon-alert: 2.25rem;
+    --viva-icon-detail-box: 3rem;
+    --viva-icon-detail: 1.45rem;
+
+    /* Tipografia visual dos cards com ícone */
+    --viva-card-title: 1.1rem;
+    --viva-card-text: 0.92rem;
+}
+
+/* =========================================================
+   MENU PRINCIPAL — HOME, AGENDA, AGENDAMENTO E PERFIL
+   ========================================================= */
+
+.app-nav .nav-icon {
+    width: var(--viva-icon-nav) !important;
+    height: var(--viva-icon-nav) !important;
+    min-width: var(--viva-icon-nav);
+    color: currentColor;
+    display: block;
+    flex-shrink: 0;
+}
+
+.app-nav .nav-link {
+    color: var(--text-muted);
+}
+
+.app-nav .nav-link:hover,
+.app-nav .nav-link:focus-visible {
+    color: var(--primary-color);
+}
+
+.app-nav .nav-link.active,
+.app-nav .nav-link[aria-current="page"] {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+}
+
+.app-nav .nav-link.active span,
+.app-nav .nav-link[aria-current="page"] span {
+    color: var(--primary-color) !important;
+}
+
+.app-nav .nav-icon-outline {
+    fill: none !important;
+    stroke: currentColor !important;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 1;
+}
+
+.app-nav .nav-icon-fill {
+    fill: currentColor !important;
+    stroke: none !important;
+    opacity: 0;
+}
+
+.app-nav .nav-link.active .nav-icon-outline,
+.app-nav .nav-link[aria-current="page"] .nav-icon-outline {
+    opacity: 0;
+}
+
+.app-nav .nav-link.active .nav-icon-fill,
+.app-nav .nav-link[aria-current="page"] .nav-icon-fill {
+    opacity: 1;
+}
+
+/* Compatibilidade com SVGs que vieram com fill/stroke fixos. */
+.app-nav .nav-icon path:not(.nav-icon-outline):not(.nav-icon-fill),
+.app-nav .nav-icon rect:not(.nav-icon-outline):not(.nav-icon-fill),
+.app-nav .nav-icon circle:not(.nav-icon-outline):not(.nav-icon-fill) {
+    vector-effect: non-scaling-stroke;
+}
+
+/* =========================================================
+   HOME — CARDS PRINCIPAIS DE SERVIÇO
+   Consulta, exames e vacinas.
+   ========================================================= */
+
+.service-card-icon {
+    width: var(--viva-icon-action-circle) !important;
+    height: var(--viva-icon-action-circle) !important;
+    min-width: var(--viva-icon-action-circle);
+    border-radius: 999px;
+    background-color: var(--subcard-primary-bg);
+    color: var(--primary-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.service-card-icon svg,
+.service-card-icon img {
+    width: var(--viva-icon-action) !important;
+    height: var(--viva-icon-action) !important;
+    display: block;
+    object-fit: contain;
+}
+
+.service-card-icon svg path {
+    fill: currentColor;
+}
+
+.service-card-title {
+    font-size: 1.25rem;
+    line-height: 1.15;
+}
+
+/* =========================================================
+   PERFIL — MENU PRINCIPAL
+   Meus dados, acessibilidade, alterar senha e sair.
+   ========================================================= */
+
+.profile-menu-card {
+    grid-template-columns: var(--viva-icon-list-column) 1fr var(--viva-icon-arrow) !important;
+    gap: 1rem !important;
+    min-height: 5.5rem !important;
+    padding: 1rem 1.2rem !important;
+    align-items: center;
+}
+
+.profile-menu-icon {
+    width: var(--viva-icon-list-box) !important;
+    height: var(--viva-icon-list-box) !important;
+    min-width: var(--viva-icon-list-box);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.profile-menu-icon svg,
+.profile-menu-icon img {
+    width: var(--viva-icon-list) !important;
+    height: var(--viva-icon-list) !important;
+    display: block;
+    object-fit: contain;
+}
+
+.profile-menu-icon svg path {
+    fill: currentColor;
+}
+
+.profile-menu-icon-lock svg {
+    width: var(--viva-icon-list-lock-width) !important;
+    height: var(--viva-icon-list-lock-height) !important;
+}
+
+.profile-menu-text strong,
+.accessibility-text strong,
+.font-size-card strong {
+    font-size: var(--viva-card-title) !important;
+    line-height: 1.15;
+}
+
+.profile-menu-text small,
+.accessibility-text small,
+.font-size-card small {
+    font-size: var(--viva-card-text) !important;
+    line-height: 1.25;
+}
+
+.profile-menu-arrow,
+.agenda-card-arrow svg,
+.item-arrow {
+    width: var(--viva-icon-arrow) !important;
+    height: var(--viva-icon-arrow) !important;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.profile-menu-arrow {
+    font-size: 2.15rem !important;
+    line-height: 1;
+}
+
+/* =========================================================
+   PERFIL — ACESSIBILIDADE
+   Ícones e toggles da página de configurações.
+   ========================================================= */
+
+.accessibility-card {
+    grid-template-columns: var(--viva-icon-list-column) 1fr auto !important;
+    gap: 1rem !important;
+    min-height: 5.5rem !important;
+    padding: 1rem 1.2rem !important;
+    align-items: center;
+}
+
+.accessibility-icon {
+    width: var(--viva-icon-list-box) !important;
+    height: var(--viva-icon-list-box) !important;
+    min-width: var(--viva-icon-list-box);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.accessibility-icon svg,
+.accessibility-icon img {
+    width: var(--viva-icon-list) !important;
+    height: var(--viva-icon-list) !important;
+    display: block;
+    object-fit: contain;
+}
+
+.accessibility-icon svg path {
+    fill: currentColor;
+}
+
+.text-icon {
+    font-size: 1.9rem !important;
+    font-weight: 800;
+}
+
+.switch {
+    width: 3.6rem !important;
+    height: 2rem !important;
+    padding: 0.22rem !important;
+}
+
+.switch span {
+    width: 1.55rem !important;
+    height: 1.55rem !important;
+}
+
+.switch[aria-checked="true"] span {
+    transform: translateX(1.55rem) !important;
+}
+
+/* =========================================================
+   PERFIL — TAMANHO DO TEXTO
+   Cards pequeno, padrão e grande.
+   ========================================================= */
+
+.font-size-card {
+    grid-template-columns: 5.25rem 1fr !important;
+    gap: 1rem !important;
+    min-height: 6.25rem !important;
+    padding: 1rem 1.2rem !important;
+}
+
+.font-preview {
+    width: 4.75rem !important;
+    height: 4.75rem !important;
+    min-width: 4.75rem;
+}
+
+.font-preview.small {
+    font-size: 1.15rem !important;
+}
+
+.font-preview.standard {
+    font-size: 1.55rem !important;
+}
+
+.font-preview.large {
+    font-size: 2rem !important;
+}
+
+/* =========================================================
+   AGENDAMENTO — LISTAS E ESCOLHAS
+   Consulta, especialidade, exames, vacinas, locais e datas.
+   ========================================================= */
+
+.choice-icon,
+.item-icon {
+    width: var(--viva-icon-list-box) !important;
+    height: var(--viva-icon-list-box) !important;
+    min-width: var(--viva-icon-list-box);
+    color: var(--primary-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.choice-icon svg,
+.choice-icon img,
+.item-icon svg,
+.item-icon img {
+    width: var(--viva-icon-list) !important;
+    height: var(--viva-icon-list) !important;
+    display: block;
+    object-fit: contain;
+}
+
+.choice-icon svg path,
+.item-icon svg path {
+    fill: currentColor;
+}
+
+.item-card {
+    gap: 1rem !important;
+    min-height: 5.25rem;
+}
+
+.item-title {
+    font-size: var(--viva-card-title) !important;
+}
+
+.item-desc {
+    font-size: var(--viva-card-text) !important;
+}
+
+/* Raio-X e ícones mais verticais não devem estourar o card. */
+.item-icon svg.icon-xray,
+.item-icon img[src*="raio"],
+.item-icon img[src*="x"] {
+    width: calc(var(--viva-icon-list) * 0.9) !important;
+    height: var(--viva-icon-list) !important;
+}
+
+/* =========================================================
+   AGENDA — ABAS, CARDS, DETALHES E ALERTAS
+   ========================================================= */
+
+.agenda-tab svg,
+.agenda-back svg,
+.profile-back svg,
+.scheduling-back svg,
+.btn svg,
+.btn-text svg,
+.btn-secondary-small svg,
+.btn-secondary-outline svg {
+    width: var(--viva-icon-inline) !important;
+    height: var(--viva-icon-inline) !important;
+    flex-shrink: 0;
+}
+
+.agenda-card-line svg {
+    width: var(--viva-icon-inline) !important;
+    height: var(--viva-icon-inline) !important;
+    min-width: var(--viva-icon-inline);
+    color: var(--primary-color);
+}
+
+.agenda-alert-icon,
+.info-alert-icon,
+.profile-alert span {
+    width: var(--viva-icon-alert) !important;
+    height: var(--viva-icon-alert) !important;
+    min-width: var(--viva-icon-alert);
+    font-size: 1.1rem;
+}
+
+.details-item {
+    grid-template-columns: var(--viva-icon-detail-box) 1fr !important;
+}
+
+.details-icon,
+.review-icon,
+.summary-icon {
+    width: var(--viva-icon-detail-box) !important;
+    height: var(--viva-icon-detail-box) !important;
+    min-width: var(--viva-icon-detail-box);
+}
+
+.details-icon svg,
+.review-icon svg,
+.summary-icon svg {
+    width: var(--viva-icon-detail) !important;
+    height: var(--viva-icon-detail) !important;
+}
+
+.details-date-highlight svg {
+    width: calc(var(--viva-icon-detail) * 1.65) !important;
+    height: calc(var(--viva-icon-detail) * 1.65) !important;
+}
+
+/* =========================================================
+   ESTADOS DE ACESSIBILIDADE
+   Os valores são em rem, então já acompanham html[data-fontsize].
+   Aqui ajustamos só respiro para evitar aparência esmagada.
+   ========================================================= */
+
+html[data-fontsize="large"] .profile-menu-card,
+html[data-fontsize="large"] .accessibility-card,
+html[data-fontsize="large"] .item-card {
+    min-height: 6rem !important;
+}
+
+html[data-fontsize="large"] .service-card {
+    min-height: 10.5rem;
+}
+
+html[data-fontsize="small"] .profile-menu-card,
+html[data-fontsize="small"] .accessibility-card,
+html[data-fontsize="small"] .item-card {
+    min-height: 5.15rem !important;
+}
+
+/* =========================================================
+   MOBILE PEQUENO
+   Mantém os ícones proporcionais sem roubar espaço do texto.
+   ========================================================= */
+
+@media (max-width: 420px) {
+    :root {
+        --viva-icon-nav: 1.45rem;
+        --viva-icon-action-circle: 3.75rem;
+        --viva-icon-action: 1.95rem;
+        --viva-icon-list-column: 3rem;
+        --viva-icon-list-box: 3rem;
+        --viva-icon-list: 1.8rem;
+        --viva-icon-list-lock-width: 1.6rem;
+        --viva-icon-list-lock-height: 2.15rem;
+        --viva-icon-alert: 2.1rem;
+        --viva-card-title: 1rem;
+        --viva-card-text: 0.84rem;
+    }
+
+    .profile-menu-card,
+    .accessibility-card,
+    .item-card {
+        gap: 0.85rem !important;
+        padding: 0.9rem 1rem !important;
+    }
+
+    .profile-menu-arrow {
+        font-size: 2rem !important;
+    }
+}

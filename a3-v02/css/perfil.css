@@ -1,3 +1,31 @@
+/* =========================================================
+   PERFIL — VIVA+
+   Arquivo organizado por blocos para evitar sobrescritas
+   e facilitar manutenção dos cards, ícones e responsividade.
+   ========================================================= */
+
+
+/* =========================================================
+   1. BASE DA PÁGINA
+   ========================================================= */
+
+
+/*
+   Tokens locais da página de perfil.
+   Todos usam rem para acompanhar o tamanho de fonte escolhido na acessibilidade.
+*/
+.profile-layout {
+    --profile-nav-icon-size: 1.5rem;
+    --profile-card-icon-column: 3.25rem;
+    --profile-card-icon-box: 3.25rem;
+    --profile-card-icon-size: 2rem;
+    --profile-card-lock-width: 1.85rem;
+    --profile-card-lock-height: 2.45rem;
+    --profile-card-arrow-size: 2.25rem;
+    --profile-card-min-height: 5.5rem;
+    --profile-card-gap: 1rem;
+}
+
 body {
     background-color: var(--bg-color);
 }
@@ -20,6 +48,11 @@ body {
     display: none !important;
 }
 
+
+/* =========================================================
+   2. BOTÃO VOLTAR
+   ========================================================= */
+
 .profile-back {
     display: inline-flex;
     align-items: center;
@@ -37,7 +70,13 @@ body {
 .profile-back svg {
     width: 18px;
     height: 18px;
+    flex-shrink: 0;
 }
+
+
+/* =========================================================
+   3. CABEÇALHOS DAS ETAPAS
+   ========================================================= */
 
 .profile-header {
     margin-bottom: 1.5rem;
@@ -56,6 +95,18 @@ body {
     font-size: 1.05rem;
     line-height: 1.35;
 }
+
+.profile-section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 2rem 0 1rem;
+}
+
+
+/* =========================================================
+   4. CARD PRINCIPAL DO USUÁRIO
+   ========================================================= */
 
 .profile-user-card {
     display: grid;
@@ -95,88 +146,251 @@ body {
     margin-top: 0.5rem;
 }
 
-.profile-menu-list,
-.accessibility-list,
+
+/* =========================================================
+   5. LISTAS DO PERFIL
+   ========================================================= */
+
+.profile-menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.accessibility-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .font-size-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.profile-menu-card,
-.accessibility-card,
-.font-size-card {
+
+/* =========================================================
+   6. CARDS DO MENU PRINCIPAL DO PERFIL
+   ========================================================= */
+
+.profile-menu-card {
     width: 100%;
+    min-height: var(--profile-card-min-height);
     display: grid;
-    grid-template-columns: 4rem 1fr auto;
-    gap: 1rem;
+    grid-template-columns: var(--profile-card-icon-column) 1fr var(--profile-card-arrow-size);
     align-items: center;
+    gap: var(--profile-card-gap);
     background-color: var(--card-bg);
     border: 1px solid var(--secondary-border);
     border-radius: 0.75rem;
-    padding: 1rem;
+    padding: 0.9rem 1rem;
     color: var(--text-main);
     text-align: left;
     cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 .profile-menu-card:hover,
-.profile-menu-card:focus-visible,
-.accessibility-card:hover,
-.accessibility-card:focus-visible,
-.font-size-card:hover,
-.font-size-card:focus-visible {
+.profile-menu-card:focus-visible {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px var(--subcard-secondary-bg);
+    box-shadow: 0 0 0 4px var(--subcard-secondary-bg);
     outline: none;
 }
 
-.profile-menu-icon,
-.accessibility-icon {
-    width: 4rem;
-    height: 4rem;
+.profile-menu-card:active {
+    transform: scale(0.99);
+}
+
+.profile-menu-icon {
+    width: var(--profile-card-icon-box);
+    height: var(--profile-card-icon-box);
     color: var(--primary-color);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
-.profile-menu-icon svg,
-.accessibility-icon svg {
-    width: 3rem;
-    height: 3rem;
+.profile-menu-icon svg {
+    width: var(--profile-card-icon-size);
+    height: var(--profile-card-icon-size);
+    display: block;
     fill: currentColor;
 }
 
-.profile-menu-text,
+.profile-menu-icon img {
+    width: var(--profile-card-icon-size);
+    height: var(--profile-card-icon-size);
+    display: block;
+    object-fit: contain;
+}
+
+.profile-menu-icon-lock svg {
+    width: var(--profile-card-lock-width);
+    height: var(--profile-card-lock-height);
+}
+
+.profile-menu-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.profile-menu-text strong {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text-main);
+}
+
+.profile-menu-text small {
+    display: block;
+    font-size: 0.95rem;
+    line-height: 1.25;
+    color: var(--text-secondary);
+}
+
+.profile-menu-arrow {
+    color: var(--primary-color);
+    font-size: var(--profile-card-arrow-size);
+    font-weight: 800;
+    line-height: 1;
+    justify-self: end;
+}
+
+
+/* =========================================================
+   7. CARDS DE ACESSIBILIDADE
+   ========================================================= */
+
+.accessibility-card {
+    width: 100%;
+    min-height: var(--profile-card-min-height);
+    display: grid;
+    grid-template-columns: var(--profile-card-icon-column) 1fr auto;
+    align-items: center;
+    gap: var(--profile-card-gap);
+    background-color: var(--card-bg);
+    border: 1px solid var(--secondary-border);
+    border-radius: 0.75rem;
+    padding: 0.9rem 1rem;
+    color: var(--text-main);
+    text-align: left;
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.accessibility-card:hover,
+.accessibility-card:focus-visible {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--subcard-secondary-bg);
+    outline: none;
+}
+
+.accessibility-card:active {
+    transform: scale(0.99);
+}
+
+.accessibility-icon {
+    width: var(--profile-card-icon-box);
+    height: var(--profile-card-icon-box);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.accessibility-icon svg,
+.accessibility-icon img {
+    width: var(--profile-card-icon-size);
+    height: var(--profile-card-icon-size);
+    display: block;
+    object-fit: contain;
+    fill: currentColor;
+}
+
 .accessibility-text {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    min-width: 0;
 }
 
-.profile-menu-text strong,
-.accessibility-text strong,
-.font-size-card strong {
-    font-size: 1.25rem;
+.accessibility-text strong {
+    font-size: 1.2rem;
     font-weight: 800;
+    line-height: 1.15;
     color: var(--text-main);
 }
 
-.profile-menu-text small,
-.accessibility-text small,
-.font-size-card small {
-    color: var(--text-secondary);
-    font-size: 1rem;
+.accessibility-text small {
+    font-size: 0.95rem;
     line-height: 1.25;
+    color: var(--text-secondary);
 }
 
-.profile-menu-arrow {
-    font-size: 3rem;
-    line-height: 1;
-    color: var(--primary-color);
-    font-weight: 700;
+.text-icon {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--text-secondary);
 }
+
+
+/* =========================================================
+   8. SWITCHES / TOGGLES
+   ========================================================= */
+
+.switch {
+    width: 4rem;
+    height: 2.1rem;
+    border: none;
+    border-radius: 999px;
+    background-color: var(--text-muted);
+    padding: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease;
+}
+
+.switch span {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 999px;
+    background-color: #ffffff;
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+.switch[aria-checked="true"] {
+    background-color: var(--primary-color);
+}
+
+.switch[aria-checked="true"] span {
+    transform: translateX(1.8rem);
+}
+
+.switch:focus-visible {
+    outline: 3px solid var(--subcard-secondary-bg);
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   9. CAMPOS DE DADOS DO USUÁRIO
+   ========================================================= */
 
 .data-form-card {
     background-color: var(--card-bg);
@@ -242,6 +456,11 @@ body {
     stroke-width: 2;
 }
 
+
+/* =========================================================
+   10. MENSAGENS, ALERTAS E ERROS
+   ========================================================= */
+
 .profile-alert {
     display: flex;
     align-items: center;
@@ -270,6 +489,23 @@ body {
     font-size: 1rem;
     line-height: 1.25;
 }
+
+.field-error {
+    display: block;
+    color: var(--error, #B42318);
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0.5rem 0 1rem;
+}
+
+.field-error[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================================
+   11. TELAS DE CONFIRMAÇÃO E SUCESSO
+   ========================================================= */
 
 .profile-hero {
     background-color: var(--mascot-bg);
@@ -312,51 +548,56 @@ body {
     gap: 0.8rem;
 }
 
-.profile-section-title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin: 2rem 0 1rem;
-}
 
-.text-icon {
-    font-size: 2.25rem;
-    font-weight: 800;
-    color: var(--text-secondary);
-}
-
-.switch {
-    width: 4rem;
-    height: 2.1rem;
-    border: none;
-    border-radius: 999px;
-    background-color: var(--text-muted);
-    padding: 0.25rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.switch span {
-    width: 1.6rem;
-    height: 1.6rem;
-    border-radius: 999px;
-    background-color: #ffffff;
-    display: block;
-    transition: transform 0.2s ease;
-}
-
-.switch[aria-checked="true"] {
-    background-color: var(--primary-color);
-}
-
-.switch[aria-checked="true"] span {
-    transform: translateX(1.8rem);
-}
+/* =========================================================
+   12. TAMANHO DO TEXTO
+   ========================================================= */
 
 .font-size-card {
+    width: 100%;
+    display: grid;
     grid-template-columns: 7rem 1fr;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--card-bg);
+    border: 1px solid var(--secondary-border);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    color: var(--text-main);
+    text-align: left;
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.font-size-card:hover,
+.font-size-card:focus-visible {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--subcard-secondary-bg);
+    outline: none;
+}
+
+.font-size-card.selected {
+    border-color: var(--primary-color);
+    background-color: var(--subcard-secondary-bg);
+}
+
+.font-size-card strong {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.15;
+    margin-bottom: 0.25rem;
+}
+
+.font-size-card small {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.25;
 }
 
 .font-preview {
@@ -383,10 +624,10 @@ body {
     font-size: 20px;
 }
 
-.font-size-card.selected {
-    border-color: var(--primary-color);
-    background-color: var(--subcard-secondary-bg);
-}
+
+/* =========================================================
+   13. BOTÕES SECUNDÁRIOS
+   ========================================================= */
 
 .btn-secondary-outline {
     width: 100%;
@@ -398,6 +639,10 @@ body {
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        color 0.2s ease,
+        background-color 0.2s ease;
 }
 
 .btn-secondary-outline:hover,
@@ -407,7 +652,10 @@ body {
     outline: none;
 }
 
-/* NAV */
+
+/* =========================================================
+   14. NAVEGAÇÃO INFERIOR / LATERAL
+   ========================================================= */
 
 .app-nav {
     position: fixed;
@@ -442,10 +690,17 @@ body {
     text-decoration: none;
 }
 
+.nav-link:hover,
+.nav-link:focus-visible {
+    color: var(--primary-color);
+    outline: none;
+}
+
 .nav-icon {
-    width: 24px;
-    height: 24px;
+    width: var(--profile-nav-icon-size);
+    height: var(--profile-nav-icon-size);
     color: currentColor;
+    flex-shrink: 0;
 }
 
 .nav-icon-outline {
@@ -478,6 +733,32 @@ body {
 .nav-link[aria-current="page"] .nav-icon-fill {
     opacity: 1;
 }
+
+
+/* =========================================================
+   15. SEGURANÇA DE CLIQUE
+   Mantém o botão pai como alvo do clique nos cards.
+   Switches continuam clicáveis por conta própria.
+   ========================================================= */
+
+.profile-menu-card > *,
+.font-size-card > * {
+    pointer-events: none;
+}
+
+.accessibility-card > *:not(.switch) {
+    pointer-events: none;
+}
+
+.accessibility-card .switch,
+.accessibility-card .switch * {
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   16. DESKTOP
+   ========================================================= */
 
 @media (min-width: 768px) {
     .profile-layout {
@@ -534,9 +815,15 @@ body {
     }
 }
 
+
+/* =========================================================
+   17. MOBILE PEQUENO
+   ========================================================= */
+
 @media (max-width: 420px) {
     .profile-user-card {
         grid-template-columns: 5.5rem 1fr;
+        gap: 1rem;
     }
 
     .profile-avatar {
@@ -549,33 +836,42 @@ body {
         font-size: 1.35rem;
     }
 
+    .profile-user-cpf {
+        font-size: 1rem;
+    }
+
+    .profile-layout {
+        --profile-card-icon-column: 3rem;
+        --profile-card-icon-box: 3rem;
+        --profile-card-icon-size: 1.85rem;
+        --profile-card-lock-width: 1.7rem;
+        --profile-card-lock-height: 2.25rem;
+        --profile-card-arrow-size: 2rem;
+        --profile-card-min-height: 5.25rem;
+        --profile-card-gap: 0.85rem;
+    }
+
     .profile-menu-card,
     .accessibility-card {
-        grid-template-columns: 3.5rem 1fr auto;
+        padding: 0.85rem 0.95rem;
     }
 
-    .profile-menu-icon,
-    .accessibility-icon {
-        width: 3.5rem;
-        height: 3.5rem;
+    .profile-menu-text strong,
+    .accessibility-text strong {
+        font-size: 1.08rem;
     }
 
-    .profile-menu-icon svg,
-    .accessibility-icon svg {
-        width: 2.6rem;
-        height: 2.6rem;
+    .profile-menu-text small,
+    .accessibility-text small {
+        font-size: 0.9rem;
     }
-}
 
-/* Garante que cliques nos textos/ícones internos dos cards sejam tratados pelo botão pai */
-.profile-menu-card > *,
-.accessibility-card > *,
-.font-size-card > * {
-    pointer-events: none;
-}
+    .font-size-card {
+        grid-template-columns: 5.5rem 1fr;
+    }
 
-/* Mantém switches clicáveis mesmo dentro dos cards de acessibilidade */
-.accessibility-card .switch,
-.accessibility-card .switch * {
-    pointer-events: auto;
+    .font-preview {
+        width: 5.5rem;
+        height: 5.5rem;
+    }
 }

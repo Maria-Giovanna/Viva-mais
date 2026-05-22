@@ -137,7 +137,7 @@ body {
 
 .choice-icon svg,
 .item-icon svg,
-item-icon img {
+.item-icon img {
     width: 100%;
     height: 100%;
     display: block;

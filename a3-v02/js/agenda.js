@@ -35,15 +35,9 @@
     return JSON.parse(sessionStorage.getItem("viva_usuario_logado") || "null");
   }
 
-  function obterAgendamentosDoUsuario(cpf) {
-    const agendamentos = JSON.parse(
-      localStorage.getItem("viva_agendamentos") || "[]",
-    );
-
-    return agendamentos.filter((agendamento) => {
-      return agendamento.cpf === cpf;
-    });
-  }
+function obterAgendamentosDoUsuario(cpf) {
+  return window.VivaAgendamentos.listarDoUsuario(cpf);
+}
 
   function configurarEventos() {
     document.querySelectorAll("[data-tab]").forEach((botao) => {
@@ -123,52 +117,17 @@
     });
   }
 
-  function filtrarAgendamentosPorAba() {
-    const agora = new Date();
-
-    const agendamentos = estadoAgenda.agendamentos.map((agendamento) => {
-      return {
-        ...agendamento,
-        statusCalculado: obterStatusCalculado(agendamento),
-      };
-    });
-
-    if (estadoAgenda.abaAtual === "proximos") {
-      return agendamentos
-        .filter((agendamento) => {
-          return (
-            agendamento.statusCalculado === "confirmado" &&
-            criarDataHora(agendamento.data, agendamento.hora) >= agora
-          );
-        })
-        .sort((a, b) => {
-          return criarDataHora(a.data, a.hora) - criarDataHora(b.data, b.hora);
-        });
-    }
-
-    return agendamentos
-      .filter((agendamento) => {
-        return agendamento.statusCalculado !== "confirmado";
-      })
-      .sort((a, b) => {
-        const dataA = criarDataHora(a.data, a.hora);
-        const dataB = criarDataHora(b.data, b.hora);
-
-        return Math.abs(dataA - agora) - Math.abs(dataB - agora);
-      });
+ function filtrarAgendamentosPorAba() {
+  if (estadoAgenda.abaAtual === "proximos") {
+    return window.VivaAgendamentos.listarProximos(estadoAgenda.usuario.cpf);
   }
+
+  return window.VivaAgendamentos.listarHistorico(estadoAgenda.usuario.cpf);
+}
 
   function obterStatusCalculado(agendamento) {
-    const statusOriginal = normalizarStatus(agendamento.status);
-    const dataHora = criarDataHora(agendamento.data, agendamento.hora);
-    const agora = new Date();
-
-    if (statusOriginal === "confirmado" && dataHora < agora) {
-      return "realizado";
-    }
-
-    return statusOriginal;
-  }
+  return window.VivaAgendamentos.obterStatusCalculado(agendamento);
+}
 
   function normalizarStatus(status) {
     const valor = String(status || "confirmado")
@@ -438,11 +397,8 @@ Código: ${agendamento.id}
   }
 
   function criarDataHora(dataISO, hora) {
-    const [ano, mes, dia] = dataISO.split("-").map(Number);
-    const [horas, minutos] = String(hora || "00:00").split(":").map(Number);
-
-    return new Date(ano, mes - 1, dia, horas, minutos || 0);
-  }
+  return window.VivaAgendamentos.criarDataHora(dataISO, hora);
+}
 
   function obterPartesData(dataISO) {
     const [ano, mes, dia] = dataISO.split("-").map(Number);
