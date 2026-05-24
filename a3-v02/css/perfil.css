@@ -12,7 +12,7 @@
 
 /*
    Tokens locais da página de perfil.
-   Todos usam rem para acompanhar o tamanho de fonte escolhido na acessibilidade.
+/Todos usam rem para acompanhar o tamanho de fonte escolhido na acessibilidade.
 */
 .profile-layout {
     --profile-nav-icon-size: 1.5rem;
@@ -437,9 +437,7 @@ body {
     font-size: 1rem;
 }
 
-.profile-input-field.disabled {
-    background-color: var(--subcard-secondary-bg);
-}
+
 
 .field-icon {
     width: 2rem;

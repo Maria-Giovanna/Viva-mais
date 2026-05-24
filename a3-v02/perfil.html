@@ -151,57 +151,31 @@
             </p>
           </header>
 
-          <div class="data-form-card">
-            <div class="profile-field">
-              <label>Nome completo</label>
-              <div class="profile-readonly-field">
-                <span class="field-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="8" r="4" />
-                    <path d="M4 21a8 8 0 0 1 16 0" />
-                  </svg>
-                </span>
+          <div class="auth-fieldset">
+            <div class="form-group">
+              <label class="form-label">Nome completo</label>
+              <div class="form-input input-readonly">
                 <span id="dados-nome">Maria da Silva</span>
               </div>
             </div>
 
-            <div class="profile-field">
-              <label>CPF</label>
-              <div class="profile-readonly-field">
-                <span class="field-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="8" r="4" />
-                    <path d="M4 21a8 8 0 0 1 16 0" />
-                  </svg>
-                </span>
+            <div class="form-group">
+              <label class="form-label">CPF</label>
+              <div class="form-input input-readonly">
                 <span id="dados-cpf">000.000.000-00</span>
               </div>
             </div>
 
-            <div class="profile-field">
-              <label>Endereço</label>
-              <div class="profile-readonly-field">
-                <span class="field-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Z"
-                    />
-                  </svg>
-                </span>
+            <div class="form-group">
+              <label class="form-label">Endereço</label>
+              <div class="form-input input-readonly">
                 <span id="dados-endereco">Endereço</span>
               </div>
             </div>
 
-            <div class="profile-field">
-              <label>Telefone</label>
-              <div class="profile-readonly-field">
-                <span class="field-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm5 17a1 1 0 1 0 0-2a1 1 0 0 0 0 2Z"
-                    />
-                  </svg>
-                </span>
+            <div class="form-group">
+              <label class="form-label">Telefone</label>
+              <div class="form-input input-readonly">
                 <span id="dados-telefone">Telefone</span>
               </div>
             </div>
@@ -218,90 +192,58 @@
         </section>
 
         <!-- EDITAR DADOS -->
-        <section class="profile-step" id="step-editar-dados" hidden>
-          <header class="profile-header">
+         <section class="profile-step" id="step-editar-dados" hidden>
+           <header class="profile-header">
             <h1 class="profile-title">Veja suas informações</h1>
             <p class="profile-subtitle">Atualize apenas os dados permitidos.</p>
           </header>
 
-          <form class="data-form-card" id="form-dados">
-            <div class="profile-field">
-              <label for="edit-cpf">CPF</label>
-              <div class="profile-input-field disabled">
-                <span class="field-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="8" r="4" />
-                    <path d="M4 21a8 8 0 0 1 16 0" />
-                  </svg>
-                </span>
-                <input type="text" id="edit-cpf" disabled />
+          <form class="auth-fieldset">
+            <div class="form-group">
+              <label for="edit-nome" class="form-label">Nome completo</label>
+              <div>
+                <input type="text" id="edit-nome" class="form-input input-readonly" disabled />
               </div>
             </div>
 
-            <div class="profile-field">
-              <label for="edit-nome">Nome completo</label>
-              <div class="profile-input-field disabled">
-                <span class="field-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="8" r="4" />
-                    <path d="M4 21a8 8 0 0 1 16 0" />
-                  </svg>
-                </span>
-                <input type="text" id="edit-nome" disabled />
+            <div class="form-group">
+              <label for="edit-cpf" class="form-label">CPF</label>
+              <div>
+                <input type="text" id="edit-cpf" class="form-input input-readonly" disabled />
               </div>
             </div>
 
-            <div class="profile-field">
-              <label for="edit-endereco">Endereço</label>
-              <div class="profile-input-field">
-                <span class="field-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Z"
-                    />
-                  </svg>
-                </span>
-                <input
-                  type="text"
-                  id="edit-endereco"
-                  placeholder="Digite seu endereço"
-                />
+            <div class="form-group">
+              <label for="edit-endereco" class="form-label">Endereço</label>
+              <div>
+                <input type="text" id="edit-endereco" placeholder="Digite seu endereço" class="form-input"/>
               </div>
             </div>
 
-            <div class="profile-field">
-              <label for="edit-telefone">Telefone</label>
-              <div class="profile-input-field">
-                <span class="field-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm5 17a1 1 0 1 0 0-2a1 1 0 0 0 0 2Z"
-                    />
-                  </svg>
-                </span>
-                <input
-                  type="tel"
-                  id="edit-telefone"
-                  placeholder="Digite seu telefone"
-                />
+            <div class="form-group">
+              <label for="edit-telefone" class="form-label">Telefone</label>
+              <div>
+                <input type="tel" id="edit-telefone" placeholder="Digite seu telefone" class="form-input"/>
               </div>
             </div>
-
-            <span
-              class="field-error"
-              id="erro-dados"
-              role="alert"
-              hidden
-            ></span>
 
             <div class="profile-alert" role="status" aria-live="polite">
               <span>!</span>
               <p>Nome completo e CPF não podem ser alterados.</p>
             </div>
 
+             <span
+              class="field-error"
+              id="erro-dados"
+              role="alert"
+              hidden
+            ></span>
+
+       
             <button type="submit" class="btn btn-primary">
               Salvar alterações
             </button>
+
           </form>
         </section>
 
