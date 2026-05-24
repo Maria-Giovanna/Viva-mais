@@ -908,25 +908,49 @@ Código: ${agendamento.id}
   }
 
   function mostrarEtapaSemHistorico(idEtapa) {
-    const etapa = document.getElementById(idEtapa);
+  const etapa = document.getElementById(idEtapa);
 
-    if (!etapa) {
-      console.error(`Etapa não encontrada: #${idEtapa}`);
-      mostrarErroNaTela(`Etapa não encontrada: ${idEtapa}`);
-      return;
-    }
-
-    document.querySelectorAll(".step").forEach((secao) => {
-      secao.hidden = true;
-    });
-
-    etapa.hidden = false;
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+  if (!etapa) {
+    console.error(`Etapa não encontrada: #${idEtapa}`);
+    mostrarErroNaTela(`Etapa não encontrada: ${idEtapa}`);
+    return;
   }
+
+  const layout = document.querySelector(".scheduling-layout");
+  const mainContent = document.getElementById("main-content");
+  const botaoVoltar = document.getElementById("btn-voltar");
+
+  const etapasDeBloqueio = [
+    "step-bloqueio-especialidade",
+    "step-bloqueio-exame",
+    "step-bloqueio-vacina",
+  ];
+
+  const etapaAtualEhBloqueio = etapasDeBloqueio.includes(idEtapa);
+
+  document.querySelectorAll(".step").forEach((secao) => {
+    secao.hidden = true;
+  });
+
+  etapa.hidden = false;
+
+  if (layout) {
+    layout.classList.toggle("is-blocked-step", etapaAtualEhBloqueio);
+  }
+
+  if (mainContent) {
+    mainContent.hidden = etapaAtualEhBloqueio;
+  }
+
+  if (botaoVoltar) {
+    botaoVoltar.hidden = etapaAtualEhBloqueio;
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}
 
   function voltarEtapa() {
     const etapaAtual = document.querySelector(".step:not([hidden])");

@@ -662,6 +662,50 @@ body {
     opacity: 1;
 }
 
+#main-content[hidden],
+#btn-voltar[hidden] {
+    display: none !important;
+}
+
+#step-bloqueio-especialidade:not([hidden]),
+    #step-bloqueio-exame:not([hidden]),
+    #step-bloqueio-vacina:not([hidden]) {
+        min-height: auto;
+    }
+
+    #step-bloqueio-especialidade:not([hidden]) .blocked-content,
+    #step-bloqueio-exame:not([hidden]) .blocked-content,
+    #step-bloqueio-vacina:not([hidden]) .blocked-content {
+        width: 100%;
+        padding: 0 1rem 6rem;
+    }
+    /* 1. Faz a tela de bloqueio preencher a área roxa listrada e centraliza o conteúdo */
+.scheduling-layout.is-blocked-step > .step:not([hidden]) {
+    flex: 1; /* É isso aqui que "mata" o espaço vazio! */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: var(--bg-color);
+}
+
+/* 2. Limita a largura do texto e da imagem para não ficarem distorcidos em monitores grandes */
+.scheduling-layout.is-blocked-step .blocked-hero,
+.scheduling-layout.is-blocked-step .blocked-content {
+    width: 100%;
+    max-width: 520px; /* Mantém a proporção elegante do layout */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 3. Ajusta o fundo azul escuro do mascote para virar um card centralizado */
+.scheduling-layout.is-blocked-step .blocked-hero {
+    margin: 0 auto 1.5rem auto;
+    border-radius: 1rem 1rem 0 0; /* Arredonda o topo para um acabamento mais premium */
+}
+
+
 @media (max-width: 420px) {
     .location-card {
         padding: 1rem;
@@ -694,6 +738,49 @@ body {
         min-height: 3rem;
         font-size: 0.95rem;
     }
+
+    #main-content[hidden],
+#btn-voltar[hidden] {
+    display: none !important;
+}
+
+#step-bloqueio-especialidade:not([hidden]),
+    #step-bloqueio-exame:not([hidden]),
+    #step-bloqueio-vacina:not([hidden]) {
+        min-height: auto;
+    }
+
+    #step-bloqueio-especialidade:not([hidden]) .blocked-content,
+    #step-bloqueio-exame:not([hidden]) .blocked-content,
+    #step-bloqueio-vacina:not([hidden]) .blocked-content {
+        width: 100%;
+        padding: 0 1rem 6rem;
+    }
+    /* 1. Faz a tela de bloqueio preencher a área roxa listrada e centraliza o conteúdo */
+.scheduling-layout.is-blocked-step > .step:not([hidden]) {
+    flex: 1; /* É isso aqui que "mata" o espaço vazio! */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: var(--bg-color);
+}
+
+/* 2. Limita a largura do texto e da imagem para não ficarem distorcidos em monitores grandes */
+.scheduling-layout.is-blocked-step .blocked-hero,
+.scheduling-layout.is-blocked-step .blocked-content {
+    width: 100%;
+    max-width: 520px; /* Mantém a proporção elegante do layout */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 3. Ajusta o fundo azul escuro do mascote para virar um card centralizado */
+.scheduling-layout.is-blocked-step .blocked-hero {
+    margin: 0 auto 1.5rem auto;
+    border-radius: 1rem 1rem 0 0; /* Arredonda o topo para um acabamento mais premium */
+}
 }
 
 @media (min-width: 768px) {
@@ -788,4 +875,47 @@ body {
         min-height: 3.4rem;
         font-size: 1.05rem;
     }
+
+    #main-content[hidden],
+#btn-voltar[hidden] {
+    display: none !important;
+}
+
+#step-bloqueio-especialidade:not([hidden]),
+    #step-bloqueio-exame:not([hidden]),
+    #step-bloqueio-vacina:not([hidden]) {
+        min-height: auto;
+    }
+
+    #step-bloqueio-especialidade:not([hidden]) .blocked-content,
+    #step-bloqueio-exame:not([hidden]) .blocked-content,
+    #step-bloqueio-vacina:not([hidden]) .blocked-content {
+        width: 100%;
+        padding: 0 1rem 6rem;
+    }
+    /* 1. Faz a tela de bloqueio preencher a área roxa listrada e centraliza o conteúdo */
+.scheduling-layout.is-blocked-step > .step:not([hidden]) {
+    flex: 1; /* É isso aqui que "mata" o espaço vazio! */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: var(--bg-color);
+}
+
+/* 2. Limita a largura do texto e da imagem para não ficarem distorcidos em monitores grandes */
+.scheduling-layout.is-blocked-step .blocked-hero,
+.scheduling-layout.is-blocked-step .blocked-content {
+    width: 100%;
+    max-width: 520px; /* Mantém a proporção elegante do layout */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 3. Ajusta o fundo azul escuro do mascote para virar um card centralizado */
+.scheduling-layout.is-blocked-step .blocked-hero {
+    margin: 0 auto 1.5rem auto;
+    border-radius: 1rem 1rem 0 0; /* Arredonda o topo para um acabamento mais premium */
+}
 }
