@@ -210,3 +210,99 @@
 .btn-toggle-password[aria-pressed="true"] .olho-fechado {
   display: block;
 }
+
+/* =========================================================
+   COMPONENTE GLOBAL — DIÁLOGO/OVERLAY DE CONFIRMAÇÃO
+   Usado para ações pontuais, como cancelar agendamento
+   ou confirmar alteração de dados.
+   ========================================================= */
+
+.app-dialog-step[hidden] {
+  display: none !important;
+}
+
+.app-dialog-step:not([hidden]) {
+  position: fixed !important;
+  inset: 0;
+  z-index: 9999;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  min-height: 100dvh;
+  padding: 1rem;
+  background: rgba(0, 1, 10, 0.62);
+  overflow-y: auto;
+}
+
+.app-dialog-card {
+  width: min(100%, 28rem);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  background: var(--card-bg);
+  border: 1px solid var(--secondary-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1.25rem 3.5rem rgba(0, 1, 10, 0.28);
+}
+
+.app-dialog-card .agenda-header,
+.app-dialog-card .profile-success-content {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.app-dialog-card .agenda-header {
+  padding-top: 1.25rem;
+  margin-bottom: 0;
+}
+
+.app-dialog-card .agenda-title,
+.app-dialog-card .profile-success-content h1 {
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.app-dialog-card .cancel-hero,
+.app-dialog-card .profile-hero {
+  margin: 1rem 1.25rem 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.app-dialog-card .cancel-hero img,
+.app-dialog-card .profile-hero img {
+  width: min(78%, 13rem);
+  max-width: 13rem;
+}
+
+.app-dialog-card .cancel-content,
+.app-dialog-card .profile-success-content {
+  padding: 1.25rem;
+}
+
+.app-dialog-card .agenda-actions,
+.app-dialog-card .profile-actions {
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 360px) {
+  .app-dialog-step:not([hidden]) {
+    padding: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .app-dialog-card {
+    width: 100%;
+    max-height: calc(100dvh - 1.5rem);
+  }
+
+  .app-dialog-card .agenda-title,
+  .app-dialog-card .profile-success-content h1 {
+    font-size: 1.25rem;
+  }
+
+  .app-dialog-card .cancel-hero img,
+  .app-dialog-card .profile-hero img {
+    width: min(72%, 11rem);
+  }
+}

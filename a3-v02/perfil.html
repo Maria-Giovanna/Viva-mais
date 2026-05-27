@@ -243,75 +243,59 @@
           </form>
         </section>
 
-        <!-- CONFIRMAR DADOS -->
-        <section class="profile-step" id="step-confirmar-dados" hidden>
+      <!-- CONFIRMAR DADOS -->
+      <section class="profile-step app-dialog-step" id="step-confirmar-dados" hidden role="dialog" aria-modal="true"
+        aria-labelledby="titulo-confirmar-dados">
+        <div class="app-dialog-card app-dialog-card--info">
           <div class="profile-hero">
-            <img src="assets/img/Mascote-Olá.svg" alt="" aria-hidden="true" />
+            <img src="assets/img/Mascote-4- duvida.svg" alt="" aria-hidden="true" />
           </div>
-
+      
           <div class="profile-success-content">
-            <h1>Salvar alterações?</h1>
+            <h1 id="titulo-confirmar-dados">Salvar alterações?</h1>
             <p>
               As alterações de endereço e telefone podem levar até 48 horas para
               serem atualizadas no sistema.
             </p>
-
+      
             <div class="profile-actions">
-              <button
-                type="button"
-                class="btn btn-primary"
-                id="btn-confirmar-dados"
-              >
+              <button type="button" class="btn btn-primary" id="btn-confirmar-dados">
                 Confirmar alterações
               </button>
-
-              <button
-                type="button"
-                class="btn-secondary-outline"
-                id="btn-voltar-edicao"
-              >
+      
+              <button type="button" class="btn-secondary-outline" id="btn-voltar-edicao">
                 Voltar
               </button>
             </div>
           </div>
-        </section>
-
-        <!-- SUCESSO DADOS -->
-        <section class="profile-step" id="step-dados-sucesso" hidden>
-          <div class="profile-hero">
-            <img
-              src="assets/img/Mascote-Parabens.svg"
-              alt=""
-              aria-hidden="true"
-            />
+        </div>
+      </section>
+      
+      <!-- SUCESSO DADOS -->
+      <section class="profile-step" id="step-dados-sucesso" hidden>
+        <div class="profile-hero">
+          <img src="assets/img/Mascote-Parabens.svg" alt="" aria-hidden="true" />
+        </div>
+      
+        <div class="profile-success-content">
+          <h1>Dados alterados!</h1>
+          <p>
+            As alterações levarão até 48 horas para serem completamente
+            atualizadas no sistema.
+          </p>
+      
+          <div class="profile-actions">
+            <button type="button" class="btn btn-primary" id="btn-voltar-dados">
+              Voltar aos meus dados
+            </button>
+      
+            <button type="button" class="btn-secondary-outline" id="btn-voltar-inicio-dados">
+              Voltar ao início
+            </button>
           </div>
+        </div>
+      </section>
 
-          <div class="profile-success-content">
-            <h1>Dados alterados!</h1>
-            <p>
-              As alterações levarão até 48 horas para serem completamente
-              atualizadas no sistema.
-            </p>
-
-            <div class="profile-actions">
-              <button
-                type="button"
-                class="btn btn-primary"
-                id="btn-voltar-dados"
-              >
-                Voltar aos meus dados
-              </button>
-
-              <button
-                type="button"
-                class="btn-secondary-outline"
-                id="btn-voltar-inicio-dados"
-              >
-                Voltar ao início
-              </button>
-            </div>
-          </div>
-        </section>
 
         <!-- ACESSIBILIDADE -->
         <section class="profile-step" id="step-acessibilidade" hidden>
@@ -572,31 +556,24 @@
           </form>
         </section>
 
-        <!-- SENHA SUCESSO -->
-        <section class="profile-step" id="step-senha-sucesso" hidden>
-          <div class="profile-hero">
-            <img
-              src="assets/img/Mascote-Parabens.svg"
-              alt=""
-              aria-hidden="true"
-            />
+      <!-- SENHA SUCESSO -->
+      <section class="profile-step" id="step-senha-sucesso" hidden>
+        <div class="profile-hero">
+          <img src="assets/img/Mascote-Parabens.svg" alt="" aria-hidden="true" />
+        </div>
+      
+        <div class="profile-success-content">
+          <h1>Senha alterada!</h1>
+          <p>Sua senha foi atualizada com sucesso.</p>
+      
+          <div class="profile-actions">
+            <button type="button" class="btn btn-primary" id="btn-voltar-perfil-senha">
+              Voltar ao perfil
+            </button>
           </div>
+        </div>
+      </section>
 
-          <div class="profile-success-content">
-            <h1>Senha alterada!</h1>
-            <p>Sua senha foi atualizada com sucesso.</p>
-
-            <div class="profile-actions">
-              <button
-                type="button"
-                class="btn btn-primary"
-                id="btn-voltar-perfil-senha"
-              >
-                Voltar ao perfil
-              </button>
-            </div>
-          </div>
-        </section>
       </main>
 
       <nav class="app-nav" aria-label="Menu principal">

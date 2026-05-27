@@ -501,10 +501,11 @@ body {
 
 .review-item {
     display: grid;
-    grid-template-columns: 42px 1fr;
-    gap: 0.75rem;
-    padding: 0.75rem 0;
+    grid-template-columns: 3rem 1fr;
+    gap: 0.85rem;
+    padding: 0.85rem 0;
     border-bottom: 1px solid var(--secondary-border);
+    align-items: center;
 }
 
 .review-item:last-child {
@@ -512,15 +513,39 @@ body {
 }
 
 .review-icon {
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--primary-color);
-    border-radius: 0.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1.5px solid var(--primary-color);
+    border-radius: 0.35rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--primary-color);
-    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.review-icon svg {
+    width: 1.45rem;
+    height: 1.45rem;
+    display: block;
+    fill: currentColor;
+}
+
+.review-icon svg path,
+.review-icon svg circle,
+.review-icon svg rect {
+    fill: currentColor;
+}
+
+.review-icon svg[viewBox="0 0 48 55"] {
+    width: 1.55rem;
+    height: 1.75rem;
+}
+
+.review-icon svg[viewBox="0 0 24 27"],
+.review-icon svg[viewBox="0 0 24 28"] {
+    width: 1.45rem;
+    height: 1.65rem;
 }
 
 .review-label {
@@ -662,50 +687,6 @@ body {
     opacity: 1;
 }
 
-#main-content[hidden],
-#btn-voltar[hidden] {
-    display: none !important;
-}
-
-#step-bloqueio-especialidade:not([hidden]),
-    #step-bloqueio-exame:not([hidden]),
-    #step-bloqueio-vacina:not([hidden]) {
-        min-height: auto;
-    }
-
-    #step-bloqueio-especialidade:not([hidden]) .blocked-content,
-    #step-bloqueio-exame:not([hidden]) .blocked-content,
-    #step-bloqueio-vacina:not([hidden]) .blocked-content {
-        width: 100%;
-        padding: 0 1rem 6rem;
-    }
-    /* 1. Faz a tela de bloqueio preencher a área roxa listrada e centraliza o conteúdo */
-.scheduling-layout.is-blocked-step > .step:not([hidden]) {
-    flex: 1; /* É isso aqui que "mata" o espaço vazio! */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    background-color: var(--bg-color);
-}
-
-/* 2. Limita a largura do texto e da imagem para não ficarem distorcidos em monitores grandes */
-.scheduling-layout.is-blocked-step .blocked-hero,
-.scheduling-layout.is-blocked-step .blocked-content {
-    width: 100%;
-    max-width: 520px; /* Mantém a proporção elegante do layout */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* 3. Ajusta o fundo azul escuro do mascote para virar um card centralizado */
-.scheduling-layout.is-blocked-step .blocked-hero {
-    margin: 0 auto 1.5rem auto;
-    border-radius: 1rem 1rem 0 0; /* Arredonda o topo para um acabamento mais premium */
-}
-
-
 @media (max-width: 420px) {
     .location-card {
         padding: 1rem;
@@ -738,49 +719,6 @@ body {
         min-height: 3rem;
         font-size: 0.95rem;
     }
-
-    #main-content[hidden],
-#btn-voltar[hidden] {
-    display: none !important;
-}
-
-#step-bloqueio-especialidade:not([hidden]),
-    #step-bloqueio-exame:not([hidden]),
-    #step-bloqueio-vacina:not([hidden]) {
-        min-height: auto;
-    }
-
-    #step-bloqueio-especialidade:not([hidden]) .blocked-content,
-    #step-bloqueio-exame:not([hidden]) .blocked-content,
-    #step-bloqueio-vacina:not([hidden]) .blocked-content {
-        width: 100%;
-        padding: 0 1rem 6rem;
-    }
-    /* 1. Faz a tela de bloqueio preencher a área roxa listrada e centraliza o conteúdo */
-.scheduling-layout.is-blocked-step > .step:not([hidden]) {
-    flex: 1; /* É isso aqui que "mata" o espaço vazio! */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    background-color: var(--bg-color);
-}
-
-/* 2. Limita a largura do texto e da imagem para não ficarem distorcidos em monitores grandes */
-.scheduling-layout.is-blocked-step .blocked-hero,
-.scheduling-layout.is-blocked-step .blocked-content {
-    width: 100%;
-    max-width: 520px; /* Mantém a proporção elegante do layout */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* 3. Ajusta o fundo azul escuro do mascote para virar um card centralizado */
-.scheduling-layout.is-blocked-step .blocked-hero {
-    margin: 0 auto 1.5rem auto;
-    border-radius: 1rem 1rem 0 0; /* Arredonda o topo para um acabamento mais premium */
-}
 }
 
 @media (min-width: 768px) {
@@ -875,47 +813,562 @@ body {
         min-height: 3.4rem;
         font-size: 1.05rem;
     }
+}
 
-    #main-content[hidden],
-#btn-voltar[hidden] {
+/* =========================================
+   CORREÇÃO DEFINITIVA — BLOQUEIOS SEM VOLTAR GLOBAL
+   Quando a etapa atual for uma tela de bloqueio, o <main>
+   é escondido pelo JS. Esta regra garante que nenhum CSS
+   anterior consiga manter o botão "Voltar" visível.
+   ========================================= */
+
+.scheduling-main[hidden],
+.scheduling-back[hidden] {
     display: none !important;
 }
 
+.scheduling-layout.is-blocked-step .scheduling-main,
+.scheduling-layout.is-blocked-step #btn-voltar,
+.scheduling-layout.is-blocked-step .scheduling-back {
+    display: none !important;
+}
+
+.scheduling-layout.is-blocked-step>.step:not([hidden]) {
+    flex: 1;
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+}
+
+@media (min-width: 768px) {
+    .scheduling-layout.is-blocked-step>.step:not([hidden]) {
+        min-height: 100vh;
+    }
+}
+
+/* =========================================
+   CORREÇÃO DEFINITIVA — TELAS DE BLOQUEIO
+   Esconde o <main> e o botão global "Voltar"
+   quando uma tela de aviso estiver visível.
+
+   Motivo:
+   As telas #step-bloqueio-* ficam fora do <main>,
+   mas o botão global #btn-voltar fica dentro dele.
+   Sem esta regra, o aviso aparece e o botão global
+   continua aparecendo ao lado.
+   ========================================= */
+
+.scheduling-layout:has(#step-bloqueio-especialidade:not([hidden])) #main-content,
+.scheduling-layout:has(#step-bloqueio-exame:not([hidden])) #main-content,
+.scheduling-layout:has(#step-bloqueio-vacina:not([hidden])) #main-content,
+.scheduling-layout:has(#step-bloqueio-especialidade:not([hidden])) .scheduling-main,
+.scheduling-layout:has(#step-bloqueio-exame:not([hidden])) .scheduling-main,
+.scheduling-layout:has(#step-bloqueio-vacina:not([hidden])) .scheduling-main,
+.scheduling-layout:has(#step-bloqueio-especialidade:not([hidden])) #btn-voltar,
+.scheduling-layout:has(#step-bloqueio-exame:not([hidden])) #btn-voltar,
+.scheduling-layout:has(#step-bloqueio-vacina:not([hidden])) #btn-voltar {
+    display: none !important;
+}
+
+/* Faz a tela de aviso ocupar a área de conteúdo corretamente */
 #step-bloqueio-especialidade:not([hidden]),
+#step-bloqueio-exame:not([hidden]),
+#step-bloqueio-vacina:not([hidden]) {
+    flex: 1;
+    width: 100%;
+    max-width: none;
+}
+
+/* No desktop, mantém o menu lateral e deixa o aviso preencher o restante */
+@media (min-width: 768px) {
+
+    #step-bloqueio-especialidade:not([hidden]),
     #step-bloqueio-exame:not([hidden]),
     #step-bloqueio-vacina:not([hidden]) {
-        min-height: auto;
+        min-height: 100vh;
+    }
+}
+
+/* =========================================
+   FIX FINAL — BLOQUEIOS SEM MAIN LATERAL
+   Regra baseada na estrutura real do HTML:
+   as telas de bloqueio ficam antes do #main-content.
+   Então, quando uma delas estiver visível, o main inteiro
+   é removido do layout. Não depende de classe no JS.
+   ========================================= */
+
+#step-bloqueio-especialidade:not([hidden])~#main-content,
+#step-bloqueio-exame:not([hidden])~#main-content,
+#step-bloqueio-vacina:not([hidden])~#main-content,
+#step-bloqueio-especialidade:not([hidden])~.scheduling-main,
+#step-bloqueio-exame:not([hidden])~.scheduling-main,
+#step-bloqueio-vacina:not([hidden])~.scheduling-main {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+#step-bloqueio-especialidade:not([hidden]),
+#step-bloqueio-exame:not([hidden]),
+#step-bloqueio-vacina:not([hidden]) {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
+}
+
+@media (min-width: 768px) {
+
+    #step-bloqueio-especialidade:not([hidden]),
+    #step-bloqueio-exame:not([hidden]),
+    #step-bloqueio-vacina:not([hidden]) {
+        min-height: 100vh;
+    }
+}
+
+
+/* Ícones da revisão acompanham o tamanho de fonte escolhido na acessibilidade. */
+html[data-fontsize="large"] .review-item {
+    grid-template-columns: 3.35rem 1fr;
+    gap: 1rem;
+}
+
+html[data-fontsize="large"] .review-icon {
+    width: 3.1rem;
+    height: 3.1rem;
+}
+
+html[data-fontsize="large"] .review-icon svg {
+    width: 1.65rem;
+    height: 1.65rem;
+}
+
+@media (max-width: 420px) {
+    .review-item {
+        grid-template-columns: 2.75rem 1fr;
+        gap: 0.75rem;
     }
 
-    #step-bloqueio-especialidade:not([hidden]) .blocked-content,
-    #step-bloqueio-exame:not([hidden]) .blocked-content,
-    #step-bloqueio-vacina:not([hidden]) .blocked-content {
-        width: 100%;
-        padding: 0 1rem 6rem;
+    .review-icon {
+        width: 2.55rem;
+        height: 2.55rem;
     }
-    /* 1. Faz a tela de bloqueio preencher a área roxa listrada e centraliza o conteúdo */
-.scheduling-layout.is-blocked-step > .step:not([hidden]) {
-    flex: 1; /* É isso aqui que "mata" o espaço vazio! */
+
+    .review-icon svg {
+        width: 1.3rem;
+        height: 1.3rem;
+    }
+}
+
+/* =========================================
+   ETAPA DE PROFISSIONAL
+   O usuário escolhe o profissional/equipe antes
+   de escolher o horário.
+   ========================================= */
+.professional-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.professional-card {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 3.25rem 1fr;
+    gap: 1rem;
+    align-items: center;
+    background-color: var(--card-bg);
+    border: 1.5px solid var(--secondary-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    color: var(--text-main);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.professional-card:hover,
+.professional-card:focus-visible {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--subcard-secondary-bg);
+    outline: none;
+    transform: translateY(-2px);
+}
+
+.professional-card:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.professional-icon {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 0.55rem;
+    background-color: var(--primary-color);
+    color: var(--text-button);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.professional-icon svg {
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.professional-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.professional-name {
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--text-main);
+}
+
+.professional-specialty,
+.professional-count {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.25;
+}
+
+.professional-count {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* Inclui a nova tela de bloqueio de clínico geral no mesmo comportamento dos avisos */
+.scheduling-layout:has(#step-bloqueio-clinico-aberto:not([hidden])) #main-content,
+.scheduling-layout:has(#step-bloqueio-clinico-aberto:not([hidden])) .scheduling-main,
+.scheduling-layout:has(#step-bloqueio-clinico-aberto:not([hidden])) #btn-voltar,
+#step-bloqueio-clinico-aberto:not([hidden])~#main-content,
+#step-bloqueio-clinico-aberto:not([hidden])~.scheduling-main {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+#step-bloqueio-clinico-aberto:not([hidden]) {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
+}
+
+@media (min-width: 768px) {
+    #step-bloqueio-clinico-aberto:not([hidden]) {
+        min-height: 100vh;
+    }
+
+    .professional-list {
+        max-width: 560px;
+    }
+
+    .professional-card {
+        padding: 1.5rem;
+        grid-template-columns: 3.5rem 1fr;
+    }
+
+    .professional-icon {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    .professional-name {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .scheduling-main {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .choice-card,
+    .item-card,
+    .date-card,
+    .time-card,
+    .location-card,
+    .professional-card {
+        padding: 1rem;
+    }
+
+    .professional-card {
+        grid-template-columns: 3rem 1fr;
+        gap: 0.75rem;
+    }
+
+    .professional-icon {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+/* =========================================
+   FIX ESTRUTURAL FINAL — AVISOS SEM ÁREA BRANCA
+   No desktop, quando uma etapa de bloqueio está ativa,
+   o layout vira grid: menu lateral + tela de aviso.
+   Assim não sobra coluna fantasma do main.
+   ========================================= */
+@media (min-width: 768px) {
+    .scheduling-layout.is-blocked-step {
+        display: grid !important;
+        grid-template-columns: 250px minmax(0, 1fr);
+        align-items: stretch;
+    }
+
+    .scheduling-layout.is-blocked-step .app-nav {
+        grid-column: 1;
+        grid-row: 1;
+        width: 250px;
+        order: initial;
+    }
+
+    .scheduling-layout.is-blocked-step>.step:not([hidden]) {
+        grid-column: 2;
+        grid-row: 1;
+        min-width: 0;
+        width: 100%;
+        max-width: none;
+    }
+
+    .scheduling-layout.is-blocked-step .blocked-hero {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .scheduling-layout.is-blocked-step .blocked-content {
+        width: min(100%, 760px);
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        padding-bottom: 4rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .scheduling-layout.is-blocked-step {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+/* =========================================================
+   COMPONENTE — MENSAGEM DA MASCOTE EM TELA CHEIA
+   Usado para bloqueios/avisos do fluxo de agendamento.
+   A mensagem principal fica em balão de fala, conectada
+   visualmente à mascote.
+   ========================================================= */
+
+.mascot-message[hidden] {
+    display: none !important;
+}
+
+.mascot-message:not([hidden]) {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    min-height: 100vh;
+    background: var(--bg-color);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mascot-message-hero {
+    width: 100%;
+    background: var(--mascot-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
-    background-color: var(--bg-color);
+    padding: 1.25rem 1rem 1.75rem;
 }
 
-/* 2. Limita a largura do texto e da imagem para não ficarem distorcidos em monitores grandes */
-.scheduling-layout.is-blocked-step .blocked-hero,
-.scheduling-layout.is-blocked-step .blocked-content {
+.mascot-message-image {
+    width: min(14rem, 70vw);
+    height: auto;
+    display: block;
+}
+
+.mascot-speech {
+    position: relative;
+    width: min(100%, 34rem);
+    margin-top: -0.25rem;
+    background: var(--card-bg);
+    border: 1.5px solid var(--secondary-border);
+    border-radius: var(--radius-lg);
+    padding: 1.15rem;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+}
+
+.mascot-speech::before {
+    content: "";
+    position: absolute;
+    top: -0.65rem;
+    left: 50%;
+    width: 1.25rem;
+    height: 1.25rem;
+    transform: translateX(-50%) rotate(45deg);
+    background: var(--card-bg);
+    border-top: 1.5px solid var(--secondary-border);
+    border-left: 1.5px solid var(--secondary-border);
+}
+
+.mascot-speech h1 {
+    position: relative;
+    z-index: 1;
+    font-size: 1.45rem;
+    line-height: 1.12;
+    font-weight: 850;
+    color: var(--text-main);
+    margin-bottom: 0.65rem;
+}
+
+.mascot-speech p {
+    position: relative;
+    z-index: 1;
+    font-size: 1rem;
+    line-height: 1.35;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.mascot-message-content {
+    width: min(100%, 34rem);
+    padding: 1.25rem 1rem 5.5rem;
+}
+
+.helper-text {
     width: 100%;
-    max-width: 520px; /* Mantém a proporção elegante do layout */
-    margin-left: auto;
-    margin-right: auto;
+    background: var(--subcard-secondary-bg);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    font-size: 1rem;
+    line-height: 1.35;
+    color: var(--text-main);
+    margin-bottom: 1.25rem;
+    text-align: left;
 }
 
-/* 3. Ajusta o fundo azul escuro do mascote para virar um card centralizado */
-.scheduling-layout.is-blocked-step .blocked-hero {
-    margin: 0 auto 1.5rem auto;
-    border-radius: 1rem 1rem 0 0; /* Arredonda o topo para um acabamento mais premium */
+.helper-text::before {
+    content: "!";
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.75rem;
+    border-radius: 999px;
+    background: var(--primary-color);
+    color: var(--text-button);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 850;
+    vertical-align: middle;
 }
+
+/* A tela de bloqueio substitui o conteúdo principal, sem criar coluna fantasma. */
+.scheduling-main[hidden],
+.scheduling-layout.is-blocked-step .scheduling-main,
+.scheduling-layout.is-blocked-step #btn-voltar,
+.scheduling-layout.is-blocked-step .scheduling-back {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+@media (min-width: 768px) {
+    .scheduling-layout.is-blocked-step {
+        display: grid !important;
+        grid-template-columns: clamp(15.5rem, 19vw, 19.5rem) minmax(0, 1fr);
+        align-items: stretch;
+        min-height: 100vh;
+    }
+
+    .scheduling-layout.is-blocked-step .app-nav {
+        grid-column: 1;
+        grid-row: 1;
+        width: auto;
+    }
+
+    .scheduling-layout.is-blocked-step>.mascot-message:not([hidden]) {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .mascot-message-hero {
+        min-height: 18rem;
+        flex-direction: row;
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .mascot-message-image {
+        width: 14rem;
+        max-width: 28vw;
+    }
+
+    .mascot-speech {
+        margin-top: 0;
+        text-align: left;
+        padding: 1.35rem 1.45rem;
+    }
+
+    .mascot-speech::before {
+        top: 50%;
+        left: -0.65rem;
+        transform: translateY(-50%) rotate(45deg);
+        border-top: none;
+        border-bottom: 1.5px solid var(--secondary-border);
+        border-left: 1.5px solid var(--secondary-border);
+    }
+
+    .mascot-message-content {
+        padding-top: 1.5rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .mascot-message-hero {
+        padding: 1rem 0.75rem 1.25rem;
+    }
+
+    .mascot-message-image {
+        width: min(11rem, 66vw);
+    }
+
+    .mascot-speech {
+        padding: 1rem;
+        border-radius: 0.85rem;
+    }
+
+    .mascot-speech h1 {
+        font-size: 1.22rem;
+    }
+
+    .mascot-speech p,
+    .helper-text {
+        font-size: 0.95rem;
+    }
+
+    .mascot-message-content {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
 }

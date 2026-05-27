@@ -85,61 +85,64 @@
                 </div>
             </section>
 
-            <!-- CONFIRMAR CANCELAMENTO -->
-            <section class="agenda-step" id="step-confirmar-cancelamento" hidden>
+        <section class="agenda-step app-dialog-step" id="step-confirmar-cancelamento" hidden role="dialog" aria-modal="true"
+            aria-labelledby="titulo-cancelamento">
+            <div class="app-dialog-card app-dialog-card--warning">
                 <header class="agenda-header">
-                    <h1 class="agenda-title">Quer mesmo cancelar?</h1>
+                    <h1 class="agenda-title" id="titulo-cancelamento">Quer mesmo cancelar?</h1>
                 </header>
-
+        
                 <div class="cancel-hero">
-                    <img src="assets/img/Mascote-Olá.svg" alt="" aria-hidden="true">
+                    <img src="assets/img/Mascote-Tem Certeza_.svg" alt="" aria-hidden="true">
                 </div>
-
+        
                 <div class="cancel-content">
                     <p class="cancel-main-text">
                         Esse agendamento será cancelado e sua vaga será liberada no sistema.
                     </p>
-
+        
                     <p class="cancel-secondary-text">
                         Se depois quiser agendar novamente, será preciso iniciar um novo agendamento.
                     </p>
-
+        
                     <div class="agenda-actions">
                         <button type="button" class="btn btn-primary" id="btn-manter-agendamento">
                             Manter agendamento
                         </button>
-
+        
                         <button type="button" class="btn-secondary-outline" id="btn-confirmar-cancelamento">
                             Confirmar Cancelamento
                         </button>
                     </div>
                 </div>
-            </section>
-
-            <!-- SUCESSO DO CANCELAMENTO -->
-            <section class="agenda-step" id="step-cancelado" hidden>
-                <div class="success-hero">
-                    <img src="assets/img/Mascote-Parabens.svg" alt="" aria-hidden="true">
+            </div>
+        </section>
+        
+        <!-- SUCESSO DO CANCELAMENTO -->
+        <section class="agenda-step" id="step-cancelado" hidden>
+            <div class="success-hero">
+                <img src="assets/img/Mascote-Parabens.svg" alt="" aria-hidden="true">
+            </div>
+        
+            <div class="success-content">
+                <h1 class="success-title">Agendamento<br>cancelado!</h1>
+        
+                <p class="success-text">
+                    Se quiser agendar novamente depois, será preciso iniciar um novo agendamento.
+                </p>
+        
+                <div class="agenda-actions">
+                    <button type="button" class="btn btn-primary" id="btn-ir-agenda">
+                        Ir para a Agenda
+                    </button>
+        
+                    <button type="button" class="btn-secondary-outline" id="btn-novo-agendamento">
+                        Novo Agendamento
+                    </button>
                 </div>
+            </div>
+        </section>
 
-                <div class="success-content">
-                    <h1 class="success-title">Agendamento<br>cancelado!</h1>
-
-                    <p class="success-text">
-                        Se quiser agendar novamente depois, será preciso iniciar um novo agendamento.
-                    </p>
-
-                    <div class="agenda-actions">
-                        <button type="button" class="btn btn-primary" id="btn-ir-agenda">
-                            Ir para a Agenda
-                        </button>
-
-                        <button type="button" class="btn-secondary-outline" id="btn-novo-agendamento">
-                            Novo Agendamento
-                        </button>
-                    </div>
-                </div>
-            </section>
 
             <!-- ERRO -->
             <section class="agenda-step" id="step-error" hidden>
