@@ -17,14 +17,15 @@
         <section class="auth-sidebar" aria-hidden="true">
             <div class="sidebar-wrapper">
                 <img src="assets/img/LOGO-VIVA+.svg" alt="" class="sidebar-mascot">
-                <p class="sidebar-text">Sua saúde de forma simples e segura.</p>
+                <p class="sidebar-text">Sua saúde de forma <br> simples e segura.</p>
             </div>
         </section>
 
         <section class="auth-content">
             <div class="form-card-wrapper">
                 <header class="auth-header">
-                    <button type="button" class="btn-back" aria-label="Voltar para a tela inicial" onclick="window.location.href='index.html'">
+                    <button type="button" class="btn-back" aria-label="Voltar para a tela inicial"
+                        onclick="window.location.href='index.html'">
                         <img src="assets/icons/icon-voltar.svg" alt="" aria-hidden="true">
                         <span>Voltar</span>
                     </button>
@@ -36,7 +37,10 @@
                     <div class="form-group">
                         <label for="cpf" class="form-label">CPF</label>
                         <div class="input-container">
-                            <input type="text" id="cpf" name="cpf" class="form-input" placeholder="Digite apenas os números" inputmode="numeric" pattern="[0-9]*" maxlength="14" required aria-required="true" aria-invalid="false" aria-describedby="cpf-error">
+                            <input type="text" id="cpf" name="cpf" class="form-input"
+                                placeholder="Digite apenas os números" inputmode="numeric" pattern="[0-9]*"
+                                maxlength="14" required aria-required="true" aria-invalid="false"
+                                aria-describedby="cpf-error">
                         </div>
                         <span id="cpf-error" class="field-error" aria-live="polite" hidden>
                             Não encontramos uma conta ativa com este CPF.
@@ -46,10 +50,15 @@
                     <div class="form-group">
                         <label for="senha" class="form-label">Senha</label>
                         <div class="input-container">
-                            <input type="password" id="senha" name="senha" class="form-input has-password-toggle" placeholder="Digite a sua senha" inputmode="numeric" pattern="[0-9]*" maxlength="8" data-only-numbers="true" required aria-required="true" aria-invalid="false" aria-describedby="senha-error">
-                            <button type="button" class="btn-toggle-password" aria-label="Mostrar senha escrita como texto" aria-pressed="false">
+                            <input type="password" id="senha" name="senha" class="form-input has-password-toggle"
+                                placeholder="Digite a sua senha" inputmode="numeric" pattern="[0-9]*" maxlength="8"
+                                data-only-numbers="true" required aria-required="true" aria-invalid="false"
+                                aria-describedby="senha-error">
+                            <button type="button" class="btn-toggle-password"
+                                aria-label="Mostrar senha escrita como texto" aria-pressed="false">
                                 <img src="assets/icons/icon-visivel.svg" class="olho-aberto" alt="" aria-hidden="true">
-                                <img src="assets/icons/icon-nao-visivel.svg" class="olho-fechado" alt="" aria-hidden="true">
+                                <img src="assets/icons/icon-nao-visivel.svg" class="olho-fechado" alt=""
+                                    aria-hidden="true">
                             </button>
                         </div>
                         <span id="senha-error" class="field-error" aria-live="polite" hidden>
