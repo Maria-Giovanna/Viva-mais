@@ -1,97 +1,70 @@
+# 🏥 Viva+ | Área do Paciente
+> **Branch de Desenvolvimento (`feature/desenvolvimento`)**
+
+O **Viva+** é um sistema web acadêmico focado no agendamento de serviços de saúde. O grande diferencial do projeto é a **acessibilidade e a experiência do usuário (UX)**, com fluxos objetivos, claros e amigáveis, pensados especialmente para a inclusão digital de pessoas idosas.
+
+Aqui testamos, refinamos e validamos as novas funcionalidades de interface antes de enviá-las para a branch principal.
 
 ---
 
-# README da branch `feature/desenvolvimento`
+## 📸 Preview da Interface
 
-Esse pode ser mais técnico, explicando que é uma branch de construção:
+*(Coloque aqui 2 ou 3 screenshots das telas mais bonitas, como a Home, o Perfil e a nova tela de Erro com a mascote. Se puder gravar um GIF do fluxo de agendamento, fica ainda melhor!)*
 
-```md
-# Viva+ — Branch de Desenvolvimento
+<p align="center">
+  <img src="caminho-para-imagem-da-home.png" width="250" alt="Tela Inicial do Viva+">
+  <img src="caminho-para-imagem-do-modal.png" width="250" alt="Modal de aviso com a Mascote">
+  <img src="caminho-para-imagem-da-agenda.png" width="250" alt="Tela de Agenda">
+</p>
 
-## Sobre esta branch
+---
 
-Esta branch contém a versão em desenvolvimento do projeto **Viva+**, um sistema web acadêmico voltado para agendamento de serviços de saúde.
+## ✨ Destaques de UI/UX
 
-Aqui são implementadas, testadas e ajustadas novas funcionalidades antes de serem enviadas para a branch principal `main`.
+Além das funcionalidades padrão, o projeto conta com refinamentos de front-end focados na usabilidade:
 
-## Objetivo do projeto
+- **Modais Nativos (`<dialog>`):** Feedbacks visuais e alertas de bloqueio integrados ao fluxo através de modais conversacionais com a mascote do app, evitando que o usuário perca o contexto da tela.
+- **Acessibilidade Configurável:** Opções de alto contraste, tema escuro e redimensionamento de fonte.
+- **Design System Consistente:** Uso de variáveis CSS (`variables.css`) para manter a consistência da paleta de cores, tipografia e ícones em todo o projeto.
 
-O Viva+ tem como objetivo simular uma plataforma acessível para pacientes realizarem agendamentos de saúde de forma simples, com atenção especial à experiência de pessoas idosas.
+---
 
-O sistema busca apresentar fluxos objetivos para:
+## ⚙️ Regras de Negócio Simuladas
 
-- criação de conta;
-- login;
-- recuperação de senha;
-- navegação pela área do paciente;
-- agendamento de consultas;
-- agendamento de exames;
-- agendamento de vacinas;
-- revisão e confirmação de agendamentos.
+Para demonstrar o funcionamento real da aplicação, o front-end consome dados simulados (`data/usuarios.json` e `data/unidades.json`) que ditam as seguintes regras de bloqueio e liberação de agenda:
 
-## Funcionalidades em desenvolvimento
+* **🩺 Consultas Médicas:** O agendamento de especialidades requer um encaminhamento ativo. Caso não haja, a interface guia o paciente para o agendamento com um Clínico Geral.
+* **🔬 Exames:** Exige um pedido médico registrado no sistema para liberar os horários.
+* **💉 Vacinas:** A exibição depende do estoque e da disponibilidade vinculada ao perfil do usuário.
 
-### Fluxos já implementados
+---
 
-- Tela inicial.
-- Login.
-- Cadastro.
-- Recuperação de senha.
-- Home do paciente.
-- Agendamento de consulta médica.
-- Agendamento de exames.
-- Agendamento de vacinas.
-- Tela de bloqueio para especialidade sem encaminhamento.
-- Tela de bloqueio para exame sem pedido médico.
-- Tela de bloqueio para vacina indisponível.
-- Seleção de local.
-- Seleção de data.
-- Seleção de horário.
-- Revisão do agendamento.
-- Confirmação do agendamento.
+## 🚀 Status do Desenvolvimento
 
-### Funcionalidades previstas
+**Fluxos de Autenticação & Setup**
+- [x] Tela inicial e Login
+- [x] Cadastro e Recuperação de senha
+- [x] Acessibilidade e visualização de Perfil
 
-- Melhorias na tela de agenda.
-- Tela de perfil do paciente.
-- Melhorias de acessibilidade.
-- Ajustes finais de responsividade.
-- Refinamento visual com base no Figma.
-- Organização final do código.
-- Revisão de textos e mensagens do sistema.
+**Fluxos de Agendamento**
+- [x] Home do paciente
+- [x] Agendamento de consultas, exames e vacinas
+- [x] Telas de bloqueio amigáveis (Mascote)
+- [x] Seleção de local, data e horário
+- [x] Revisão e confirmação de agendamentos
 
-## Regras de negócio simuladas
+**Próximos Passos (To-Do)**
+- [ ] Refinamento visual finais com base no Figma
+- [ ] Melhorias na tela de histórico da Agenda
+- [ ] Revisão de textos (UX Writing) e organização final do código
 
-O sistema utiliza dados simulados para representar algumas regras de agendamento.
+---
 
-### Consulta médica
+## 📁 Estrutura de Arquivos Principal
 
-O paciente pode escolher entre:
+A arquitetura do front-end foi dividida para separar a lógica de negócio da estilização e marcação:
 
-- Clínico Geral;
-- Especialista.
-
-Para agendar uma especialidade, o paciente precisa ter um encaminhamento ativo registrado no `usuarios.json`.
-
-Caso não tenha encaminhamento, o sistema exibe uma tela de aviso e recomenda agendar uma consulta com clínico geral.
-
-### Exames
-
-O paciente só pode agendar exames se houver um pedido médico ativo registrado no `usuarios.json`.
-
-Caso não tenha pedido médico, o sistema exibe uma tela de bloqueio.
-
-### Vacinas
-
-O paciente só visualiza vacinas disponíveis quando elas estão cadastradas como disponíveis no `usuarios.json`.
-
-Caso não existam vacinas disponíveis, o sistema exibe uma mensagem informando que não há vacinas para agendamento no momento.
-
-## Arquivos principais
-
-```txt
-agendamento.html
-css/agendamento.css
-js/agendamento.js
-data/unidades.json
-data/usuarios.json
+- `*.html` — Marcação estrutural das telas principais.
+- `css/` — Estilos separados por componentes e páginas (`global.css`, `components.css`, etc).
+- `js/` — Controladores de tela e integrações simuladas (`agendamento.js`, `a11y.js`).
+- `data/` — Banco de dados em formato JSON.
