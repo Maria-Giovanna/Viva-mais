@@ -103,29 +103,29 @@
    em Perfil > Acessibilidade > Tamanho do texto.
    ========================================= */
 
-/* Padrão do sistema: 16px */
+/* Padrão do sistema: 18px */
 html {
-    font-size: 100%;
+    font-size: 18px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* Pequeno: 14px */
 html[data-fontsize="small"] {
-    font-size: 87.5%;
+    font-size: 14px;
 }
 
-/* Padrão: 16px */
+/* Padrão: 18px */
 html[data-fontsize="standard"] {
-    font-size: 100%;
+    font-size: 18px;
 }
 
 /* Compatibilidade com versão antiga.
    Caso algum usuário esteja salvo como medium, o sistema trata como padrão. */
 html[data-fontsize="medium"] {
-    font-size: 100%;
+    font-size: 20px;
 }
 
-/* Grande: 20px */
+/* Grande: 24px */
 html[data-fontsize="large"] {
-    font-size: 125%;
+    font-size: 24px;
 }

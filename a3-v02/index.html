@@ -14,53 +14,69 @@
 
 <body>
     <main id="main-content" class="welcome-layout">
-        <section class="welcome-illustration" aria-labelledby="welcome-help-title">
-            <div class="welcome-speech-bubble">
-                <p class="bubble-intro" id="welcome-help-title">
-                    Para acessar o VIVA+, basta escolher uma das opções abaixo:
+    <section class="welcome-illustration" aria-labelledby="welcome-help-title">
+        <div class="welcome-speech-bubble">
+            <p class="bubble-title" id="welcome-help-title">
+                Como você quer acessar?
+            </p>
+
+            <div class="bubble-option">
+                <span class="bubble-icon" aria-hidden="true">
+                <svg id="icon-entrar" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 512 512" focusable="false">
+                    <path
+                        d="m126.962 402.3a54.849 54.849 0 1 0 0 109.7h258.063a54.849 54.849 0 1 0 0-109.7zm129.031-390.3c98.489 0 178.607 80.123 178.607 178.607a178.487 178.487 0 0 1 -72.932 143.9v-17.02a105.859 105.859 0 0 0 -82.236-103.051 63.322 63.322 0 1 0 -46.886 0 105.86 105.86 0 0 0 -82.226 103.051v17.013a178.459 178.459 0 0 1 -72.932-143.9c.004-98.477 80.126-178.6 178.605-178.6zm0 369.214c105.1 0 190.613-85.5 190.613-190.608s-85.506-190.606-190.613-190.606-190.6 85.509-190.6 190.608 85.5 190.608 190.6 190.608zm-102.4 75.937 4.9 3.964a6 6 0 1 1 -7.539 9.331l-.91-.731v2.538a6 6 0 1 1 -12 0v-2.538l-.911.731a6 6 0 1 1 -7.539-9.331l4.9-3.964-4.9-3.962a6 6 0 0 1 7.539-9.332l.911.731v-2.538a6 6 0 1 1 12 0v2.538l.91-.731a6 6 0 1 1 7.539 9.332zm60.879 3.964a6 6 0 0 1 -7.549 9.331l-.9-.731v2.538a6 6 0 1 1 -12 0v-2.538l-.911.731a6 6 0 1 1 -7.539-9.331l4.9-3.964-4.9-3.962a6 6 0 1 1 7.539-9.332l.911.731v-2.538a6 6 0 1 1 12 0v2.538l.9-.731a6 6 0 0 1 7.549 9.332l-4.911 3.962zm51.07-3.964 4.9 3.964a6 6 0 0 1 -3.77 10.666 5.943 5.943 0 0 1 -3.769-1.335l-.911-.731v2.538a6 6 0 0 1 -12 0v-2.538l-.911.731a6 6 0 0 1 -7.539-9.331l4.911-3.964-4.911-3.962a6 6 0 0 1 7.539-9.332l.911.731v-2.538a6 6 0 0 1 12 0v2.538l.911-.731a6 6 0 1 1 7.539 9.332zm60.883 3.964a6 6 0 1 1 -7.544 9.331l-.906-.731v2.538a6 6 0 0 1 -12 0v-2.538l-.91.731a6 6 0 1 1 -7.539-9.331l4.9-3.964-4.9-3.962a6 6 0 1 1 7.539-9.332l.91.731v-2.538a6 6 0 0 1 12 0v2.538l.906-.731a6 6 0 0 1 7.544 9.332l-4.911 3.962zm48.428 9.331-.91-.731v2.538a6 6 0 1 1 -12 0v-2.538l-.91.731a6 6 0 1 1 -7.539-9.331l4.906-3.964-4.9-3.961a6 6 0 0 1 7.539-9.332l.91.731v-2.538a6 6 0 1 1 12 0v2.538l.91-.731a6 6 0 1 1 7.539 9.332l-4.9 3.962 4.9 3.964a6 6 0 1 1 -7.539 9.331z" fill-rule="evenodd"></path>
+                </svg>
+                </span>
+
+                <div class="bubble-option-text">
+                    <strong>Entrar</strong>
+                    <span>Use se você já criou sua senha neste site.</span>
+                </div>
+            </div>
+
+            <div class="bubble-option">
+                <span class="bubble-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5Zm0 2c-4.42 0-8 2.24-8 5v1c0 1.1.9 2 2 2h7.25A7.96 7.96 0 0 1 12 18c0-1.46.39-2.82 1.07-4H12Zm7 1c.55 0 1 .45 1 1v2h2c.55 0 1 .45 1 1s-.45 1-1 1h-2v2c0 .55-.45 1-1 1s-1-.45-1-1v-2h-2c-.55 0-1-.45-1-1s.45-1 1-1h2v-2c0-.55.45-1 1-1Z"/>
+                    </svg>
+                </span>
+
+                <div class="bubble-option-text">
+                    <strong>Ativar meu acesso</strong>
+                    <span>Use se você tem plano ativo, mas ainda não usou o site.</span>
+                </div>
+            </div>
+        </div>
+
+        <img src="assets/img/Mascote-Olá.svg" alt="" class="mascot-img" aria-hidden="true">
+    </section>
+
+    <section class="welcome-content" aria-labelledby="welcome-title">
+        <div class="content-wrapper">
+            <header class="welcome-header">
+                <h1 class="page-title" id="welcome-title">
+                    Seja bem-vindo<br>
+                    ao <img src="assets/img/logo-viva+escrito.svg" alt="Viva+" class="logo-inline">!
+                </h1>
+
+                <p class="page-description">
+                    Agende suas consultas, exames e<br>
+                    vacinas de forma <strong class="text-highlight">simples e segura</strong>.
                 </p>
+            </header>
 
-                <ul class="bubble-list">
-                    <li>
-                        <strong>ENTRAR:</strong>
-                        <span>Use essa opção se você já criou uma conta neste site.</span>
-                    </li>
+            <nav class="welcome-actions" aria-label="Ações de acesso à conta">
+                <a href="login.html" class="btn btn-primary welcome-action-link">
+                    Entrar
+                </a>
 
-                    <li>
-                        <strong>ATIVAR MEU ACESSO:</strong>
-                        <span>Use essa opção se você já tem plano ativo, mas ainda não tem uma conta no site.</span>
-                    </li>
-                </ul>
-            </div>
-
-            <img src="assets/img/Mascote-Olá.svg" alt="" class="mascot-img" aria-hidden="true">
-        </section>
-
-        <section class="welcome-content" aria-labelledby="welcome-title">
-            <div class="content-wrapper">
-                <header class="welcome-header">
-                    <h1 class="page-title" id="welcome-title">
-                        Seja bem-vindo<br>
-                        ao <img src="assets/img/logo-viva+escrito.svg" alt="Viva+" class="logo-inline">!
-                    </h1>
-
-                    <p class="page-description">
-                        Agende suas consultas, exames e<br>
-                        vacinas de forma <strong class="text-highlight">simples e segura</strong>.
-                    </p>
-                </header>
-
-                <nav class="welcome-actions" aria-label="Ações de acesso à conta">
-                    <a href="login.html" class="btn btn-primary">
-                        Entrar
-                    </a>
-
-                    <a href="cadastro.html" class="btn btn-secondary">
-                        Ativar meu acesso
-                    </a>
-                </nav>
-            </div>
-        </section>
+                <a href="cadastro.html" class="btn btn-secondary welcome-action-link">
+                    Ativar meu acesso
+                </a>
+            </nav>
+        </div>
+    </section>
+</main>>
     </main>
     <script src="js/a11y.js"></script>
 </body>
