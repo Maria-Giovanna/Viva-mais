@@ -8,6 +8,17 @@ body {
   line-height: 1.5;
 }
 
+.app-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--secondary-border);
+  padding: 0.5rem 1rem;
+  z-index: 100;
+}
+
 /* =========================================
    ACESSIBILIDADE GLOBAL
    ========================================= */

@@ -206,13 +206,11 @@ body {
 }
 
 .profile-menu-icon {
-    width: var(--profile-card-icon-box);
-    height: var(--profile-card-icon-box);
-    color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+    display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  flex-shrink: 0;
 }
 
 .profile-menu-icon svg {
@@ -781,7 +779,7 @@ body {
     }
 
     .app-nav {
-        position: sticky;
+        position: fixed;
         top: 0;
         width: 250px;
         height: 100vh;
