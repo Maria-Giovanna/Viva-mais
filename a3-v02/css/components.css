@@ -306,3 +306,437 @@
     width: min(72%, 11rem);
   }
 }
+
+/* =========================================
+   PAINEL RÁPIDO DE ACESSIBILIDADE — DESKTOP
+   Permite ajustar fonte, tema e apoios sem entrar no Perfil.
+   ========================================= */
+
+.quick-a11y {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2000;
+  font-family: inherit;
+}
+
+.quick-a11y-toggle {
+  min-height: 3.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--secondary-border);
+  border-radius: 999px;
+  background-color: var(--card-bg);
+  color: var(--text-main);
+  box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.quick-a11y-toggle:hover,
+.quick-a11y-toggle:focus-visible {
+  border-color: var(--primary-color);
+  outline: 3px solid rgba(var(--primary-color-rgb), 0.18);
+  outline-offset: 2px;
+}
+
+.quick-a11y-toggle-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-color);
+  color: var(--text-button);
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.quick-a11y-toggle-text {
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.quick-a11y-panel {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: 0;
+  width: min(28rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 5.5rem);
+  overflow-y: auto;
+  background-color: var(--card-bg);
+  color: var(--text-main);
+  border: 1px solid var(--secondary-border);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 0.7rem 2rem rgba(0, 0, 0, 0.18);
+}
+
+.quick-a11y-panel[hidden] {
+  display: none !important;
+}
+
+.quick-a11y-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--secondary-border);
+  margin-bottom: 1rem;
+}
+
+.quick-a11y-header strong {
+  display: block;
+  font-size: 1.1rem;
+  line-height: 1.2;
+  color: var(--text-main);
+}
+
+.quick-a11y-header small {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.88rem;
+  line-height: 1.3;
+  color: var(--text-secondary);
+}
+
+.quick-a11y-close {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--secondary-border);
+  border-radius: 0.7rem;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.quick-a11y-close:hover,
+.quick-a11y-close:focus-visible {
+  border-color: var(--primary-color);
+  outline: 3px solid rgba(var(--primary-color-rgb), 0.18);
+  outline-offset: 2px;
+}
+
+.quick-a11y-section+.quick-a11y-section {
+  margin-top: 1rem;
+}
+
+.quick-a11y-section h2 {
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  font-weight: 800;
+}
+
+.quick-a11y-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.quick-a11y-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.quick-a11y-option,
+.quick-a11y-support {
+  border: 1px solid var(--secondary-border);
+  border-radius: 0.75rem;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  cursor: pointer;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.quick-a11y-option {
+  min-height: 2.8rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.95rem;
+}
+
+.quick-a11y-option:hover,
+.quick-a11y-option:focus-visible,
+.quick-a11y-support:hover,
+.quick-a11y-support:focus-visible {
+  border-color: var(--primary-color);
+  outline: 3px solid rgba(var(--primary-color-rgb), 0.18);
+  outline-offset: 2px;
+}
+
+.quick-a11y-option.is-selected,
+.quick-a11y-support.is-selected {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--text-button);
+}
+
+.quick-a11y-support-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.quick-a11y-support {
+  min-height: 3.2rem;
+  padding: 0.7rem 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.quick-a11y-support span {
+  font-size: 0.95rem;
+}
+
+.quick-a11y-support strong {
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .quick-a11y {
+    display: none !important;
+  }
+}
+
+/* =========================================
+   CORREÇÃO — ATALHO DE ACESSIBILIDADE NO MENU LATERAL
+   Evita que o atalho cubra o botão Sair no desktop.
+   Quando houver .app-nav, o painel fica dentro do menu.
+   ========================================= */
+@media (min-width: 768px) {
+  .app-nav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .app-nav .quick-a11y.quick-a11y--nav {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    margin-top: auto;
+    z-index: 20;
+  }
+
+  .app-nav .quick-a11y--nav .quick-a11y-toggle {
+    width: 100%;
+    justify-content: flex-start;
+    min-height: 3.25rem;
+    padding: 0.65rem 0.75rem;
+    box-shadow: none;
+  }
+
+  .app-nav .quick-a11y--nav .quick-a11y-toggle-text {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .app-nav .quick-a11y--nav .quick-a11y-panel {
+    position: absolute;
+    top: auto;
+    right: auto;
+    bottom: 0;
+    left: calc(100% + 0.75rem);
+    width: min(28rem, calc(100vw - 19rem));
+    max-height: calc(100vh - 2rem);
+  }
+}
+
+@media (max-width: 767px) {
+
+  .quick-a11y,
+  .app-nav .quick-a11y.quick-a11y--nav {
+    display: none !important;
+  }
+}
+
+
+/* =========================================
+   CORREÇÃO — ATALHO DE ACESSIBILIDADE FIXO NO TOPO
+   Mantém o botão no canto superior direito sem cobrir o botão Sair.
+   ========================================= */
+
+@media (min-width: 768px) {
+  .quick-a11y {
+    position: fixed !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    width: auto !important;
+    margin: 0 !important;
+    z-index: 3000 !important;
+  }
+
+  .quick-a11y-toggle {
+    width: auto !important;
+    justify-content: center !important;
+    box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.12) !important;
+    white-space: nowrap;
+  }
+
+  .quick-a11y-panel {
+    position: absolute !important;
+    top: calc(100% + 0.75rem) !important;
+    right: 0 !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: min(28rem, calc(100vw - 2rem)) !important;
+    max-height: calc(100vh - 5.5rem) !important;
+  }
+
+  /*
+    Reserva espaço no header para o botão Sair não ficar embaixo
+    do atalho de acessibilidade.
+  */
+  .app-header {
+    padding-right: clamp(16rem, 24vw, 22rem);
+  }
+
+  html[data-fontsize="medium"] .app-header {
+    padding-right: clamp(18rem, 28vw, 25rem);
+  }
+
+  html[data-fontsize="large"] .app-header {
+    padding-right: clamp(20rem, 32vw, 28rem);
+  }
+
+  .app-header .btn-text,
+  .app-header #btn-sair {
+    position: relative;
+    z-index: 10;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 767px) {
+  .quick-a11y {
+    display: none !important;
+  }
+
+  .app-header {
+    padding-right: 0;
+  }
+}
+
+/* =========================================
+   AJUSTE FINAL — SAIR + ACESSIBILIDADE NO MESMO GRUPO
+   Mantém o atalho no topo direito sem cobrir o botão Sair.
+   ========================================= */
+
+@media (min-width: 768px) {
+  .app-header {
+    width: 100%;
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 1rem clamp(1rem, 3vw, 2rem) !important;
+    padding-right: clamp(1rem, 3vw, 2rem) !important;
+    position: relative;
+    z-index: 1500;
+    background-color: var(--bg-color);
+  }
+
+  .app-header-actions {
+    width: auto;
+    max-width: 100%;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .app-header-actions #btn-sair,
+  .app-header-actions .btn-text {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    z-index: auto !important;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  #a11y-shortcut-slot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+  }
+
+  #a11y-shortcut-slot .quick-a11y.quick-a11y--header {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: auto !important;
+    margin: 0 !important;
+    z-index: 1 !important;
+    font-family: inherit;
+  }
+
+  #a11y-shortcut-slot .quick-a11y--header .quick-a11y-toggle {
+    width: auto !important;
+    min-height: 3.25rem;
+    justify-content: center !important;
+    white-space: nowrap;
+  }
+
+  #a11y-shortcut-slot .quick-a11y--header .quick-a11y-panel {
+    position: absolute !important;
+    top: calc(100% + 0.75rem) !important;
+    right: 0 !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: min(28rem, calc(100vw - 2rem)) !important;
+    max-height: calc(100vh - 5.5rem) !important;
+    z-index: 2000;
+  }
+
+  .quick-a11y.quick-a11y--floating {
+    position: fixed !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    width: auto !important;
+    margin: 0 !important;
+    z-index: 3000 !important;
+  }
+
+  html[data-fontsize="medium"] .app-header-actions,
+  html[data-fontsize="large"] .app-header-actions {
+    gap: 0.75rem;
+  }
+
+  html[data-fontsize="large"] #a11y-shortcut-slot .quick-a11y-toggle-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 767px) {
+
+  #a11y-shortcut-slot,
+  #a11y-shortcut-slot .quick-a11y,
+  .quick-a11y.quick-a11y--header,
+  .quick-a11y.quick-a11y--floating {
+    display: none !important;
+  }
+
+  .app-header {
+    padding-right: 1rem !important;
+  }
+}

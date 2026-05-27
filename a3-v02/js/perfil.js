@@ -68,9 +68,12 @@
     return {
       ...usuario,
       preferencias: {
-        tema: preferencias.tema || localStorage.getItem("viva_theme") || "light",
+        tema:
+          preferencias.tema || localStorage.getItem("viva_theme") || "light",
         tamanhoFonte: normalizarTamanhoFonte(
-          preferencias.tamanhoFonte || localStorage.getItem("viva_fontsize") || "standard",
+          preferencias.tamanhoFonte ||
+            localStorage.getItem("viva_fontsize") ||
+            "standard",
         ),
         leitorTela:
           preferencias.leitorTela ||
@@ -171,11 +174,35 @@
     definirTexto("perfil-nome", usuario.nomeCompleto || "Usuário");
     definirTexto("perfil-cpf", formatarCPF(usuario.cpf));
     definirTexto("avatar-inicial", obterInicial(usuario.nomeCompleto));
+    renderizarFotoPerfil(usuario);
 
     definirTexto("dados-nome", usuario.nomeCompleto || "Não informado");
     definirTexto("dados-cpf", formatarCPF(usuario.cpf));
-    definirTexto("dados-endereco", usuario.endereco || "Endereço não informado");
+    definirTexto(
+      "dados-endereco",
+      usuario.endereco || "Endereço não informado",
+    );
     definirTexto("dados-telefone", formatarTelefone(usuario.telefone));
+  }
+
+  function renderizarFotoPerfil(usuario) {
+    const imagem = document.getElementById("avatar-foto");
+    const inicial = document.getElementById("avatar-inicial");
+    const caminhoFoto = usuario.fotoPerfil || usuario.foto || "";
+
+    if (!imagem || !inicial) return;
+
+    if (caminhoFoto) {
+      imagem.src = caminhoFoto;
+      imagem.alt = "";
+      imagem.hidden = false;
+      inicial.hidden = true;
+      return;
+    }
+
+    imagem.hidden = true;
+    imagem.removeAttribute("src");
+    inicial.hidden = false;
   }
 
   function definirTexto(id, valor) {
@@ -194,8 +221,10 @@
 
     if (cpfInput) cpfInput.value = formatarCPF(estadoPerfil.usuario.cpf);
     if (nomeInput) nomeInput.value = estadoPerfil.usuario.nomeCompleto || "";
-    if (enderecoInput) enderecoInput.value = estadoPerfil.usuario.endereco || "";
-    if (telefoneInput) telefoneInput.value = estadoPerfil.usuario.telefone || "";
+    if (enderecoInput)
+      enderecoInput.value = estadoPerfil.usuario.endereco || "";
+    if (telefoneInput)
+      telefoneInput.value = estadoPerfil.usuario.telefone || "";
   }
 
   function prepararAlteracaoDados(evento) {
@@ -243,7 +272,9 @@
 
     const senhaAtual = document.getElementById("senha-atual").value.trim();
     const novaSenha = document.getElementById("nova-senha").value.trim();
-    const confirmaSenha = document.getElementById("confirma-senha").value.trim();
+    const confirmaSenha = document
+      .getElementById("confirma-senha")
+      .value.trim();
     const erro = document.getElementById("erro-senha");
 
     erro.hidden = true;
@@ -314,7 +345,9 @@
   function sincronizarPreferenciasNaTela() {
     const tema = localStorage.getItem("viva_theme") || "light";
     const tamanhoFonte = normalizarTamanhoFonte(
-      localStorage.getItem("viva_fontsize") || estadoPerfil.usuario.preferencias?.tamanhoFonte || "standard",
+      localStorage.getItem("viva_fontsize") ||
+        estadoPerfil.usuario.preferencias?.tamanhoFonte ||
+        "standard",
     );
     const leitorTela =
       localStorage.getItem("viva_screen_reader") === "true" ||
@@ -439,7 +472,9 @@
   }
 
   function salvarTamanhoFonte() {
-    const tamanho = normalizarTamanhoFonte(estadoPerfil.tamanhoFonteSelecionado || "standard");
+    const tamanho = normalizarTamanhoFonte(
+      estadoPerfil.tamanhoFonteSelecionado || "standard",
+    );
 
     if (window.setVivaFontSize) {
       window.setVivaFontSize(tamanho);
@@ -557,7 +592,10 @@
   }
 
   function obterInicial(nome) {
-    return String(nome || "U").trim().charAt(0).toUpperCase();
+    return String(nome || "U")
+      .trim()
+      .charAt(0)
+      .toUpperCase();
   }
 
   function formatarCPF(cpf) {
@@ -585,11 +623,7 @@
   }
 
   function normalizarTamanhoFonte(tamanho) {
-    if (tamanho === "medium") {
-      return "standard";
-    }
-
-    if (["small", "standard", "large"].includes(tamanho)) {
+    if (["small", "standard", "medium", "large"].includes(tamanho)) {
       return tamanho;
     }
 

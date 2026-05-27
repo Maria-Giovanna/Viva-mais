@@ -1,247 +1,222 @@
 <!doctype html>
+<!doctype html>
 <html lang="pt-BR" data-theme="light" data-fontsize="standard">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perfil - Viva+</title>
 
-    <link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/variables.css" />
-    <link rel="stylesheet" href="css/global.css" />
-    <link rel="stylesheet" href="css/components.css" />
-    <link rel="stylesheet" href="css/perfil.css" />
-    <link rel="stylesheet" href="css/icon-system.css">
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil - Viva+</title>
 
-  <body>
-    <div class="profile-layout">
-      <main id="main-content" class="profile-main">
-        <button type="button" class="profile-back" id="btn-voltar">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="M15 18L9 12L15 6"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <span>Voltar</span>
-        </button>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/perfil.css" />
+  <link rel="stylesheet" href="css/icon-system.css">
+</head>
 
-        <!-- MENU DO PERFIL -->
-        <section class="profile-step" id="step-menu">
-          <article class="profile-user-card">
-            <div class="profile-avatar" aria-hidden="true">
-              <span id="avatar-inicial">M</span>
+<body>
+  <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+  <div class="profile-layout">
+    <main id="main-content" class="profile-main">
+      <button type="button" class="profile-back" id="btn-voltar">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 18L9 12L15 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span>Voltar</span>
+      </button>
+
+      <!-- MENU DO PERFIL -->
+      <section class="profile-step" id="step-menu">
+        <article class="profile-user-card">
+          <div class="profile-avatar" aria-hidden="true">
+            <img id="avatar-foto" class="profile-avatar-img" src="" alt="">
+            <span id="avatar-inicial">M</span>
+          </div>
+
+          <div>
+            <h1 class="profile-user-name" id="perfil-nome">
+              Nome do usuário
+            </h1>
+            <p class="profile-user-cpf" id="perfil-cpf">000.000.000-00</p>
+          </div>
+        </article>
+
+        <div class="profile-menu-list">
+          <!-- Meus dados -->
+          <button type="button" class="profile-menu-card" data-profile-target="step-dados">
+            <span class="profile-menu-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48">
+                <path
+                  d="M15.525 20.475C13.175 18.125 12 15.3 12 12C12 8.7 13.175 5.875 15.525 3.525C17.875 1.175 20.7 0 24 0C27.3 0 30.125 1.175 32.475 3.525C34.825 5.875 36 8.7 36 12C36 15.3 34.825 18.125 32.475 20.475C30.125 22.825 27.3 24 24 24C20.7 24 17.875 22.825 15.525 20.475ZM0 42V39.6C0 37.9 0.438001 36.338 1.314 34.914C2.19 33.49 3.352 32.402 4.8 31.65C7.9 30.1 11.05 28.938 14.25 28.164C17.45 27.39 20.7 27.002 24 27C27.3 26.998 30.55 27.386 33.75 28.164C36.95 28.942 40.1 30.104 43.2 31.65C44.65 32.4 45.813 33.488 46.689 34.914C47.565 36.34 48.002 37.902 48 39.6V42C48 43.65 47.413 45.063 46.239 46.239C45.065 47.415 43.652 48.002 42 48H6C4.35 48 2.938 47.413 1.764 46.239C0.589999 45.065 0.002 43.652 0 42Z"
+                  fill="currentColor" />
+              </svg>
+            </span>
+
+            <span class="profile-menu-text">
+              <strong>Meus dados</strong>
+              <small>Suas informações pessoais</small>
+            </span>
+
+            <span class="profile-menu-arrow" aria-hidden="true">›</span>
+          </button>
+
+          <!-- Acessibilidade -->
+          <button type="button" class="profile-menu-card" data-profile-target="step-acessibilidade">
+            <span class="profile-menu-icon" aria-hidden="true">
+              <img src="assets/icons/icon-acessibilidade.svg" alt="" />
+            </span>
+
+            <span class="profile-menu-text">
+              <strong>Acessibilidade</strong>
+              <small>Ajuste o sistema para ficar mais confortável</small>
+            </span>
+
+            <span class="profile-menu-arrow" aria-hidden="true">›</span>
+          </button>
+
+          <!-- Alterar senha -->
+          <button type="button" class="profile-menu-card" data-profile-target="step-senha">
+            <span class="profile-menu-icon profile-menu-icon-lock" aria-hidden="true">
+              <svg viewBox="0 0 48 63">
+                <path
+                  d="M24 48C25.5913 48 27.1174 47.3679 28.2426 46.2426C29.3679 45.1174 30 43.5913 30 42C30 40.4087 29.3679 38.8826 28.2426 37.7574C27.1174 36.6321 25.5913 36 24 36C22.4087 36 20.8826 36.6321 19.7574 37.7574C18.6321 38.8826 18 40.4087 18 42C18 43.5913 18.6321 45.1174 19.7574 46.2426C20.8826 47.3679 22.4087 48 24 48ZM42 21C43.5913 21 45.1174 21.6321 46.2426 22.7574C47.3679 23.8826 48 25.4087 48 27V57C48 58.5913 47.3679 60.1174 46.2426 61.2426C45.1174 62.3679 43.5913 63 42 63H6C4.4087 63 2.88258 62.3679 1.75736 61.2426C0.632141 60.1174 0 58.5913 0 57V27C0 25.4087 0.632141 23.8826 1.75736 22.7574C2.88258 21.6321 4.4087 21 6 21H9V15C9 11.0218 10.5804 7.20644 13.3934 4.3934C16.2064 1.58035 20.0218 0 24 0C25.9698 0 27.9204 0.387987 29.7402 1.14181C31.5601 1.89563 33.2137 3.00052 34.6066 4.3934C35.9995 5.78628 37.1044 7.43986 37.8582 9.25975C38.612 11.0796 39 13.0302 39 15V21H42ZM24 6C21.6131 6 19.3239 6.94821 17.636 8.63604C15.9482 10.3239 15 12.6131 15 15V21H33V15C33 12.6131 32.0518 10.3239 30.364 8.63604C28.6761 6.94821 26.3869 6 24 6Z"
+                  fill="currentColor" />
+              </svg>
+            </span>
+
+            <span class="profile-menu-text">
+              <strong>Alterar a senha</strong>
+              <small>Atualize sua senha</small>
+            </span>
+
+            <span class="profile-menu-arrow" aria-hidden="true">›</span>
+          </button>
+
+          <!-- Sair -->
+          <button type="button" class="profile-menu-card" id="btn-sair">
+            <span class="profile-menu-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48">
+                <path
+                  d="M16.0019 42.0052H6.81881C6.36744 42.0041 6.00177 41.6385 6.00074 41.1871V6.81882C6.00187 6.36745 6.36744 6.00178 6.81881 6.00075H16.0019C17.659 6.00075 19.0023 4.65742 19.0023 3.00037C19.0023 1.34332 17.659 0 16.0019 0H6.81881C3.05466 0.0044068 0.00440679 3.05475 0 6.81882V41.1871C0.00440679 44.9512 3.05466 48.0016 6.81881 48.006H16.0019C17.659 48.006 19.0023 46.6626 19.0023 45.0056C19.0023 43.3485 17.659 42.0052 16.0019 42.0052Z"
+                  fill="currentColor" />
+                <path
+                  d="M45.3696 17.6381L37.6046 9.87909C36.4325 8.70754 34.5326 8.70801 33.3611 9.88012C32.1895 11.0522 32.19 12.9521 33.3621 14.1237L40.1869 20.9465L13.0016 21.0025C11.3445 21.0025 10.0012 22.3458 10.0012 24.0029C10.0012 25.6599 11.3445 27.0033 13.0016 27.0033L40.297 26.9533L33.3621 33.8882C32.233 35.1011 32.301 36.9996 33.5138 38.1286C34.6666 39.2017 36.4529 39.2009 37.6046 38.1267L45.3636 30.3677C48.8788 26.8526 48.8788 21.1534 45.3637 17.6382L45.3636 17.6382L45.3696 17.6381Z"
+                  fill="currentColor" />
+              </svg>
+            </span>
+
+            <span class="profile-menu-text">
+              <strong>Sair</strong>
+              <small>Encerrar sessão neste dispositivo</small>
+            </span>
+
+            <span class="profile-menu-arrow" aria-hidden="true">›</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- VISUALIZAR DADOS -->
+      <section class="profile-step" id="step-dados" hidden>
+        <header class="profile-header">
+          <h1 class="profile-title">Veja suas informações</h1>
+          <p class="profile-subtitle">
+            Abaixo estão seus dados cadastrados em nosso sistema.
+          </p>
+        </header>
+
+        <div class="auth-fieldset">
+          <div class="form-group">
+            <label class="form-label">Nome completo</label>
+            <div class="form-input input-readonly">
+              <span id="dados-nome">Maria da Silva</span>
             </div>
+          </div>
 
+          <div class="form-group">
+            <label class="form-label">CPF</label>
+            <div class="form-input input-readonly">
+              <span id="dados-cpf">000.000.000-00</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Endereço</label>
+            <div class="form-input input-readonly">
+              <span id="dados-endereco">Endereço</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Telefone</label>
+            <div class="form-input input-readonly">
+              <span id="dados-telefone">Telefone</span>
+            </div>
+          </div>
+
+          <div class="profile-alert" role="status" aria-live="polite">
+            <span>!</span>
+            <p>Nome completo e CPF não podem ser alterados.</p>
+          </div>
+
+          <button type="button" class="btn btn-primary" id="btn-editar-dados">
+            Editar endereço e telefone
+          </button>
+        </div>
+      </section>
+
+      <!-- EDITAR DADOS -->
+      <section class="profile-step" id="step-editar-dados" hidden>
+        <header class="profile-header">
+          <h1 class="profile-title">Veja suas informações</h1>
+          <p class="profile-subtitle">Atualize apenas os dados permitidos.</p>
+        </header>
+
+        <form class="auth-fieldset">
+          <div class="form-group">
+            <label for="edit-nome" class="form-label">Nome completo</label>
             <div>
-              <h1 class="profile-user-name" id="perfil-nome">
-                Nome do usuário
-              </h1>
-              <p class="profile-user-cpf" id="perfil-cpf">000.000.000-00</p>
+              <input type="text" id="edit-nome" class="form-input input-readonly" disabled />
             </div>
-          </article>
-
-          <div class="profile-menu-list">
-            <!-- Meus dados -->
-            <button
-              type="button"
-              class="profile-menu-card"
-              data-profile-target="step-dados"
-            >
-              <span class="profile-menu-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                  <path
-                    d="M15.525 20.475C13.175 18.125 12 15.3 12 12C12 8.7 13.175 5.875 15.525 3.525C17.875 1.175 20.7 0 24 0C27.3 0 30.125 1.175 32.475 3.525C34.825 5.875 36 8.7 36 12C36 15.3 34.825 18.125 32.475 20.475C30.125 22.825 27.3 24 24 24C20.7 24 17.875 22.825 15.525 20.475ZM0 42V39.6C0 37.9 0.438001 36.338 1.314 34.914C2.19 33.49 3.352 32.402 4.8 31.65C7.9 30.1 11.05 28.938 14.25 28.164C17.45 27.39 20.7 27.002 24 27C27.3 26.998 30.55 27.386 33.75 28.164C36.95 28.942 40.1 30.104 43.2 31.65C44.65 32.4 45.813 33.488 46.689 34.914C47.565 36.34 48.002 37.902 48 39.6V42C48 43.65 47.413 45.063 46.239 46.239C45.065 47.415 43.652 48.002 42 48H6C4.35 48 2.938 47.413 1.764 46.239C0.589999 45.065 0.002 43.652 0 42Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </span>
-
-              <span class="profile-menu-text">
-                <strong>Meus dados</strong>
-                <small>Suas informações pessoais</small>
-              </span>
-
-              <span class="profile-menu-arrow" aria-hidden="true">›</span>
-            </button>
-
-            <!-- Acessibilidade -->
-            <button
-              type="button"
-              class="profile-menu-card"
-              data-profile-target="step-acessibilidade"
-            >
-              <span class="profile-menu-icon" aria-hidden="true">
-                <img src="assets/icons/icon-acessibilidade.svg" alt="" />
-              </span>
-
-              <span class="profile-menu-text">
-                <strong>Acessibilidade</strong>
-                <small>Ajuste o sistema para ficar mais confortável</small>
-              </span>
-
-              <span class="profile-menu-arrow" aria-hidden="true">›</span>
-            </button>
-
-            <!-- Alterar senha -->
-            <button
-              type="button"
-              class="profile-menu-card"
-              data-profile-target="step-senha"
-            >
-              <span
-                class="profile-menu-icon profile-menu-icon-lock"
-                aria-hidden="true"
-              >
-                <svg viewBox="0 0 48 63">
-                  <path
-                    d="M24 48C25.5913 48 27.1174 47.3679 28.2426 46.2426C29.3679 45.1174 30 43.5913 30 42C30 40.4087 29.3679 38.8826 28.2426 37.7574C27.1174 36.6321 25.5913 36 24 36C22.4087 36 20.8826 36.6321 19.7574 37.7574C18.6321 38.8826 18 40.4087 18 42C18 43.5913 18.6321 45.1174 19.7574 46.2426C20.8826 47.3679 22.4087 48 24 48ZM42 21C43.5913 21 45.1174 21.6321 46.2426 22.7574C47.3679 23.8826 48 25.4087 48 27V57C48 58.5913 47.3679 60.1174 46.2426 61.2426C45.1174 62.3679 43.5913 63 42 63H6C4.4087 63 2.88258 62.3679 1.75736 61.2426C0.632141 60.1174 0 58.5913 0 57V27C0 25.4087 0.632141 23.8826 1.75736 22.7574C2.88258 21.6321 4.4087 21 6 21H9V15C9 11.0218 10.5804 7.20644 13.3934 4.3934C16.2064 1.58035 20.0218 0 24 0C25.9698 0 27.9204 0.387987 29.7402 1.14181C31.5601 1.89563 33.2137 3.00052 34.6066 4.3934C35.9995 5.78628 37.1044 7.43986 37.8582 9.25975C38.612 11.0796 39 13.0302 39 15V21H42ZM24 6C21.6131 6 19.3239 6.94821 17.636 8.63604C15.9482 10.3239 15 12.6131 15 15V21H33V15C33 12.6131 32.0518 10.3239 30.364 8.63604C28.6761 6.94821 26.3869 6 24 6Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </span>
-
-              <span class="profile-menu-text">
-                <strong>Alterar a senha</strong>
-                <small>Atualize sua senha</small>
-              </span>
-
-              <span class="profile-menu-arrow" aria-hidden="true">›</span>
-            </button>
-
-            <!-- Sair -->
-            <button type="button" class="profile-menu-card" id="btn-sair">
-              <span class="profile-menu-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                  <path
-                    d="M16.0019 42.0052H6.81881C6.36744 42.0041 6.00177 41.6385 6.00074 41.1871V6.81882C6.00187 6.36745 6.36744 6.00178 6.81881 6.00075H16.0019C17.659 6.00075 19.0023 4.65742 19.0023 3.00037C19.0023 1.34332 17.659 0 16.0019 0H6.81881C3.05466 0.0044068 0.00440679 3.05475 0 6.81882V41.1871C0.00440679 44.9512 3.05466 48.0016 6.81881 48.006H16.0019C17.659 48.006 19.0023 46.6626 19.0023 45.0056C19.0023 43.3485 17.659 42.0052 16.0019 42.0052Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M45.3696 17.6381L37.6046 9.87909C36.4325 8.70754 34.5326 8.70801 33.3611 9.88012C32.1895 11.0522 32.19 12.9521 33.3621 14.1237L40.1869 20.9465L13.0016 21.0025C11.3445 21.0025 10.0012 22.3458 10.0012 24.0029C10.0012 25.6599 11.3445 27.0033 13.0016 27.0033L40.297 26.9533L33.3621 33.8882C32.233 35.1011 32.301 36.9996 33.5138 38.1286C34.6666 39.2017 36.4529 39.2009 37.6046 38.1267L45.3636 30.3677C48.8788 26.8526 48.8788 21.1534 45.3637 17.6382L45.3636 17.6382L45.3696 17.6381Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </span>
-
-              <span class="profile-menu-text">
-                <strong>Sair</strong>
-                <small>Encerrar sessão neste dispositivo</small>
-              </span>
-
-              <span class="profile-menu-arrow" aria-hidden="true">›</span>
-            </button>
           </div>
-        </section>
 
-        <!-- VISUALIZAR DADOS -->
-        <section class="profile-step" id="step-dados" hidden>
-          <header class="profile-header">
-            <h1 class="profile-title">Veja suas informações</h1>
-            <p class="profile-subtitle">
-              Abaixo estão seus dados cadastrados em nosso sistema.
-            </p>
-          </header>
-
-          <div class="auth-fieldset">
-            <div class="form-group">
-              <label class="form-label">Nome completo</label>
-              <div class="form-input input-readonly">
-                <span id="dados-nome">Maria da Silva</span>
-              </div>
+          <div class="form-group">
+            <label for="edit-cpf" class="form-label">CPF</label>
+            <div>
+              <input type="text" id="edit-cpf" class="form-input input-readonly" disabled />
             </div>
-
-            <div class="form-group">
-              <label class="form-label">CPF</label>
-              <div class="form-input input-readonly">
-                <span id="dados-cpf">000.000.000-00</span>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Endereço</label>
-              <div class="form-input input-readonly">
-                <span id="dados-endereco">Endereço</span>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Telefone</label>
-              <div class="form-input input-readonly">
-                <span id="dados-telefone">Telefone</span>
-              </div>
-            </div>
-
-            <div class="profile-alert" role="status" aria-live="polite">
-              <span>!</span>
-              <p>Nome completo e CPF não podem ser alterados.</p>
-            </div>
-
-            <button type="button" class="btn btn-primary" id="btn-editar-dados">
-              Editar endereço e telefone
-            </button>
           </div>
-        </section>
 
-        <!-- EDITAR DADOS -->
-         <section class="profile-step" id="step-editar-dados" hidden>
-           <header class="profile-header">
-            <h1 class="profile-title">Veja suas informações</h1>
-            <p class="profile-subtitle">Atualize apenas os dados permitidos.</p>
-          </header>
-
-          <form class="auth-fieldset">
-            <div class="form-group">
-              <label for="edit-nome" class="form-label">Nome completo</label>
-              <div>
-                <input type="text" id="edit-nome" class="form-input input-readonly" disabled />
-              </div>
+          <div class="form-group">
+            <label for="edit-endereco" class="form-label">Endereço</label>
+            <div>
+              <input type="text" id="edit-endereco" placeholder="Digite seu endereço" class="form-input" />
             </div>
+          </div>
 
-            <div class="form-group">
-              <label for="edit-cpf" class="form-label">CPF</label>
-              <div>
-                <input type="text" id="edit-cpf" class="form-input input-readonly" disabled />
-              </div>
+          <div class="form-group">
+            <label for="edit-telefone" class="form-label">Telefone</label>
+            <div>
+              <input type="tel" id="edit-telefone" placeholder="Digite seu telefone" class="form-input" />
             </div>
+          </div>
 
-            <div class="form-group">
-              <label for="edit-endereco" class="form-label">Endereço</label>
-              <div>
-                <input type="text" id="edit-endereco" placeholder="Digite seu endereço" class="form-input"/>
-              </div>
-            </div>
+          <div class="profile-alert" role="status" aria-live="polite">
+            <span>!</span>
+            <p>Nome completo e CPF não podem ser alterados.</p>
+          </div>
 
-            <div class="form-group">
-              <label for="edit-telefone" class="form-label">Telefone</label>
-              <div>
-                <input type="tel" id="edit-telefone" placeholder="Digite seu telefone" class="form-input"/>
-              </div>
-            </div>
+          <span class="field-error" id="erro-dados" role="alert" hidden></span>
 
-            <div class="profile-alert" role="status" aria-live="polite">
-              <span>!</span>
-              <p>Nome completo e CPF não podem ser alterados.</p>
-            </div>
 
-             <span
-              class="field-error"
-              id="erro-dados"
-              role="alert"
-              hidden
-            ></span>
+          <button type="submit" class="btn btn-primary">
+            Salvar alterações
+          </button>
 
-       
-            <button type="submit" class="btn btn-primary">
-              Salvar alterações
-            </button>
-
-          </form>
-        </section>
+        </form>
+      </section>
 
       <!-- CONFIRMAR DADOS -->
       <section class="profile-step app-dialog-step" id="step-confirmar-dados" hidden role="dialog" aria-modal="true"
@@ -250,19 +225,19 @@
           <div class="profile-hero">
             <img src="assets/img/Mascote-4- duvida.svg" alt="" aria-hidden="true" />
           </div>
-      
+
           <div class="profile-success-content">
             <h1 id="titulo-confirmar-dados">Salvar alterações?</h1>
             <p>
               As alterações de endereço e telefone podem levar até 48 horas para
               serem atualizadas no sistema.
             </p>
-      
+
             <div class="profile-actions">
               <button type="button" class="btn btn-primary" id="btn-confirmar-dados">
                 Confirmar alterações
               </button>
-      
+
               <button type="button" class="btn-secondary-outline" id="btn-voltar-edicao">
                 Voltar
               </button>
@@ -270,25 +245,25 @@
           </div>
         </div>
       </section>
-      
+
       <!-- SUCESSO DADOS -->
       <section class="profile-step" id="step-dados-sucesso" hidden>
         <div class="profile-hero">
           <img src="assets/img/Mascote-Parabens.svg" alt="" aria-hidden="true" />
         </div>
-      
+
         <div class="profile-success-content">
           <h1>Dados alterados!</h1>
           <p>
             As alterações levarão até 48 horas para serem completamente
             atualizadas no sistema.
           </p>
-      
+
           <div class="profile-actions">
             <button type="button" class="btn btn-primary" id="btn-voltar-dados">
               Voltar aos meus dados
             </button>
-      
+
             <button type="button" class="btn-secondary-outline" id="btn-voltar-inicio-dados">
               Voltar ao início
             </button>
@@ -296,276 +271,212 @@
         </div>
       </section>
 
+      <!-- ACESSIBILIDADE -->
+      <section class="profile-step" id="step-acessibilidade" hidden>
+        <header class="profile-header">
+          <h1 class="profile-title">
+            Ajuste o sistema para ficar do seu jeito
+          </h1>
+        </header>
 
-        <!-- ACESSIBILIDADE -->
-        <section class="profile-step" id="step-acessibilidade" hidden>
-          <header class="profile-header">
-            <h1 class="profile-title">
-              Ajuste o sistema para ficar do seu jeito
-            </h1>
-          </header>
+        <h2 class="profile-section-title">Preferências de visualização</h2>
 
-          <h2 class="profile-section-title">Preferências de visualização</h2>
+        <div class="accessibility-list">
+          <button type="button" class="accessibility-card" data-profile-target="step-tamanho-texto">
+            <span class="accessibility-icon text-icon" aria-hidden="true">Aa</span>
 
-          <div class="accessibility-list">
-            <button
-              type="button"
-              class="accessibility-card"
-              data-profile-target="step-tamanho-texto"
-            >
-              <span class="accessibility-icon text-icon" aria-hidden="true"
-                >Aa</span
-              >
+            <span class="accessibility-text">
+              <strong>Tamanho do texto</strong>
+              <small>Aumente ou diminua o tamanho do texto.</small>
+            </span>
 
-              <span class="accessibility-text">
-                <strong>Tamanho do texto</strong>
-                <small>Aumente ou diminua o tamanho do texto.</small>
-              </span>
-
-              <span class="profile-menu-arrow" aria-hidden="true">›</span>
-            </button>
-
-            <div class="accessibility-card">
-              <span class="accessibility-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 2a10 10 0 1 0 0 20V2Z" />
-                </svg>
-              </span>
-
-              <span class="accessibility-text">
-                <strong>Alto contraste</strong>
-                <small>Ative cores com maior contraste para leitura.</small>
-              </span>
-
-              <button
-                type="button"
-                class="switch"
-                id="toggle-contraste"
-                role="switch"
-                aria-checked="false"
-                aria-label="Ativar alto contraste"
-              >
-                <span></span>
-              </button>
-            </div>
-
-            <div class="accessibility-card">
-              <span class="accessibility-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M12 4a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1Zm0 13a5 5 0 1 0 0-10a5 5 0 0 0 0 10Zm0 1a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Z"
-                  />
-                </svg>
-              </span>
-
-              <span class="accessibility-text">
-                <strong>Tema escuro</strong>
-                <small>Ative o modo escuro.</small>
-              </span>
-
-              <button
-                type="button"
-                class="switch"
-                id="toggle-escuro"
-                role="switch"
-                aria-checked="false"
-                aria-label="Ativar tema escuro"
-              >
-                <span></span>
-              </button>
-            </div>
-          </div>
-
-          <h2 class="profile-section-title">Recursos de acessibilidade</h2>
-
-          <div class="accessibility-list">
-            <div class="accessibility-card">
-              <span class="accessibility-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M3 9v6h4l5 5V4L7 9H3Zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Z"
-                  />
-                </svg>
-              </span>
-
-              <span class="accessibility-text">
-                <strong>Leitura em voz alta</strong>
-                <small
-                  >Lê botões, campos e opções quando você interage com
-                  eles.</small
-                >
-              </span>
-
-              <button
-                type="button"
-                class="switch"
-                id="toggle-leitor"
-                role="switch"
-                aria-checked="false"
-                aria-label="Ativar leitura em voz alta"
-              >
-                <span></span>
-              </button>
-            </div>
-
-            <div class="accessibility-card">
-              <span class="accessibility-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M7 11V7a5 5 0 0 1 10 0v4h-2V7a3 3 0 0 0-6 0v4H7Zm5 1a2 2 0 0 1 2 2v7h-4v-7a2 2 0 0 1 2-2Z"
-                  />
-                </svg>
-              </span>
-
-              <span class="accessibility-text">
-                <strong>Botões grandes</strong>
-                <small
-                  >Aumenta o tamanho dos botões para facilitar toque.</small
-                >
-              </span>
-
-              <button
-                type="button"
-                class="switch"
-                id="toggle-botoes"
-                role="switch"
-                aria-checked="false"
-                aria-label="Ativar botões grandes"
-              >
-                <span></span>
-              </button>
-            </div>
-          </div>
-
-          <div class="profile-alert" role="status" aria-live="polite">
-            <span>!</span>
-            <p>Suas preferências são salvas automaticamente.</p>
-          </div>
-        </section>
-
-        <!-- TAMANHO DO TEXTO -->
-        <section class="profile-step" id="step-tamanho-texto" hidden>
-          <header class="profile-header">
-            <h1 class="profile-title">Escolha o tamanho</h1>
-          </header>
-
-          <div class="font-size-list">
-            <button
-              type="button"
-              class="font-size-card"
-              data-font-option="small"
-            >
-              <span class="font-preview small">A</span>
-              <span>
-                <strong>Pequeno</strong>
-                <small>Texto em 14px.</small>
-              </span>
-            </button>
-
-            <button
-              type="button"
-              class="font-size-card"
-              data-font-option="standard"
-            >
-              <span class="font-preview standard">A</span>
-              <span>
-                <strong>Padrão</strong>
-                <small>Texto em 16px.</small>
-              </span>
-            </button>
-
-            <button
-              type="button"
-              class="font-size-card"
-              data-font-option="large"
-            >
-              <span class="font-preview large">A</span>
-              <span>
-                <strong>Grande</strong>
-                <small>Texto em 20px.</small>
-              </span>
-            </button>
-          </div>
-
-          <div class="profile-alert" role="status" aria-live="polite">
-            <span>!</span>
-            <p>Essa configuração será aplicada em todas as telas do sistema.</p>
-          </div>
-
-          <button type="button" class="btn btn-primary" id="btn-salvar-fonte">
-            Salvar tamanho do texto
+            <span class="profile-menu-arrow" aria-hidden="true">›</span>
           </button>
-        </section>
 
-        <!-- ALTERAR SENHA -->
-        <section class="profile-step" id="step-senha" hidden>
-          <header class="profile-header">
-            <h1 class="profile-title">Alterar senha</h1>
-            <p class="profile-subtitle">
-              Crie uma nova senha numérica com 8 dígitos.
-            </p>
-          </header>
+          <div class="accessibility-card">
+            <span class="accessibility-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 1 0 0 20V2Z" />
+              </svg>
+            </span>
 
-          <form class="data-form-card" id="form-senha">
-            <div class="profile-field">
-              <label for="senha-atual">Senha atual</label>
-              <div class="profile-input-field">
-                <input
-                  type="password"
-                  id="senha-atual"
-                  inputmode="numeric"
-                  maxlength="8"
-                />
-              </div>
-            </div>
+            <span class="accessibility-text">
+              <strong>Alto contraste</strong>
+              <small>Ative cores com maior contraste para leitura.</small>
+            </span>
 
-            <div class="profile-field">
-              <label for="nova-senha">Nova senha</label>
-              <div class="profile-input-field">
-                <input
-                  type="password"
-                  id="nova-senha"
-                  inputmode="numeric"
-                  maxlength="8"
-                />
-              </div>
-            </div>
-
-            <div class="profile-field">
-              <label for="confirma-senha">Confirmar nova senha</label>
-              <div class="profile-input-field">
-                <input
-                  type="password"
-                  id="confirma-senha"
-                  inputmode="numeric"
-                  maxlength="8"
-                />
-              </div>
-            </div>
-
-            <span
-              class="field-error"
-              id="erro-senha"
-              role="alert"
-              hidden
-            ></span>
-
-            <button type="submit" class="btn btn-primary">
-              Salvar nova senha
+            <button type="button" class="switch" id="toggle-contraste" role="switch" aria-checked="false"
+              aria-label="Ativar alto contraste">
+              <span></span>
             </button>
-          </form>
-        </section>
+          </div>
+
+          <div class="accessibility-card">
+            <span class="accessibility-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 4a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1Zm0 13a5 5 0 1 0 0-10a5 5 0 0 0 0 10Zm0 1a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Z" />
+              </svg>
+            </span>
+
+            <span class="accessibility-text">
+              <strong>Tema escuro</strong>
+              <small>Ative o modo escuro.</small>
+            </span>
+
+            <button type="button" class="switch" id="toggle-escuro" role="switch" aria-checked="false"
+              aria-label="Ativar tema escuro">
+              <span></span>
+            </button>
+          </div>
+        </div>
+
+        <h2 class="profile-section-title">Recursos de acessibilidade</h2>
+
+        <div class="accessibility-list">
+          <div class="accessibility-card">
+            <span class="accessibility-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3Zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Z" />
+              </svg>
+            </span>
+
+            <span class="accessibility-text">
+              <strong>Leitura em voz alta</strong>
+              <small>Lê botões, campos e opções quando você interage com
+                eles.</small>
+            </span>
+
+            <button type="button" class="switch" id="toggle-leitor" role="switch" aria-checked="false"
+              aria-label="Ativar leitura em voz alta">
+              <span></span>
+            </button>
+          </div>
+
+          <div class="accessibility-card">
+            <span class="accessibility-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M7 11V7a5 5 0 0 1 10 0v4h-2V7a3 3 0 0 0-6 0v4H7Zm5 1a2 2 0 0 1 2 2v7h-4v-7a2 2 0 0 1 2-2Z" />
+              </svg>
+            </span>
+
+            <span class="accessibility-text">
+              <strong>Botões grandes</strong>
+              <small>Aumenta o tamanho dos botões para facilitar toque.</small>
+            </span>
+
+            <button type="button" class="switch" id="toggle-botoes" role="switch" aria-checked="false"
+              aria-label="Ativar botões grandes">
+              <span></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="profile-alert" role="status" aria-live="polite">
+          <span>!</span>
+          <p>Suas preferências são salvas automaticamente.</p>
+        </div>
+      </section>
+
+      <!-- TAMANHO DO TEXTO -->
+      <section class="profile-step" id="step-tamanho-texto" hidden>
+        <header class="profile-header">
+          <h1 class="profile-title">Escolha o tamanho</h1>
+        </header>
+
+        <div class="font-size-list">
+          <button type="button" class="font-size-card" data-font-option="small">
+            <span class="font-preview small">A</span>
+            <span>
+              <strong>Pequeno</strong>
+              <small>Texto para quem gosta de algo menor.</small>
+            </span>
+          </button>
+
+          <button type="button" class="font-size-card" data-font-option="standard">
+            <span class="font-preview standard">A</span>
+            <span>
+              <strong>Padrão</strong>
+              <small>Texto padrão do sistema, ideal para <br>a maioria dos usuários.</small>
+            </span>
+          </button>
+
+          <button type="button" class="font-size-card" data-font-option="medium">
+            <span class="font-preview medium">A</span>
+            <span>
+              <strong>Médio</strong>
+              <small>Texto com tamanho médio, bom para leitura.</small>
+            </span>
+          </button>
+
+          <button type="button" class="font-size-card" data-font-option="large">
+            <span class="font-preview large">A</span>
+            <span>
+              <strong>Grande</strong>
+              <small>Texto maior e mais confortavel a vista.</small>
+            </span>
+          </button>
+        </div>
+
+        <div class="profile-alert" role="status" aria-live="polite">
+          <span>!</span>
+          <p>Essa configuração será aplicada em todas as telas do sistema.</p>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="btn-salvar-fonte">
+          Salvar tamanho do texto
+        </button>
+      </section>
+
+      <!-- ALTERAR SENHA -->
+      <section class="profile-step" id="step-senha" hidden>
+        <header class="profile-header">
+          <h1 class="profile-title">Alterar senha</h1>
+          <p class="profile-subtitle">
+            Crie uma nova senha numérica com 8 dígitos.
+          </p>
+        </header>
+
+        <form class="data-form-card" id="form-senha">
+          <div class="profile-field">
+            <label for="senha-atual">Senha atual</label>
+            <div class="profile-input-field">
+              <input type="password" id="senha-atual" inputmode="numeric" maxlength="8" />
+            </div>
+          </div>
+
+          <div class="profile-field">
+            <label for="nova-senha">Nova senha</label>
+            <div class="profile-input-field">
+              <input type="password" id="nova-senha" inputmode="numeric" maxlength="8" />
+            </div>
+          </div>
+
+          <div class="profile-field">
+            <label for="confirma-senha">Confirmar nova senha</label>
+            <div class="profile-input-field">
+              <input type="password" id="confirma-senha" inputmode="numeric" maxlength="8" />
+            </div>
+          </div>
+
+          <span class="field-error" id="erro-senha" role="alert" hidden></span>
+
+          <button type="submit" class="btn btn-primary">
+            Salvar nova senha
+          </button>
+        </form>
+      </section>
 
       <!-- SENHA SUCESSO -->
       <section class="profile-step" id="step-senha-sucesso" hidden>
         <div class="profile-hero">
           <img src="assets/img/Mascote-Parabens.svg" alt="" aria-hidden="true" />
         </div>
-      
+
         <div class="profile-success-content">
           <h1>Senha alterada!</h1>
           <p>Sua senha foi atualizada com sucesso.</p>
-      
+
           <div class="profile-actions">
             <button type="button" class="btn btn-primary" id="btn-voltar-perfil-senha">
               Voltar ao perfil
@@ -573,62 +484,58 @@
           </div>
         </div>
       </section>
+    </main>
 
-      </main>
+    <nav class="app-nav" aria-label="Menu principal">
+      <ul class="nav-list">
+        <li>
+          <a href="home.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path class="nav-icon-outline" d="M3 10.8L12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.8Z" />
+              <path class="nav-icon-fill" d="M3 10.8L12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.8Z" />
+            </svg>
+            <span>Início</span>
+          </a>
+        </li>
 
-      <nav class="app-nav" aria-label="Menu principal">
-        <ul class="nav-list">
-          <li>
-            <a href="home.html" class="nav-link">
-              <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <li>
+          <a href="agenda.html" class="nav-link">
+            <svg class="nav-icon nav-icon-calendar" viewBox="0 0 24 24" aria-hidden="true">
+              <g class="nav-icon-outline">
                 <path
-                  class="nav-icon-outline"
-                  d="M3 10.8L12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.8Z"
-                />
+                  d="M18 1C18.053 1 18.1041 1.02109 18.1416 1.05859C18.179 1.09609 18.2002 1.14719 18.2002 1.2002V4.59961H20.4004C21.0897 4.59971 21.7508 4.87395 22.2383 5.36133C22.7259 5.84892 23 6.51063 23 7.2002V7.40039H1V7.2002C1 6.51063 1.27412 5.84892 1.76172 5.36133C2.2492 4.87395 2.91028 4.59971 3.59961 4.59961H5.7998V1.2002C5.7998 1.1472 5.82095 1.09609 5.8584 1.05859C5.88656 1.03043 5.92245 1.01157 5.96094 1.00391L6 1C6.05304 1 6.10409 1.02109 6.1416 1.05859C6.17905 1.09609 6.2002 1.1472 6.2002 1.2002V4.59961H17.7998V1.2002C17.7998 1.14719 17.821 1.09609 17.8584 1.05859C17.8866 1.03043 17.9224 1.01157 17.9609 1.00391L18 1Z" />
                 <path
-                  class="nav-icon-fill"
-                  d="M3 10.8L12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.8Z"
-                />
-              </svg>
-              <span>Início</span>
-            </a>
-          </li>
-
-          <li>
-            <a href="agenda.html" class="nav-link">
-              <svg class="nav-icon nav-icon-calendar" viewBox="0 0 24 24" aria-hidden="true">
-                            <g class="nav-icon-outline">
-                                <path d="M18 1C18.053 1 18.1041 1.02109 18.1416 1.05859C18.179 1.09609 18.2002 1.14719 18.2002 1.2002V4.59961H20.4004C21.0897 4.59971 21.7508 4.87395 22.2383 5.36133C22.7259 5.84892 23 6.51063 23 7.2002V7.40039H1V7.2002C1 6.51063 1.27412 5.84892 1.76172 5.36133C2.2492 4.87395 2.91028 4.59971 3.59961 4.59961H5.7998V1.2002C5.7998 1.1472 5.82095 1.09609 5.8584 1.05859C5.88656 1.03043 5.92245 1.01157 5.96094 1.00391L6 1C6.05304 1 6.10409 1.02109 6.1416 1.05859C6.17905 1.09609 6.2002 1.1472 6.2002 1.2002V4.59961H17.7998V1.2002C17.7998 1.14719 17.821 1.09609 17.8584 1.05859C17.8866 1.03043 17.9224 1.01157 17.9609 1.00391L18 1Z" />
-                                <path d="M23 11.8V20.3997C23 21.0892 22.7259 21.7509 22.2383 22.2385C21.7508 22.726 21.0898 23.0001 20.4004 23.0002H3.59961C2.91023 23.0001 2.24921 22.726 1.76172 22.2385C1.27412 21.7509 1 21.0892 1 20.3997V11.8H23Z" />
-                            </g>
-                            <g class="nav-icon-fill">
-                                <path d="M20.4 3.6H19.2V1.2C19.2 0.88174 19.0736 0.576515 18.8485 0.351472C18.6235 0.126428 18.3183 0 18 0C17.6817 0 17.3765 0.126428 17.1515 0.351472C16.9264 0.576515 16.8 0.88174 16.8 1.2V3.6H7.2V1.2C7.2 0.88174 7.07357 0.576515 6.84853 0.351472C6.62348 0.126428 6.31826 0 6 0C5.68174 0 5.37652 0.126428 5.15147 0.351472C4.92643 0.576515 4.8 0.88174 4.8 1.2V3.6H3.6C2.64522 3.6 1.72955 3.97929 1.05442 4.65442C0.379285 5.32955 0 6.24522 0 7.2V8.4H24V7.2C24 6.24522 23.6207 5.32955 22.9456 4.65442C22.2705 3.97929 21.3548 3.6 20.4 3.6Z" />
-                                <path d="M0 20.4C0 21.3548 0.379285 22.2705 1.05442 22.9456C1.72955 23.6208 2.64522 24 3.6 24H20.4C21.3548 24 22.2705 23.6208 22.9456 22.9456C23.6207 22.2705 24 21.3548 24 20.4V10.8H0V20.4Z" />
-                            </g>
-                        </svg>
-              <span>Agenda</span>
-            </a>
-          </li>
-
-          <li>
-            <a href="perfil.html" class="nav-link active" aria-current="page">
-              <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <circle class="nav-icon-outline" cx="12" cy="8" r="4" />
-                <path class="nav-icon-outline" d="M4 21a8 8 0 0 1 16 0" />
+                  d="M23 11.8V20.3997C23 21.0892 22.7259 21.7509 22.2383 22.2385C21.7508 22.726 21.0898 23.0001 20.4004 23.0002H3.59961C2.91023 23.0001 2.24921 22.726 1.76172 22.2385C1.27412 21.7509 1 21.0892 1 20.3997V11.8H23Z" />
+              </g>
+              <g class="nav-icon-fill">
                 <path
-                  class="nav-icon-fill"
-                  d="M12 12a4.5 4.5 0 1 0 0-9a4.5 4.5 0 0 0 0 9Zm0 2c-4.8 0-8.5 2.8-8.5 6.4c0 .9.7 1.6 1.6 1.6h13.8c.9 0 1.6-.7 1.6-1.6C20.5 16.8 16.8 14 12 14Z"
-                />
-              </svg>
-              <span>Perfil</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+                  d="M20.4 3.6H19.2V1.2C19.2 0.88174 19.0736 0.576515 18.8485 0.351472C18.6235 0.126428 18.3183 0 18 0C17.6817 0 17.3765 0.126428 17.1515 0.351472C16.9264 0.576515 16.8 0.88174 16.8 1.2V3.6H7.2V1.2C7.2 0.88174 7.07357 0.576515 6.84853 0.351472C6.62348 0.126428 6.31826 0 6 0C5.68174 0 5.37652 0.126428 5.15147 0.351472C4.92643 0.576515 4.8 0.88174 4.8 1.2V3.6H3.6C2.64522 3.6 1.72955 3.97929 1.05442 4.65442C0.379285 5.32955 0 6.24522 0 7.2V8.4H24V7.2C24 6.24522 23.6207 5.32955 22.9456 4.65442C22.2705 3.97929 21.3548 3.6 20.4 3.6Z" />
+                <path
+                  d="M0 20.4C0 21.3548 0.379285 22.2705 1.05442 22.9456C1.72955 23.6208 2.64522 24 3.6 24H20.4C21.3548 24 22.2705 23.6208 22.9456 22.9456C23.6207 22.2705 24 21.3548 24 20.4V10.8H0V20.4Z" />
+              </g>
+            </svg>
+            <span>Agenda</span>
+          </a>
+        </li>
 
-    <script src="js/a11y.js"></script>
-    <script src="js/util.js"></script>
-    <script src="js/perfil.js"></script>
-  </body>
+        <li>
+          <a href="perfil.html" class="nav-link active" aria-current="page">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle class="nav-icon-outline" cx="12" cy="8" r="4" />
+              <path class="nav-icon-outline" d="M4 21a8 8 0 0 1 16 0" />
+              <path class="nav-icon-fill"
+                d="M12 12a4.5 4.5 0 1 0 0-9a4.5 4.5 0 0 0 0 9Zm0 2c-4.8 0-8.5 2.8-8.5 6.4c0 .9.7 1.6 1.6 1.6h13.8c.9 0 1.6-.7 1.6-1.6C20.5 16.8 16.8 14 12 14Z" />
+            </svg>
+            <span>Perfil</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <script src="js/a11y.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/perfil.js"></script>
+</body>
+
 </html>

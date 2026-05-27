@@ -53,7 +53,7 @@
   --hyperlink: #89B4FF;
   --hover-color: #2A5FE0;
 
-  --subcard-primary-bg: #2D5BBA;
+  --subcard-primary-bg: #0A0C10;
   --subcard-secondary-bg: #1A2230;
   --subcard-primary-text: #FFFFFF;
   --subcard-secondary-text: #E6EDF7;
@@ -91,11 +91,6 @@
   --status-no-show: #FF6767;
   --status-confirmed: #7EFFD5;
 }
-
-
-/* =========================================
-   ESCALONAMENTO DE TIPOGRAFIA
-   ========================================= */
 
 /* =========================================
    ESCALONAMENTO DE TIPOGRAFIA

@@ -17,7 +17,7 @@
     --viva-icon-nav: 1.5rem;
 
     /* Cards grandes da Home */
-    --viva-icon-action-circle: 4rem;
+    --viva-icon-action-circle: clamp(2.75rem, 4vw, 3.5rem);
     --viva-icon-action: 2.15rem;
 
     /* Cards de lista: Perfil e listas do agendamento */
@@ -294,6 +294,10 @@
 
 .font-preview.large {
     font-size: 2rem !important;
+}
+
+.font-preview.medium{
+    font-size: 1.75rem !important;
 }
 
 /* =========================================================

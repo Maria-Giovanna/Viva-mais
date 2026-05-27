@@ -34,6 +34,9 @@
     aplicarTamanhoFonte(tamanhoFonte, false);
     aplicarBotoesGrandes(botoesGrandes === "true", false);
     aplicarLeitorAssistido(leitorTela === "true", false, false);
+
+    criarPainelRapidoAcessibilidade();
+    sincronizarPainelRapidoAcessibilidade();
   }
 
   /*
@@ -58,24 +61,22 @@
     Aplica o tamanho da fonte no elemento <html>.
     O CSS reage ao atributo data-fontsize.
   */
-  function aplicarTamanhoFonte(tamanho) {
-  const tamanhosPermitidos = ["small", "standard", "large"];
+  function aplicarTamanhoFonte(tamanho, deveSalvarUsuario = true) {
+    const tamanhosPermitidos = ["small", "standard", "medium", "large"];
 
-  let tamanhoFinal = tamanhosPermitidos.includes(tamanho)
-    ? tamanho
-    : "standard";
+    const tamanhoFinal = tamanhosPermitidos.includes(tamanho)
+      ? tamanho
+      : "standard";
 
-  /*
-    Compatibilidade com versões anteriores.
-    Antes o sistema usava "medium", agora o equivalente correto é "standard".
-  */
-  if (tamanho === "medium") {
-    tamanhoFinal = "standard";
+    document.documentElement.setAttribute("data-fontsize", tamanhoFinal);
+    localStorage.setItem("viva_fontsize", tamanhoFinal);
+
+    if (deveSalvarUsuario) {
+      salvarPreferenciasNoUsuario({
+        tamanhoFonte: tamanhoFinal,
+      });
+    }
   }
-
-  document.documentElement.setAttribute("data-fontsize", tamanhoFinal);
-  localStorage.setItem("viva_fontsize", tamanhoFinal);
-}
 
   /*
     Ativa ou desativa botões grandes no sistema inteiro.
@@ -138,6 +139,221 @@
   }
 
   /*
+    Cria um atalho visível de acessibilidade no desktop.
+    Ele evita que o usuário precise entrar em Perfil para ajustar fonte,
+    tema, contraste, botões grandes ou leitura assistida.
+  */
+  function criarPainelRapidoAcessibilidade() {
+    if (document.getElementById("quick-a11y")) return;
+
+    const painel = document.createElement("aside");
+    painel.id = "quick-a11y";
+    painel.className = "quick-a11y";
+    painel.setAttribute("aria-label", "Atalho de acessibilidade");
+
+    painel.innerHTML = `
+      <button
+        type="button"
+        class="quick-a11y-toggle"
+        id="quick-a11y-toggle"
+        aria-expanded="false"
+        aria-controls="quick-a11y-panel"
+      >
+        <span class="quick-a11y-toggle-icon" aria-hidden="true">Aa</span>
+        <span class="quick-a11y-toggle-text">Acessibilidade</span>
+      </button>
+
+      <div class="quick-a11y-panel" id="quick-a11y-panel" hidden>
+        <div class="quick-a11y-header">
+          <div>
+            <strong>Ajustar tela</strong>
+            <small>Escolha como prefere visualizar o sistema.</small>
+          </div>
+
+          <button
+            type="button"
+            class="quick-a11y-close"
+            id="quick-a11y-close"
+            aria-label="Fechar painel de acessibilidade"
+          >
+            ×
+          </button>
+        </div>
+
+        <section class="quick-a11y-section" aria-labelledby="quick-a11y-font-title">
+          <h2 id="quick-a11y-font-title">Tamanho do texto</h2>
+
+          <div class="quick-a11y-options quick-a11y-options-grid" role="group" aria-label="Tamanho do texto">
+            <button type="button" class="quick-a11y-option" data-quick-font="small">Pequeno</button>
+            <button type="button" class="quick-a11y-option" data-quick-font="standard">Padrão</button>
+            <button type="button" class="quick-a11y-option" data-quick-font="medium">Médio</button>
+            <button type="button" class="quick-a11y-option" data-quick-font="large">Grande</button>
+          </div>
+        </section>
+
+        <section class="quick-a11y-section" aria-labelledby="quick-a11y-theme-title">
+          <h2 id="quick-a11y-theme-title">Tema</h2>
+
+          <div class="quick-a11y-options" role="group" aria-label="Tema visual">
+            <button type="button" class="quick-a11y-option" data-quick-theme="light">Claro</button>
+            <button type="button" class="quick-a11y-option" data-quick-theme="dark">Escuro</button>
+            <button type="button" class="quick-a11y-option" data-quick-theme="high-contrast">Alto contraste</button>
+          </div>
+        </section>
+
+        <section class="quick-a11y-section" aria-labelledby="quick-a11y-support-title">
+          <h2 id="quick-a11y-support-title">Apoio</h2>
+
+          <div class="quick-a11y-support-list">
+            <button type="button" class="quick-a11y-support" data-quick-toggle="large-buttons" aria-pressed="false">
+              <span>Botões grandes</span>
+              <strong>Desligado</strong>
+            </button>
+
+            <button type="button" class="quick-a11y-support" data-quick-toggle="screen-reader" aria-pressed="false">
+              <span>Leitura em voz alta</span>
+              <strong>Desligado</strong>
+            </button>
+          </div>
+        </section>
+      </div>
+    `;
+
+    /*
+      Coloca o atalho de acessibilidade no slot do cabeçalho quando ele existir.
+      Assim, em telas como a Home, os botões "Sair" e "Acessibilidade"
+      ficam no mesmo grupo visual e se ajustam juntos.
+
+      Nas páginas que não possuem esse slot, o painel continua funcionando
+      como botão flutuante no canto superior direito.
+    */
+    const slotAcessibilidade = document.getElementById("a11y-shortcut-slot");
+
+    if (slotAcessibilidade) {
+      painel.classList.add("quick-a11y--header");
+      slotAcessibilidade.appendChild(painel);
+    } else {
+      painel.classList.add("quick-a11y--floating");
+      document.body.appendChild(painel);
+    }
+
+    const botaoAbrir = painel.querySelector("#quick-a11y-toggle");
+    const botaoFechar = painel.querySelector("#quick-a11y-close");
+    const painelConteudo = painel.querySelector("#quick-a11y-panel");
+
+    botaoAbrir.addEventListener("click", () => {
+      const estaAberto = !painelConteudo.hidden;
+      alternarPainelRapidoAcessibilidade(!estaAberto);
+    });
+
+    botaoFechar.addEventListener("click", () => {
+      alternarPainelRapidoAcessibilidade(false);
+      botaoAbrir.focus();
+    });
+
+    painel.querySelectorAll("[data-quick-font]").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        aplicarTamanhoFonte(botao.dataset.quickFont);
+        sincronizarPainelRapidoAcessibilidade();
+      });
+    });
+
+    painel.querySelectorAll("[data-quick-theme]").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        aplicarTema(botao.dataset.quickTheme);
+        sincronizarPainelRapidoAcessibilidade();
+      });
+    });
+
+    painel.querySelectorAll("[data-quick-toggle]").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        const tipo = botao.dataset.quickToggle;
+        const ativoAtual = botao.getAttribute("aria-pressed") === "true";
+
+        if (tipo === "large-buttons") {
+          aplicarBotoesGrandes(!ativoAtual);
+        }
+
+        if (tipo === "screen-reader") {
+          aplicarLeitorAssistido(!ativoAtual);
+        }
+
+        sincronizarPainelRapidoAcessibilidade();
+      });
+    });
+
+    document.addEventListener("keydown", (evento) => {
+      if (evento.key === "Escape") {
+        alternarPainelRapidoAcessibilidade(false);
+      }
+    });
+
+    document.addEventListener("click", (evento) => {
+      const painelAtual = document.getElementById("quick-a11y");
+
+      if (!painelAtual || painelAtual.contains(evento.target)) return;
+
+      alternarPainelRapidoAcessibilidade(false);
+    });
+  }
+
+  function alternarPainelRapidoAcessibilidade(deveAbrir) {
+    const painel = document.getElementById("quick-a11y-panel");
+    const botao = document.getElementById("quick-a11y-toggle");
+
+    if (!painel || !botao) return;
+
+    painel.hidden = !deveAbrir;
+    botao.setAttribute("aria-expanded", deveAbrir ? "true" : "false");
+  }
+
+  function sincronizarPainelRapidoAcessibilidade() {
+    const painel = document.getElementById("quick-a11y");
+
+    if (!painel) return;
+
+    const configuracoes = window.getVivaAccessibilitySettings
+      ? window.getVivaAccessibilitySettings()
+      : {
+          theme: localStorage.getItem("viva_theme") || "light",
+          fontSize: localStorage.getItem("viva_fontsize") || "standard",
+          largeButtons: localStorage.getItem("viva_large_buttons") === "true",
+          screenReader: localStorage.getItem("viva_screen_reader") === "true",
+        };
+
+    painel.querySelectorAll("[data-quick-font]").forEach((botao) => {
+      const selecionado = botao.dataset.quickFont === configuracoes.fontSize;
+      botao.classList.toggle("is-selected", selecionado);
+      botao.setAttribute("aria-pressed", selecionado ? "true" : "false");
+    });
+
+    painel.querySelectorAll("[data-quick-theme]").forEach((botao) => {
+      const selecionado = botao.dataset.quickTheme === configuracoes.theme;
+      botao.classList.toggle("is-selected", selecionado);
+      botao.setAttribute("aria-pressed", selecionado ? "true" : "false");
+    });
+
+    sincronizarBotaoApoio(painel, "large-buttons", configuracoes.largeButtons);
+
+    sincronizarBotaoApoio(painel, "screen-reader", configuracoes.screenReader);
+  }
+
+  function sincronizarBotaoApoio(painel, tipo, ativo) {
+    const botao = painel.querySelector(`[data-quick-toggle="${tipo}"]`);
+
+    if (!botao) return;
+
+    const status = botao.querySelector("strong");
+
+    botao.classList.toggle("is-selected", ativo);
+    botao.setAttribute("aria-pressed", ativo ? "true" : "false");
+
+    if (status) {
+      status.textContent = ativo ? "Ligado" : "Desligado";
+    }
+  }
+
+  /*
     Salva as preferências dentro do usuário logado.
     Isso mantém os dados consistentes entre sessionStorage e localStorage.
   */
@@ -161,7 +377,9 @@
       JSON.stringify(usuarioAtualizado),
     );
 
-    const usuariosBD = JSON.parse(localStorage.getItem("viva_usuarios") || "[]");
+    const usuariosBD = JSON.parse(
+      localStorage.getItem("viva_usuarios") || "[]",
+    );
 
     const usuarioExiste = usuariosBD.some((usuario) => {
       return usuario.cpf === usuarioAtualizado.cpf;
