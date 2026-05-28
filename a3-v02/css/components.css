@@ -725,6 +725,8 @@
   html[data-fontsize="large"] #a11y-shortcut-slot .quick-a11y-toggle-text {
     font-size: 0.9rem;
   }
+
+  
 }
 
 @media (max-width: 767px) {
