@@ -156,12 +156,15 @@
   }
 
   .sidebar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    max-width: 380px;
+    max-width: 80%;
   }
 
   .sidebar-mascot {
-    max-width: 75%;
+    max-width: 100%;
     margin: 0 auto 2rem;
   }
 
@@ -193,5 +196,208 @@
   .success-header {
     margin: -3rem -3rem 2rem;
     padding-top: 2.5rem;
+  }
+}
+
+/* =========================================
+   FOTO CADASTRADA NO CONVÊNIO
+   ========================================= */
+.cadastro-foto-card {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  gap: 1rem;
+  align-items: center;
+  background-color: var(--subcard-secondary-bg);
+  border: 2px solid var(--secondary-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cadastro-foto-card[hidden] {
+  display: none !important;
+}
+
+.cadastro-foto-img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 999px;
+  object-fit: cover;
+  background-color: var(--card-bg);
+  border: 2px solid var(--primary-color);
+}
+
+.cadastro-foto-card strong {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.cadastro-foto-card p {
+  font-size: 1rem;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 360px) {
+  .cadastro-foto-card {
+    grid-template-columns: 4rem 1fr;
+    gap: 0.75rem;
+  }
+
+  .cadastro-foto-img {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+/* =========================================
+   LOGIN — AJUSTE DE LEGIBILIDADE E RESPIRAÇÃO
+   Mantém o padrão das telas de autenticação,
+   mas deixa o formulário menos estreito e mais
+   confortável para texto médio/grande.
+   ========================================= */
+.auth-content {
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.form-card-wrapper {
+  max-width: min(100%, 34rem);
+}
+
+.auth-header {
+  margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.auth-title {
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  line-height: 1.12;
+}
+
+.auth-subtitle {
+  max-width: 28rem;
+  font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+  line-height: 1.55;
+}
+
+.auth-header .btn-back {
+  font-size: clamp(1rem, 3.5vw, 1.15rem);
+}
+
+.auth-container .form-group {
+  margin-bottom: clamp(1.35rem, 4vw, 1.75rem);
+}
+
+.auth-container .form-label {
+  font-size: clamp(1.1rem, 4vw, 1.25rem);
+  line-height: 1.25;
+  margin-bottom: 0.65rem;
+}
+
+.auth-container .form-input {
+  min-height: 4rem;
+  padding: 1rem 1.15rem;
+  font-size: clamp(1.05rem, 4vw, 1.25rem);
+  line-height: 1.25;
+  border-radius: 0.75rem;
+}
+
+.auth-container .input-container .form-input[type="password"],
+.auth-container .input-container .form-input.has-password-toggle {
+  padding-right: 4.85rem;
+}
+
+.auth-container .btn-toggle-password {
+  top: 0.35rem;
+  right: 0.35rem;
+  bottom: 0.35rem;
+  width: 3.6rem;
+  border-radius: 0.65rem;
+}
+
+.auth-container .btn-toggle-password img {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.auth-container .form-actions {
+  margin-top: clamp(2rem, 5vw, 2.75rem);
+  gap: 1.35rem;
+}
+
+.auth-container .form-actions .btn {
+  min-height: 4.15rem;
+  font-size: clamp(1.1rem, 4vw, 1.3rem);
+  border-radius: 0.85rem;
+}
+
+.auth-container .auth-link {
+  font-size: clamp(1rem, 3.5vw, 1.15rem);
+  line-height: 1.35;
+  text-align: center;
+}
+
+/* Desktop: card mais largo e com respiro, sem ficar exagerado. */
+@media (min-width: 768px) {
+  .auth-content {
+    padding: clamp(3rem, 6vw, 5rem);
+  }
+
+  .form-card-wrapper {
+    max-width: 34rem;
+    padding: clamp(2.75rem, 4vw, 3.5rem);
+  }
+}
+
+/* Fonte média/grande: evita sensação de campo espremido. */
+html[data-fontsize="medium"] .form-card-wrapper,
+html[data-fontsize="large"] .form-card-wrapper {
+  max-width: min(100%, 38rem);
+}
+
+html[data-fontsize="medium"] .auth-container .form-input,
+html[data-fontsize="large"] .auth-container .form-input {
+  min-height: 4.35rem;
+}
+
+html[data-fontsize="medium"] .auth-container .form-actions .btn,
+html[data-fontsize="large"] .auth-container .form-actions .btn {
+  min-height: 4.5rem;
+}
+
+/* Mobile pequeno: mantém tudo dentro da largura e evita corte visual. */
+@media (max-width: 420px) {
+  .auth-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .form-card-wrapper {
+    max-width: 100%;
+  }
+
+  .auth-container .form-input {
+    min-height: 3.85rem;
+    padding-inline: 0.95rem;
+  }
+
+  .auth-container .input-container .form-input[type="password"],
+  .auth-container .input-container .form-input.has-password-toggle {
+    padding-right: 4.35rem;
+  }
+
+  .auth-container .btn-toggle-password {
+    width: 3.2rem;
+  }
+}
+
+@media (max-width: 340px) {
+  .auth-content {
+    padding-inline: 0.85rem;
+  }
+
+  .auth-container .form-input {
+    font-size: 1rem;
   }
 }

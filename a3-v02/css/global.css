@@ -168,3 +168,41 @@ html[data-large-buttons="true"] .btn {
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
 }
+
+/* =========================================
+   FOCO ACESSÍVEL — APENAS EM ELEMENTOS INTERATIVOS
+   Evita borda aparecendo em títulos/textos comuns
+   ========================================= */
+
+:focus {
+  outline: none;
+}
+
+:is(a,
+  button,
+  input,
+  textarea,
+  select,
+  summary,
+  [role="button"],
+  [role="tab"],
+  [role="switch"],
+  [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid var(--focus-color, var(--primary-color));
+  outline-offset: 4px;
+  border-radius: 0.35rem;
+}
+
+/* Alto contraste: foco amarelo nos elementos clicáveis */
+html[data-theme="high-contrast"] :is(a,
+  button,
+  input,
+  textarea,
+  select,
+  summary,
+  [role="button"],
+  [role="tab"],
+  [role="switch"],
+  [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline-color: #ffff00;
+}

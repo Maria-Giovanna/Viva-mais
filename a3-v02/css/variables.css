@@ -13,6 +13,9 @@
     --text-agendamento-card: var(--card-bg);
     --agenda-status-bg: #498bfc;
 
+    --btn-secundary-border:2px solid #ffffffd9;
+    --btn-secundary-text: var(--card-bg);
+
     --primary-color: #0047CC;
     --primary-color-rgb: 0, 71, 204;
     --primary-border: #0047CC;
@@ -51,6 +54,8 @@
     --text-agendamento-card: var(--text-main);
     --agenda-status-bg: #89B4FF;
 
+    --btn-secundary-border: 2px solid #ffffffd9;
+    --btn-secundary-text:var(--text-main);
 
     --primary-color: #3D7BFF;
     --primary-color-rgb: 61, 123, 255;
@@ -79,7 +84,10 @@
     --text-button: #0A0A0A;
     --text-muted: #D6DEE8;
     --text-agendamento-card: var(--card-bg);
-    --agenda-status-bg: #a8d1fa;
+    --agenda-status-bg: #c8e4ff;
+
+    --btn-secundary-border:2px solid #bdbdbdd9;
+    --btn-secundary-text:var(--card-bg);
 
     --primary-color: #FFFF00;
     --primary-color-rgb: 255, 255, 0;
