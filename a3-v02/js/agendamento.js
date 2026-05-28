@@ -360,37 +360,37 @@
     });
   }
 
- function renderizarLocais() {
-   const lista = document.getElementById("lista-locais");
+  function renderizarLocais() {
+    const lista = document.getElementById("lista-locais");
 
-   if (!lista) {
-     mostrarErroNaTela("Lista de locais não encontrada.");
-     return;
-   }
+    if (!lista) {
+      mostrarErroNaTela("Lista de locais não encontrada.");
+      return;
+    }
 
-   let locais = obterLocaisDisponiveis();
+    let locais = obterLocaisDisponiveis();
 
-   locais = adicionarDistanciaNosLocais(locais);
-   locais = ordenarLocaisPorDistancia(locais);
+    locais = adicionarDistanciaNosLocais(locais);
+    locais = ordenarLocaisPorDistancia(locais);
 
-   lista.innerHTML = "";
+    lista.innerHTML = "";
 
-   if (locais.length === 0) {
-     lista.innerHTML = `
+    if (locais.length === 0) {
+      lista.innerHTML = `
       <div class="info-alert">
         <span class="info-alert-icon" aria-hidden="true">!</span>
         <p>Não encontramos unidades disponíveis para esse atendimento.</p>
       </div>
     `;
-     return;
-   }
+      return;
+    }
 
-   locais.forEach(({ unidade, servico, distanciaKm }) => {
-     const botao = document.createElement("button");
-     botao.type = "button";
-     botao.className = "location-card";
+    locais.forEach(({ unidade, servico, distanciaKm }) => {
+      const botao = document.createElement("button");
+      botao.type = "button";
+      botao.className = "location-card";
 
-     botao.innerHTML = `
+      botao.innerHTML = `
       <div class="location-card-header">
         <span class="location-pin" aria-hidden="true">
           <svg viewBox="0 0 24 24" focusable="false">
@@ -424,20 +424,19 @@
       <span class="btn btn-primary location-select-button">Selecionar</span>
     `;
 
-     botao.addEventListener("click", () => {
-       estadoAgendamento.unidade = unidade;
-       estadoAgendamento.servico = servico;
-       estadoAgendamento.profissional = escolherProfissional(unidade, servico);
-       estadoAgendamento.data = null;
-       estadoAgendamento.hora = null;
+      botao.addEventListener("click", () => {
+        estadoAgendamento.unidade = unidade;
+        estadoAgendamento.servico = servico;
+        estadoAgendamento.profissional = null;
+        estadoAgendamento.data = null;
+        estadoAgendamento.hora = null;
 
-       renderizarDatas();
-       mostrarEtapa("step-data");
-     });
+        renderizarProfissionais();
+      });
 
-     lista.appendChild(botao);
-   });
- }
+      lista.appendChild(botao);
+    });
+  }
 
   function obterLocaisDisponiveis() {
     const item = estadoAgendamento.itemSelecionado;
@@ -583,28 +582,127 @@
     return `${distanciaKm.toFixed(1).replace(".", ",")} km`;
   }
 
+  function renderizarProfissionais() {
+    const resumo = document.getElementById("resumo-profissional");
+    const lista = document.getElementById("lista-profissionais");
+
+    if (!resumo || !lista) {
+      mostrarErroNaTela(
+        "Elementos da etapa de profissional não foram encontrados.",
+      );
+      return;
+    }
+
+    const profissionais = obterProfissionaisDisponiveis();
+
+    if (profissionais.length === 0) {
+      estadoAgendamento.profissional = criarEquipeUnidade();
+      renderizarDatas();
+      mostrarEtapa("step-data");
+      return;
+    }
+
+    resumo.innerHTML = montarResumo({
+      servico: obterNomeServico(),
+      tipo: estadoAgendamento.itemSelecionado.nome,
+      local: estadoAgendamento.unidade.nome,
+    });
+
+    lista.innerHTML = "";
+
+    profissionais.forEach((profissional) => {
+      const botao = document.createElement("button");
+      botao.type = "button";
+      botao.className = "professional-card";
+
+      const quantidadeHorarios =
+        contarHorariosDisponiveisDoProfissional(profissional);
+
+      botao.innerHTML = `
+        <span class="professional-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path
+              d="M12 12a4 4 0 1 0 0-8a4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0v1H5v-1Z"
+              fill="currentColor"
+            />
+          </svg>
+        </span>
+
+        <span class="professional-info">
+          <span class="professional-name">${profissional.nome}</span>
+          <span class="professional-specialty">${profissional.especialidade || estadoAgendamento.itemSelecionado.nome}</span>
+          <span class="professional-count">${quantidadeHorarios} horários disponíveis</span>
+        </span>
+      `;
+
+      botao.addEventListener("click", () => {
+        estadoAgendamento.profissional = profissional;
+        estadoAgendamento.data = null;
+        estadoAgendamento.hora = null;
+
+        renderizarDatas();
+        mostrarEtapa("step-data");
+      });
+
+      lista.appendChild(botao);
+    });
+
+    mostrarEtapa("step-profissional");
+  }
+
+  function obterProfissionaisDisponiveis() {
+    const ids = estadoAgendamento.servico?.profissionaisDisponiveis || [];
+
+    if (ids.length === 0) {
+      return [];
+    }
+
+    return ids
+      .map((id) => {
+        return (estadoAgendamento.unidade?.profissionais || []).find(
+          (profissional) => profissional.id === id,
+        );
+      })
+      .filter(Boolean);
+  }
+
+  function contarHorariosDisponiveisDoProfissional(profissional) {
+    const profissionalAnterior = estadoAgendamento.profissional;
+    estadoAgendamento.profissional = profissional;
+
+    const total = gerarDatasDisponiveis(5).reduce((quantidade, dataISO) => {
+      return quantidade + obterHorariosLivres(dataISO).length;
+    }, 0);
+
+    estadoAgendamento.profissional = profissionalAnterior;
+
+    return total;
+  }
+
+  function criarEquipeUnidade() {
+    return {
+      id: "equipe-unidade",
+      nome: "Equipe da unidade",
+      especialidade:
+        estadoAgendamento.servico?.especialidade ||
+        estadoAgendamento.servico?.nome ||
+        estadoAgendamento.itemSelecionado?.nome ||
+        "Atendimento",
+    };
+  }
+
   function escolherProfissional(unidade, servico) {
     const ids = servico.profissionaisDisponiveis || [];
 
     if (ids.length === 0) {
-      return {
-        id: "equipe-unidade",
-        nome: "Equipe da unidade",
-        especialidade: servico.especialidade || servico.nome,
-      };
+      return criarEquipeUnidade();
     }
 
     const profissional = (unidade.profissionais || []).find((item) => {
       return item.id === ids[0];
     });
 
-    return (
-      profissional || {
-        id: "equipe-unidade",
-        nome: "Equipe da unidade",
-        especialidade: servico.especialidade || servico.nome,
-      }
-    );
+    return profissional || criarEquipeUnidade();
   }
 
   function renderizarDatas() {
@@ -620,6 +718,7 @@
       servico: obterNomeServico(),
       tipo: estadoAgendamento.itemSelecionado.nome,
       local: estadoAgendamento.unidade.nome,
+      profissional: estadoAgendamento.profissional?.nome,
     });
 
     lista.innerHTML = "";
@@ -689,6 +788,7 @@
       servico: obterNomeServico(),
       tipo: estadoAgendamento.itemSelecionado.nome,
       local: estadoAgendamento.unidade.nome,
+      profissional: estadoAgendamento.profissional?.nome,
       data: formatarDataComDiaSemana(estadoAgendamento.data),
     });
 
@@ -743,14 +843,21 @@
 
     const horariosBase = estadoAgendamento.servico?.horariosDisponiveis || [];
 
+    const profissionalAtualId =
+      estadoAgendamento.profissional?.id || "equipe-unidade";
+
     return horariosBase.filter((hora) => {
       return !agendamentos.some((agendamento) => {
+        const profissionalAgendadoId =
+          agendamento.profissionalId || "equipe-unidade";
+
         return (
           agendamento.status !== "cancelado" &&
           agendamento.unidadeId === estadoAgendamento.unidade.id &&
           agendamento.servicoId === estadoAgendamento.servico.id &&
           agendamento.data === dataISO &&
-          agendamento.hora === hora
+          agendamento.hora === hora &&
+          profissionalAgendadoId === profissionalAtualId
         );
       });
     });
@@ -908,49 +1015,50 @@ Código: ${agendamento.id}
   }
 
   function mostrarEtapaSemHistorico(idEtapa) {
-  const etapa = document.getElementById(idEtapa);
+    const etapa = document.getElementById(idEtapa);
 
-  if (!etapa) {
-    console.error(`Etapa não encontrada: #${idEtapa}`);
-    mostrarErroNaTela(`Etapa não encontrada: ${idEtapa}`);
-    return;
+    if (!etapa) {
+      console.error(`Etapa não encontrada: #${idEtapa}`);
+      mostrarErroNaTela(`Etapa não encontrada: ${idEtapa}`);
+      return;
+    }
+
+    const layout = document.querySelector(".scheduling-layout");
+    const mainContent = document.getElementById("main-content");
+    const botaoVoltar = document.getElementById("btn-voltar");
+
+    const etapasDeBloqueio = [
+      "step-bloqueio-especialidade",
+      "step-bloqueio-exame",
+      "step-bloqueio-vacina",
+      "step-bloqueio-clinico-aberto",
+    ];
+
+    const etapaAtualEhBloqueio = etapasDeBloqueio.includes(idEtapa);
+
+    document.querySelectorAll(".step").forEach((secao) => {
+      secao.hidden = true;
+    });
+
+    etapa.hidden = false;
+
+    if (layout) {
+      layout.classList.toggle("is-blocked-step", etapaAtualEhBloqueio);
+    }
+
+    if (mainContent) {
+      mainContent.hidden = etapaAtualEhBloqueio;
+    }
+
+    if (botaoVoltar) {
+      botaoVoltar.hidden = etapaAtualEhBloqueio;
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }
-
-  const layout = document.querySelector(".scheduling-layout");
-  const mainContent = document.getElementById("main-content");
-  const botaoVoltar = document.getElementById("btn-voltar");
-
-  const etapasDeBloqueio = [
-    "step-bloqueio-especialidade",
-    "step-bloqueio-exame",
-    "step-bloqueio-vacina",
-  ];
-
-  const etapaAtualEhBloqueio = etapasDeBloqueio.includes(idEtapa);
-
-  document.querySelectorAll(".step").forEach((secao) => {
-    secao.hidden = true;
-  });
-
-  etapa.hidden = false;
-
-  if (layout) {
-    layout.classList.toggle("is-blocked-step", etapaAtualEhBloqueio);
-  }
-
-  if (mainContent) {
-    mainContent.hidden = etapaAtualEhBloqueio;
-  }
-
-  if (botaoVoltar) {
-    botaoVoltar.hidden = etapaAtualEhBloqueio;
-  }
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-}
 
   function voltarEtapa() {
     const etapaAtual = document.querySelector(".step:not([hidden])");
@@ -1031,6 +1139,10 @@ Código: ${agendamento.id}
 
     if (dados.local) {
       linhas.push(montarLinhaResumo("Local:", dados.local));
+    }
+
+    if (dados.profissional) {
+      linhas.push(montarLinhaResumo("Profissional:", dados.profissional));
     }
 
     if (dados.data) {
@@ -1180,8 +1292,8 @@ Código: ${agendamento.id}
       `;
       }
 
-     if (nomeNormalizado.includes("raio")) {
-       return `
+      if (nomeNormalizado.includes("raio")) {
+        return `
     <svg class="icon-xray" viewBox="0 0 42 48" aria-hidden="true" focusable="false">
       <rect 
         data-stroke
@@ -1245,7 +1357,7 @@ Código: ${agendamento.id}
       />
     </svg>
   `;
-     }
+      }
 
       if (nomeNormalizado.includes("ultrassom")) {
         return `

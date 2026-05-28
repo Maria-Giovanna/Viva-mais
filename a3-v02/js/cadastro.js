@@ -18,15 +18,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputConfirmaSenha = document.getElementById("confirma-senha");
   const senhaMatchError = document.getElementById("senha-match-error");
   const btnProximaEtapa = document.getElementById("btn-proxima-etapa");
+  const btnVoltarEtapa1 = document.getElementById("btn-voltar-1");
+  const btnIrRevisao = document.getElementById("btn-ir-revisao");
+  const btnVoltarEtapa2 = document.getElementById("btn-voltar-2");
+  const btnFinalizar = document.getElementById("btn-finalizar");
 
-  if (!step1 || !step2 || !step3 || !step4 || !cpfInput || !fieldsetDados || !btnProximaEtapa) return;
+  if (
+    !step1 ||
+    !step2 ||
+    !step3 ||
+    !step4 ||
+    !cpfInput ||
+    !fieldsetDados ||
+    !btnProximaEtapa
+  )
+    return;
 
   let tempUserData = null;
   btnProximaEtapa.disabled = true;
 
   function mostrarEtapa(etapaAtual, proximaEtapa) {
+    if (!etapaAtual || !proximaEtapa) return;
+
     etapaAtual.classList.add("hidden");
+    etapaAtual.setAttribute("aria-hidden", "true");
+
     proximaEtapa.classList.remove("hidden");
+    proximaEtapa.setAttribute("aria-hidden", "false");
+
     const foco = proximaEtapa.querySelector("button, input, a");
     if (foco) foco.focus();
   }
@@ -42,6 +61,102 @@ document.addEventListener("DOMContentLoaded", () => {
     inputEndereco.value = "";
     inputNovaSenha.value = "";
     inputConfirmaSenha.value = "";
+  }
+
+  function salvarRascunhoCadastro() {
+    if (!tempUserData) return;
+
+    sessionStorage.setItem(
+      "viva_cadastro_temp",
+      JSON.stringify({
+        ...tempUserData,
+        senha: inputNovaSenha.value.trim(),
+      }),
+    );
+  }
+
+  function recuperarRascunhoCadastro() {
+    if (tempUserData) return tempUserData;
+
+    const cpfLimpo = cpfInput.value.replace(/\D/g, "");
+
+    const rascunho = JSON.parse(
+      sessionStorage.getItem("viva_cadastro_temp") || "null",
+    );
+
+    if (rascunho && rascunho.cpf === cpfLimpo) {
+      tempUserData = rascunho;
+      return tempUserData;
+    }
+
+    const conveniosBD = JSON.parse(
+      localStorage.getItem("viva_convenios") || "[]",
+    );
+    const dadosConvenio = conveniosBD.find((conv) => {
+      return conv.cpf === cpfLimpo && conv.planoAtivo;
+    });
+
+    if (!dadosConvenio) return null;
+
+    tempUserData = { ...dadosConvenio };
+    delete tempUserData.planoAtivo;
+    tempUserData.senha = inputNovaSenha.value.trim();
+
+    return tempUserData;
+  }
+
+  function preencherRevisao() {
+    const usuarioTemporario = recuperarRascunhoCadastro();
+
+    if (!usuarioTemporario) {
+      mostrarEtapa(step2, step1);
+      cpfError.textContent =
+        "Não foi possível recuperar os dados do cadastro. Verifique o CPF novamente.";
+      cpfError.hidden = false;
+      cpfInput.setAttribute("aria-invalid", "true");
+      cpfInput.focus();
+      return false;
+    }
+
+    const opcaoSelecionada = document.querySelector(
+      'input[name="acessibilidade"]:checked',
+    );
+
+    const acessibilidadeEscolhida = opcaoSelecionada
+      ? opcaoSelecionada.value
+      : "standard";
+
+    tempUserData = {
+      ...usuarioTemporario,
+      preferencias: {
+        ...(usuarioTemporario.preferencias || {}),
+        tema: localStorage.getItem("viva_theme") || "light",
+        tamanhoFonte: acessibilidadeEscolhida,
+        botoesGrandes: localStorage.getItem("viva_large_buttons") === "true",
+        leitorTela: localStorage.getItem("viva_screen_reader") === "true",
+      },
+    };
+
+    document.getElementById("rev-cpf").textContent = cpfInput.value;
+    document.getElementById("rev-nome").textContent =
+      tempUserData.nomeCompleto || "";
+    document.getElementById("rev-data").textContent =
+      tempUserData.dataNascimento || "";
+    document.getElementById("rev-endereco").textContent =
+      tempUserData.endereco || "";
+
+    salvarRascunhoCadastro();
+    return true;
+  }
+
+  function irParaRevisao(evento) {
+    if (evento) {
+      evento.preventDefault();
+    }
+
+    if (!preencherRevisao()) return;
+
+    mostrarEtapa(step2, step3);
   }
 
   function validarSenhasRealTime() {
@@ -102,20 +217,28 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const usuariosBD = JSON.parse(localStorage.getItem("viva_usuarios") || "[]");
+    const usuariosBD = JSON.parse(
+      localStorage.getItem("viva_usuarios") || "[]",
+    );
     if (usuariosBD.find((user) => user.cpf === cpfLimpo)) {
-      cpfError.innerHTML = "Você já possui uma conta. <a href='login.html'>Clique para entrar</a>.";
+      cpfError.innerHTML =
+        "Você já possui uma conta. <a href='login.html'>Clique para entrar</a>.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       bloquearDados();
       return;
     }
 
-    const conveniosBD = JSON.parse(localStorage.getItem("viva_convenios") || "[]");
-    const dadosConvenio = conveniosBD.find((conv) => conv.cpf === cpfLimpo && conv.planoAtivo);
+    const conveniosBD = JSON.parse(
+      localStorage.getItem("viva_convenios") || "[]",
+    );
+    const dadosConvenio = conveniosBD.find(
+      (conv) => conv.cpf === cpfLimpo && conv.planoAtivo,
+    );
 
     if (!dadosConvenio) {
-      cpfError.textContent = "Não encontramos um plano ativo associado a este CPF.";
+      cpfError.textContent =
+        "Não encontramos um plano ativo associado a este CPF.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       bloquearDados();
@@ -140,50 +263,71 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!validarSenhasRealTime() || !tempUserData) return;
 
     tempUserData.senha = inputNovaSenha.value.trim();
+    salvarRascunhoCadastro();
     mostrarEtapa(step1, step2);
   });
 
-  document.getElementById("btn-voltar-1").addEventListener("click", () => {
-    mostrarEtapa(step2, step1);
-  });
+  if (btnVoltarEtapa1) {
+    btnVoltarEtapa1.addEventListener("click", () => {
+      mostrarEtapa(step2, step1);
+    });
+  }
 
-  document.getElementById("btn-ir-revisao").addEventListener("click", () => {
-    const acessibilidadeEscolhida = document.querySelector('input[name="acessibilidade"]:checked').value;
+  if (btnIrRevisao) {
+    btnIrRevisao.addEventListener("click", irParaRevisao);
+  }
 
-    tempUserData.preferencias = {
-      tema: "light",
-      tamanhoFonte: acessibilidadeEscolhida,
-    };
+  /*
+    Fallback em captura: garante que o botão de próxima etapa funcione
+    mesmo se outro script interferir na etapa de acessibilidade.
+  */
+  document.addEventListener(
+    "click",
+    (evento) => {
+      const botao =
+        evento.target.closest && evento.target.closest("#btn-ir-revisao");
 
-    document.getElementById("rev-cpf").textContent = cpfInput.value;
-    document.getElementById("rev-nome").textContent = tempUserData.nomeCompleto;
-    document.getElementById("rev-data").textContent = tempUserData.dataNascimento;
-    document.getElementById("rev-endereco").textContent = tempUserData.endereco;
+      if (!botao) return;
 
-    mostrarEtapa(step2, step3);
-  });
+      evento.stopPropagation();
 
-  document.getElementById("btn-voltar-2").addEventListener("click", () => {
-    mostrarEtapa(step3, step2);
-  });
+      irParaRevisao(evento);
+    },
+    true,
+  );
 
-  document.getElementById("btn-finalizar").addEventListener("click", () => {
-    const usuariosBD = JSON.parse(localStorage.getItem("viva_usuarios") || "[]");
+  window.vivaCadastroIrRevisao = irParaRevisao;
 
-    if (usuariosBD.some((user) => user.cpf === tempUserData.cpf)) {
-      window.location.href = "login.html";
-      return;
-    }
+  if (btnVoltarEtapa2) {
+    btnVoltarEtapa2.addEventListener("click", () => {
+      mostrarEtapa(step3, step2);
+    });
+  }
 
-    usuariosBD.push(tempUserData);
-    localStorage.setItem("viva_usuarios", JSON.stringify(usuariosBD));
+  if (btnFinalizar) {
+    btnFinalizar.addEventListener("click", () => {
+      const usuariosBD = JSON.parse(
+        localStorage.getItem("viva_usuarios") || "[]",
+      );
 
-    localStorage.setItem("viva_theme", tempUserData.preferencias.tema);
-    localStorage.setItem("viva_fontsize", tempUserData.preferencias.tamanhoFonte);
+      if (usuariosBD.some((user) => user.cpf === tempUserData.cpf)) {
+        window.location.href = "login.html";
+        return;
+      }
 
-    mostrarEtapa(step3, step4);
+      usuariosBD.push(tempUserData);
+      localStorage.setItem("viva_usuarios", JSON.stringify(usuariosBD));
 
-    const sidebar = document.querySelector(".auth-sidebar");
-    if (sidebar) sidebar.classList.add("hidden");
-  });
+      localStorage.setItem("viva_theme", tempUserData.preferencias.tema);
+      localStorage.setItem(
+        "viva_fontsize",
+        tempUserData.preferencias.tamanhoFonte,
+      );
+
+      mostrarEtapa(step3, step4);
+
+      const sidebar = document.querySelector(".auth-sidebar");
+      if (sidebar) sidebar.classList.add("hidden");
+    });
+  }
 });
