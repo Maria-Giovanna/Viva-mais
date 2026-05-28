@@ -1372,3 +1372,53 @@ html[data-fontsize="large"] .review-icon svg {
         padding-right: 0.75rem;
     }
 }
+/* =========================================
+   CORREÇÃO — AGENDAMENTO DESKTOP SEM SOBREPOR MENU
+   O menu lateral estava com position: fixed e saía do fluxo.
+   Por isso, em telas desktop/tablet, algumas etapas como Exames
+   ficavam renderizadas por baixo da sidebar. Agora o layout vira
+   grid: menu ocupa a primeira coluna e o conteúdo fica na segunda.
+   ========================================= */
+@media (min-width: 768px) {
+    .scheduling-layout {
+        display: grid !important;
+        grid-template-columns: clamp(220px, 18vw, 280px) minmax(0, 1fr);
+        align-items: start;
+        min-height: 100vh;
+    }
+
+    .scheduling-layout > .app-nav {
+        position: sticky !important;
+        top: 0 !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        grid-column: 1;
+        grid-row: 1;
+        width: auto !important;
+        height: 100vh;
+        align-self: start;
+        order: initial;
+    }
+
+    .scheduling-layout > .scheduling-main {
+        grid-column: 2;
+        grid-row: 1;
+        min-width: 0;
+        width: min(100%, 760px);
+        max-width: 760px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3rem clamp(1.25rem, 4vw, 3rem);
+    }
+
+    .scheduling-layout > .mascot-message:not([hidden]) {
+        grid-column: 2;
+        grid-row: 1;
+        min-width: 0;
+    }
+
+    .scheduling-layout.is-blocked-step {
+        grid-template-columns: clamp(220px, 18vw, 280px) minmax(0, 1fr) !important;
+    }
+}
