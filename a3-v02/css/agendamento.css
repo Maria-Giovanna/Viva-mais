@@ -1388,7 +1388,7 @@ html[data-fontsize="large"] .review-icon svg {
     }
 
     .scheduling-layout > .app-nav {
-        position: sticky !important;
+        position: fixed !important;
         top: 0 !important;
         left: auto !important;
         right: auto !important;
