@@ -24,7 +24,7 @@
     }
   },
   {
-    "cpf": "45612378906",
+    "cpf": "70548445052",
     "nomeCompleto": "Ana Oliveira",
     "dataNascimento": "22/07/1945",
     "endereco": "Rua das Flores, 89 - Pinheiros, São Paulo/SP",
@@ -36,7 +36,7 @@
     }
   },
   {
-    "cpf": "78945612315",
+    "cpf": "52998224725",
     "nomeCompleto": "Roberto Costa",
     "dataNascimento": "30/11/1950",
     "endereco": "Rua do Comércio, 900 - Tatuapé, São Paulo/SP",
@@ -48,7 +48,7 @@
     }
   },
   {
-    "cpf": "32165498712",
+    "cpf": "34567890175",
     "nomeCompleto": "Sônia Pereira",
     "dataNascimento": "15/02/1958",
     "endereco": "Av. Paulista, 1000 - Bela Vista, São Paulo/SP",
@@ -60,7 +60,7 @@
     }
   },
     {
-    "cpf": "65498732104",
+    "cpf": "11122233396",
     "nomeCompleto": "João Pedro Silva",
     "dataNascimento": "10/08/1985",
     "telefone": "11991111111",
@@ -73,7 +73,7 @@
   },
   {
     "nomeCompleto": "Carla Mendes Oliveira",
-    "cpf": "15975348620",
+    "cpf": "24681012190",
     "dataNascimento": "15/06/1980",
     "telefone": "11992222222",
     "endereco": "Av. das Palmeiras, 200 - Centro - Osasco/SP",
@@ -85,7 +85,7 @@
   },
   {
     "nomeCompleto": "Maria Fernanda Costa",
-    "cpf": "75395185244",
+    "cpf": "31415926590",
     "dataNascimento": "15/02/1958",
     "telefone": "11992222222",
     "endereco": "Av. Brasil, 250 - Centro - Osasco/SP",
@@ -97,7 +97,7 @@
   },
   {
     "nomeCompleto": "Lucas Henrique Souza",
-    "cpf": "85274196301",
+    "cpf": "90817263586",
     "dataNascimento": "15/02/1958",
     "telefone": "11993333333",
     "endereco": "Rua do Sol, 78 - Vila Dirce - Carapicuíba/SP",
@@ -109,7 +109,7 @@
   },
   {
     "nomeCompleto": "Ana Beatriz Lima",
-    "cpf": "95175385208",
+    "cpf": "67293840500",
     "dataNascimento": "15/02/1958",
     "telefone": "11994444444",
     "endereco": "Rua dos Ipês, 150 - Centro - Jandira/SP",
@@ -121,7 +121,7 @@
   },
   {
     "nomeCompleto": "Gabriel Martins Rocha",
-    "cpf": "14725836903",
+    "cpf": "80654123942",
     "dataNascimento": "15/02/1958",
     "telefone": "11995555555",
     "endereco": "Alameda Verde, 88 - Alphaville - Barueri/SP",
@@ -131,6 +131,9 @@
     "lon": -46.8485
   }
   },
+
+  
+
   {
     "nomeCompleto": "Juliana Oliveira Santos",
     "cpf": "25836914705",
