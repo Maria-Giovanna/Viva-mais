@@ -16,7 +16,12 @@
 
 <body>
 
+    <!--
+        Home do paciente apos login.
+        Mostra saudacao, proximo agendamento e atalhos para consulta, exame e vacina.
+    -->
     <div class="app-layout">
+        <!-- Menu principal: lateral no desktop e inferior no tablet/mobile. -->
         <nav class="app-nav" aria-label="Menu principal">
             <div class="nav-brand desktop-only">
                 <img src="assets/img/LOGO-VIVA+.svg" alt="Viva+">
@@ -88,11 +93,13 @@
             </header>
 
             <main id="main-content" class="dashboard-main">
+                <!-- Saudacao personalizada pelo home.js usando o nome salvo na sessao. -->
                 <section class="greeting-section">
                     <h1 class="greeting-title">Olá, <span id="nome-paciente">Paciente</span></h1>
                     <p class="greeting-subtitle">O que vamos agendar hoje?</p>
                 </section>
 
+                <!-- Card alimentado por js/agendamento-storage.js com o proximo agendamento. -->
                 <section class="next-appointment-card" aria-label="Aviso de próximo agendamento">
                     <div class="card-content">
                         <div class="card-header">
@@ -104,6 +111,7 @@
                     <button type="button" class="btn-secondary-small" id="btn-ver-detalhes">Ver detalhes</button>
                 </section>
 
+                <!-- Atalhos que abrem o fluxo de agendamento com tipo definido na URL. -->
                 <section class="action-cards-grid" aria-label="Opções de Agendamento">
                     <a class="service-card" href="agendamento.html?tipo=consulta" aria-label="Agendar consulta médica">
                         <div class="service-card-icon" aria-hidden="true">

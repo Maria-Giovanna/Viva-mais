@@ -1,5 +1,4 @@
-<!doctype html>
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-BR" data-theme="light" data-fontsize="standard">
 
 <head>
@@ -16,7 +15,13 @@
 </head>
 
 <body>
+  <!--
+    Pagina de Perfil.
+    Reune dados pessoais, preferencias de acessibilidade, troca de senha e saida.
+    O perfil.js troca as secoes .profile-step conforme a escolha do usuario.
+  -->
   <div class="profile-layout">
+    <!-- Conteudo principal do perfil; cada section abaixo representa uma tela interna. -->
     <main id="main-content" class="profile-main">
       <button type="button" class="profile-back" id="btn-voltar">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -26,7 +31,7 @@
         <span>Voltar</span>
       </button>
 
-      <!-- MENU DO PERFIL -->
+      <!-- Menu inicial: cards grandes levam para dados, acessibilidade, senha ou logout. -->
       <section class="profile-step" id="step-menu">
         <article class="profile-user-card">
           <div class="profile-avatar" aria-hidden="true">
@@ -36,7 +41,7 @@
 
           <div>
             <h1 class="profile-user-name" id="perfil-nome">
-              Nome do usuário
+              Nome do usuario
             </h1>
             <p class="profile-user-cpf" id="perfil-cpf">000.000.000-00</p>
           </div>
@@ -55,10 +60,10 @@
 
             <span class="profile-menu-text">
               <strong>Meus dados</strong>
-              <small>Suas informações pessoais</small>
+              <small>Suas informacoes pessoais</small>
             </span>
 
-            <span class="profile-menu-arrow" aria-hidden="true">›</span>
+            <span class="profile-menu-arrow" aria-hidden="true"></span>
           </button>
 
           <!-- Acessibilidade -->
@@ -85,10 +90,10 @@
 
             <span class="profile-menu-text">
               <strong>Acessibilidade</strong>
-              <small>Ajuste o sistema para ficar mais confortável</small>
+              <small>Ajuste o sistema para ficar mais confortavel</small>
             </span>
 
-            <span class="profile-menu-arrow" aria-hidden="true">›</span>
+            <span class="profile-menu-arrow" aria-hidden="true"></span>
           </button>
 
           <!-- Alterar senha -->
@@ -106,7 +111,7 @@
               <small>Atualize sua senha</small>
             </span>
 
-            <span class="profile-menu-arrow" aria-hidden="true">›</span>
+            <span class="profile-menu-arrow" aria-hidden="true"></span>
           </button>
 
           <!-- Sair -->
@@ -124,10 +129,10 @@
 
             <span class="profile-menu-text">
               <strong>Sair</strong>
-              <small>Encerrar sessão neste dispositivo</small>
+              <small>Encerrar sessao neste dispositivo</small>
             </span>
 
-            <span class="profile-menu-arrow" aria-hidden="true">›</span>
+            <span class="profile-menu-arrow" aria-hidden="true"></span>
           </button>
         </div>
       </section>
@@ -135,9 +140,9 @@
       <!-- VISUALIZAR DADOS -->
       <section class="profile-step" id="step-dados" hidden>
         <header class="profile-header">
-          <h1 class="profile-title">Veja suas informações</h1>
+          <h1 class="profile-title">Veja suas informacoes</h1>
           <p class="profile-subtitle">
-            Abaixo estão seus dados cadastrados em nosso sistema.
+            Abaixo estao seus dados cadastrados em nosso sistema.
           </p>
         </header>
 
@@ -157,9 +162,9 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Endereço</label>
+            <label class="form-label">Endereco</label>
             <div class="form-input input-readonly">
-              <span id="dados-endereco">Endereço</span>
+              <span id="dados-endereco">Endereco</span>
             </div>
           </div>
 
@@ -172,11 +177,11 @@
 
           <div class="profile-alert" role="status" aria-live="polite">
             <span>!</span>
-            <p>Nome completo e CPF não podem ser alterados.</p>
+            <p>Nome completo e CPF nao podem ser alterados.</p>
           </div>
 
           <button type="button" class="btn btn-primary" id="btn-editar-dados">
-            Editar endereço e telefone
+            Editar endereco e telefone
           </button>
         </div>
       </section>
@@ -184,7 +189,7 @@
       <!-- EDITAR DADOS -->
       <section class="profile-step" id="step-editar-dados" hidden>
         <header class="profile-header">
-          <h1 class="profile-title">Veja suas informações</h1>
+          <h1 class="profile-title">Veja suas informacoes</h1>
           <p class="profile-subtitle">Atualize apenas os dados permitidos.</p>
         </header>
 
@@ -204,9 +209,9 @@
           </div>
 
           <div class="form-group">
-            <label for="edit-endereco" class="form-label">Endereço</label>
+            <label for="edit-endereco" class="form-label">Endereco</label>
             <div>
-              <input type="text" id="edit-endereco" placeholder="Digite seu endereço" class="form-input" />
+              <input type="text" id="edit-endereco" placeholder="Digite seu endereco" class="form-input" />
             </div>
           </div>
 
@@ -219,14 +224,14 @@
 
           <div class="profile-alert" role="status" aria-live="polite">
             <span>!</span>
-            <p>Nome completo e CPF não podem ser alterados.</p>
+            <p>Nome completo e CPF nao podem ser alterados.</p>
           </div>
 
           <span class="field-error" id="erro-dados" role="alert" hidden></span>
 
 
           <button type="submit" class="btn btn-primary">
-            Salvar alterações
+            Salvar alteracoes
           </button>
 
         </form>
@@ -241,15 +246,15 @@
           </div>
 
           <div class="profile-success-content">
-            <h1 id="titulo-confirmar-dados">Salvar alterações?</h1>
+            <h1 id="titulo-confirmar-dados">Salvar alteracoes?</h1>
             <p>
-              As alterações de endereço e telefone podem levar até 48 horas para
+              As alteracoes de endereco e telefone podem levar ate 48 horas para
               serem atualizadas no sistema.
             </p>
 
             <div class="profile-actions">
               <button type="button" class="btn btn-primary" id="btn-confirmar-dados">
-                Confirmar alterações
+                Confirmar alteracoes
               </button>
 
               <button type="button" class="btn-secondary-outline" id="btn-voltar-edicao">
@@ -269,7 +274,7 @@
         <div class="profile-success-content">
           <h1>Dados alterados!</h1>
           <p>
-            As alterações levarão até 48 horas para serem completamente
+            As alteracoes levarao ate 48 horas para serem completamente
             atualizadas no sistema.
           </p>
 
@@ -279,13 +284,13 @@
             </button>
 
             <button type="button" class="btn-secondary-outline" id="btn-voltar-inicio-dados">
-              Voltar ao início
+              Voltar ao inicio
             </button>
           </div>
         </div>
       </section>
 
-      <!-- ACESSIBILIDADE -->
+      <!-- Acessibilidade: controles salvos no localStorage e aplicados pelo a11y.js. -->
       <section class="profile-step" id="step-acessibilidade" hidden>
         <header class="profile-header">
           <h1 class="profile-title">
@@ -293,7 +298,7 @@
           </h1>
         </header>
 
-        <h2 class="profile-section-title">Preferências de visualização</h2>
+        <h2 class="profile-section-title">Preferencias de visualizacao</h2>
 
         <div class="accessibility-list">
           <button type="button" class="accessibility-card" data-profile-target="step-tamanho-texto">
@@ -304,7 +309,7 @@
               <small>Aumente ou diminua o tamanho do texto.</small>
             </span>
 
-            <span class="profile-menu-arrow" aria-hidden="true">›</span>
+            <span class="profile-menu-arrow" aria-hidden="true"></span>
           </button>
 
           <div class="accessibility-card">
@@ -345,6 +350,51 @@
           </div>
         </div>
 
+        <h2 class="profile-section-title">Cores da tela</h2>
+
+        <!-- Cada botao data-color-option escolhe um modo de cor usado nas variaveis do CSS. -->
+        <div class="font-size-list color-mode-list">
+          <button type="button" class="font-size-card color-mode-card" data-color-option="default" aria-pressed="true">
+            <span class="color-mode-preview color-mode-preview--default" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </span>
+            <span>
+              <strong>Padrao Viva+</strong>
+              <small>Usa as cores originais do sistema.</small>
+            </span>
+          </button>
+
+          <button type="button" class="font-size-card color-mode-card" data-color-option="deuteranopia" aria-pressed="false">
+            <span class="color-mode-preview color-mode-preview--deuteranopia" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </span>
+            <span>
+              <strong>Vermelho e verde parecidos</strong>
+              <small>Azul, laranja, verde e rosa com contraste mais forte.</small>
+            </span>
+          </button>
+
+          <button type="button" class="font-size-card color-mode-card" data-color-option="tritanopia" aria-pressed="false">
+            <span class="color-mode-preview color-mode-preview--tritanopia" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </span>
+            <span>
+              <strong>Azul e amarelo parecidos</strong>
+              <small>Roxo, verde, laranja e rosa para separar melhor as opcoes.</small>
+            </span>
+          </button>
+
+          <button type="button" class="font-size-card color-mode-card" data-color-option="achromatopsia" aria-pressed="false">
+            <span class="color-mode-preview color-mode-preview--achromatopsia" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </span>
+            <span>
+              <strong>Pouca ou nenhuma cor</strong>
+              <small>Usa tons de cinza fortes para facilitar a leitura.</small>
+            </span>
+          </button>
+        </div>
+
         <h2 class="profile-section-title">Recursos de acessibilidade</h2>
 
         <div class="accessibility-list">
@@ -357,7 +407,7 @@
 
             <span class="accessibility-text">
               <strong>Leitura em voz alta</strong>
-              <small>Lê botões, campos e opções quando você interage com
+              <small>Le botoes, campos e opcoes quando voce interage com
                 eles.</small>
             </span>
 
@@ -375,12 +425,12 @@
             </span>
 
             <span class="accessibility-text">
-              <strong>Botões grandes</strong>
-              <small>Aumenta o tamanho dos botões para facilitar toque.</small>
+              <strong>Botoes grandes</strong>
+              <small>Aumenta o tamanho dos botoes para facilitar toque.</small>
             </span>
 
             <button type="button" class="switch" id="toggle-botoes" role="switch" aria-checked="false"
-              aria-label="Ativar botões grandes">
+              aria-label="Ativar botoes grandes">
               <span></span>
             </button>
           </div>
@@ -388,7 +438,7 @@
 
         <div class="profile-alert" role="status" aria-live="polite">
           <span>!</span>
-          <p>Suas preferências são salvas automaticamente.</p>
+          <p>Suas preferencias sao salvas automaticamente.</p>
         </div>
       </section>
 
@@ -410,16 +460,16 @@
           <button type="button" class="font-size-card" data-font-option="standard">
             <span class="font-preview standard">A</span>
             <span>
-              <strong>Padrão</strong>
-              <small>Texto padrão do sistema, ideal para <br>a maioria dos usuários.</small>
+              <strong>Padrao</strong>
+              <small>Texto padrao do sistema, ideal para <br>a maioria dos usuarios.</small>
             </span>
           </button>
 
           <button type="button" class="font-size-card" data-font-option="medium">
             <span class="font-preview medium">A</span>
             <span>
-              <strong>Médio</strong>
-              <small>Texto com tamanho médio, bom para leitura.</small>
+              <strong>Medio</strong>
+              <small>Texto com tamanho medio, bom para leitura.</small>
             </span>
           </button>
 
@@ -434,7 +484,7 @@
 
         <div class="profile-alert" role="status" aria-live="polite">
           <span>!</span>
-          <p>Essa configuração será aplicada em todas as telas do sistema.</p>
+          <p>Essa configuracao sera aplicada em todas as telas do sistema.</p>
         </div>
 
         <button type="button" class="btn btn-primary" id="btn-salvar-fonte">
@@ -447,7 +497,7 @@
         <header class="profile-header">
           <h1 class="profile-title">Alterar senha</h1>
           <p class="profile-subtitle">
-            Crie uma nova senha numérica com 8 dígitos.
+            Crie uma nova senha numerica com 8 digitos.
           </p>
         </header>
 
@@ -500,6 +550,7 @@
       </section>
     </main>
 
+    <!-- Navegacao fixa do aplicativo, reutilizada nas paginas internas. -->
     <nav class="app-nav" aria-label="Menu principal">
       <ul class="nav-list">
         <li>
@@ -508,7 +559,7 @@
               <path class="nav-icon-outline" d="M3 10.8L12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.8Z" />
               <path class="nav-icon-fill" d="M3 10.8L12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.8Z" />
             </svg>
-            <span>Início</span>
+            <span>Inicio</span>
           </a>
         </li>
 
@@ -547,9 +598,11 @@
     </nav>
   </div>
 
+  <!-- Scripts em ordem: acessibilidade global, utilitarios compartilhados e regras do perfil. -->
   <script src="js/a11y.js"></script>
   <script src="js/util.js"></script>
   <script src="js/perfil.js"></script>
 </body>
 
 </html>
+

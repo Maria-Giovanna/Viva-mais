@@ -13,6 +13,10 @@
 </head>
 
 <body>
+    <!--
+        Pagina de recuperacao de senha.
+        Divide a troca de senha em CPF, data de nascimento e nova senha.
+    -->
     <a href="#main-content" class="skip-link">Pular para o formulário de recuperação</a>
 
     <main id="main-content" class="auth-container">
@@ -26,6 +30,7 @@
         <section class="auth-content">
             <div class="form-card-wrapper">
                 <form id="form-recuperacao" novalidate>
+                    <!-- Etapa 1: localizar a conta pelo CPF. -->
                     <fieldset id="etapa-1" class="auth-fieldset">
                         <header class="auth-header">
                             <button type="button" class="btn-back" onclick="window.location.href='login.html'">
@@ -41,7 +46,7 @@
                             <div class="input-container">
                                 <input type="text" id="cpf-recuperacao" name="cpf" class="form-input" placeholder="Digite apenas números" inputmode="numeric" pattern="[0-9]*" maxlength="14" required aria-invalid="false" aria-describedby="erro-cpf">
                             </div>
-                            <span id="erro-cpf" class="field-error" aria-live="polite" hidden>CPF não encontrado no sistema.</span>
+                            <span id="erro-cpf" class="field-error" role="alert" aria-live="assertive" hidden>CPF não encontrado no sistema.</span>
                         </div>
 
                         <div class="form-actions">
@@ -49,6 +54,7 @@
                         </div>
                     </fieldset>
 
+                    <!-- Etapa 2: confirmar identidade com data de nascimento. -->
                     <fieldset id="etapa-2" class="auth-fieldset" hidden disabled>
                         <header class="auth-header">
                             <button type="button" class="btn-back btn-voltar-etapa">
@@ -64,7 +70,7 @@
                             <div class="input-container">
                                 <input type="text" id="nascimento-recuperacao" class="form-input" placeholder="DD/MM/AAAA" inputmode="numeric" maxlength="10" data-mask="date-br" aria-invalid="false" aria-describedby="erro-nascimento">
                             </div>
-                            <span id="erro-nascimento" class="field-error" aria-live="polite" hidden>Data incorreta. Tente novamente.</span>
+                            <span id="erro-nascimento" class="field-error" role="alert" aria-live="assertive" hidden>Data incorreta. Tente novamente.</span>
                         </div>
 
                         <div class="form-actions">
@@ -72,6 +78,7 @@
                         </div>
                     </fieldset>
 
+                    <!-- Etapa 3: criar e confirmar a nova senha numerica. -->
                     <fieldset id="etapa-3" class="auth-fieldset" hidden disabled>
                         <header class="auth-header">
                             <button type="button" class="btn-back btn-voltar-etapa">
@@ -102,7 +109,7 @@
                                     <img src="assets/icons/icon-nao-visivel.svg" class="olho-fechado" alt="" aria-hidden="true">
                                 </button>
                             </div>
-                            <span id="erro-senha" class="field-error" aria-live="polite" hidden>As senhas não são iguais.</span>
+                            <span id="erro-senha" class="field-error" role="alert" aria-live="assertive" hidden>As senhas não são iguais.</span>
                         </div>
 
                         <div class="form-actions">
@@ -110,6 +117,7 @@
                         </div>
                     </fieldset>
 
+                    <!-- Etapa 4: mensagem final de sucesso. -->
                     <div id="etapa-4" class="success-screen" hidden>
                         <div class="success-icon-wrapper">
                             <img src="assets/img/mascote_sucesso.png" alt="" class="success-mascot" aria-hidden="true">

@@ -1,6 +1,8 @@
-// ==============================================================================
-// FUNÇÕES GLOBAIS: CPF, SENHA, MÁSCARAS, DISTÂNCIA E TOGGLE DE SENHA
-// ==============================================================================
+/*
+  util.js
+  Funcoes globais usadas nas paginas de login, cadastro e perfil:
+  validacao de CPF, mascaras de campos, distancia entre unidades e toggle de senha.
+*/
 
 function calcularDistancia(lat1, lon1, lat2, lon2) {
   const R = 6371;

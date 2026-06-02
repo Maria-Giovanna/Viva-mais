@@ -1,7 +1,10 @@
-/**
- * js/recuperar-senha.js
- * Controla o fluxo de recuperação de senha.
- */
+/*
+  recuperar-senha.js
+  Controla a recuperacao de senha em etapas:
+  - confirma CPF;
+  - valida data de nascimento;
+  - salva a nova senha do usuario no banco simulado.
+*/
 document.addEventListener("DOMContentLoaded", () => {
   const step1 = document.getElementById("etapa-1");
   const step2 = document.getElementById("etapa-2");
@@ -39,7 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const cpfLimpo = cpfInput.value.replace(/\D/g, "");
 
     if (!validarCPF(cpfLimpo)) {
-      cpfError.textContent = "CPF inválido. Confira se você digitou todos os números corretamente.";
+      cpfError.textContent =
+        "Nao conseguimos validar este CPF. Confira se digitou os 11 numeros corretamente, sem pontos ou tracos.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       cpfInput.focus();
@@ -50,7 +54,8 @@ document.addEventListener("DOMContentLoaded", () => {
     usuarioEncontrado = usuariosBD.find((u) => u.cpf === cpfLimpo);
 
     if (!usuarioEncontrado) {
-      cpfError.textContent = "Não encontramos um cadastro com este CPF no Viva+.";
+      cpfError.textContent =
+        "Nao encontramos uma conta ativa com este CPF. Confira os numeros digitados ou crie sua conta se ainda nao tiver cadastro.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       cpfInput.focus();
@@ -71,6 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    nascError.textContent =
+      "A data de nascimento nao confere com este CPF. Confira o formato DD/MM/AAAA e tente novamente.";
     nascError.hidden = false;
     nascInput.setAttribute("aria-invalid", "true");
     nascInput.focus();
@@ -94,7 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (novaSenha !== confirmaSenha) {
-      senhaError.textContent = "As senhas digitadas não são iguais.";
+      senhaError.textContent =
+        "A senha precisa ter 8 numeros e os dois campos devem ser iguais. Evite sequencias ou numeros repetidos.";
       senhaError.hidden = false;
       confirmaInput.setAttribute("aria-invalid", "true");
       confirmaInput.focus();

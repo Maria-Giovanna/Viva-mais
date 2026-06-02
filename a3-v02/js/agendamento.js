@@ -1,6 +1,13 @@
 (function () {
   "use strict";
 
+  /*
+    agendamento.js
+    Controla todo o passo a passo de agendamento:
+    consulta, exame e vacina. Ele carrega dados do JSON, filtra as opcoes,
+    controla voltar/cancelar e salva o atendimento confirmado no banco simulado.
+  */
+
   const estadoAgendamento = {
     usuario: null,
     usuarioCompleto: null,
@@ -17,6 +24,7 @@
   };
 
   const historicoEtapas = [];
+  let etapaAntesCancelamento = null;
 
   document.addEventListener("DOMContentLoaded", iniciarPagina);
 
@@ -44,7 +52,7 @@
     } catch (erro) {
       console.error("Erro ao iniciar fluxo de agendamento:", erro);
       mostrarErroNaTela(
-        "Não foi possível iniciar o agendamento. Confira o console ou tente novamente.",
+        "Nao foi possivel carregar os dados do Viva+. Verifique sua conexao, recarregue a pagina e tente novamente.",
       );
     }
   }
@@ -185,7 +193,11 @@
 
     escutarClique("btn-confirmar-agendamento", confirmarAgendamento);
 
-    escutarClique("btn-cancelar-agendamento", () => {
+    escutarClique("btn-cancelar-agendamento", mostrarConfirmacaoCancelamento);
+
+    escutarClique("btn-continuar-agendamento", fecharConfirmacaoCancelamento);
+
+    escutarClique("btn-confirmar-cancelamento", () => {
       irPara("home.html");
     });
 
@@ -266,16 +278,20 @@
 
     const ehExame = estadoAgendamento.categoria === "exame";
 
+    const itensDaLista = ehExame
+      ? itensPermitidos.map((item) => ({
+          nome: item.nome,
+          descricao: "Pedido disponível",
+          tipo: estadoAgendamento.categoria,
+        }))
+      : prepararVacinasPorIdade(itensPermitidos);
+
     renderizarListaItens({
       titulo: ehExame ? "Exames disponíveis" : "Vacinas disponíveis",
       subtitulo: ehExame
         ? "Encontramos encaminhamento para os exames abaixo:"
-        : "Encontramos vacinas disponíveis para você:",
-      itens: itensPermitidos.map((item) => ({
-        nome: item.nome,
-        descricao: ehExame ? "Pedido disponível" : "Dose disponível",
-        tipo: estadoAgendamento.categoria,
-      })),
+        : "Organizamos as vacinas pensando na sua idade:",
+      itens: itensDaLista,
     });
 
     mostrarEtapaSemHistorico("step-lista-itens");
@@ -289,6 +305,89 @@
     return lista.filter((item) => {
       return (item.status || "ativo") === "ativo";
     });
+  }
+
+  function prepararVacinasPorIdade(vacinas) {
+    return vacinas
+      .map((vacina) => {
+        const recomendacao = obterRecomendacaoVacina(vacina.nome);
+
+        return {
+          nome: vacina.nome,
+          descricao: recomendacao.descricao,
+          tipo: "vacina",
+          recomendacaoTexto: recomendacao.texto,
+          recomendacaoDestaque: recomendacao.destaque,
+        };
+      })
+      .sort((a, b) => {
+        if (a.recomendacaoDestaque && !b.recomendacaoDestaque) return -1;
+        if (!a.recomendacaoDestaque && b.recomendacaoDestaque) return 1;
+        return a.nome.localeCompare(b.nome, "pt-BR");
+      });
+  }
+
+  function obterRecomendacaoVacina(nomeVacina) {
+    const idade = calcularIdade(estadoAgendamento.usuarioCompleto?.dataNascimento);
+    const nomeNormalizado = normalizarTexto(nomeVacina);
+
+    const recomendacaoPadrao = {
+      texto: "Disponivel para agendar",
+      descricao: "Dose disponivel",
+      destaque: false,
+    };
+
+    if (!idade) {
+      return recomendacaoPadrao;
+    }
+
+    if (idade >= 60 && nomeNormalizado.includes("gripe")) {
+      return {
+        texto: "Recomendada para 60+",
+        descricao: "Vacina anual importante para pessoas idosas",
+        destaque: true,
+      };
+    }
+
+    if (idade >= 60 && nomeNormalizado.includes("covid")) {
+      return {
+        texto: "Recomendada para 60+",
+        descricao: "Reforco indicado para proteger pessoas idosas",
+        destaque: true,
+      };
+    }
+
+    if (idade >= 60 && nomeNormalizado.includes("febre")) {
+      return {
+        texto: "Avaliar na unidade",
+        descricao: "A unidade confirma se a dose e indicada para voce",
+        destaque: false,
+      };
+    }
+
+    return recomendacaoPadrao;
+  }
+
+  function calcularIdade(dataNascimento) {
+    if (!dataNascimento) return null;
+
+    const partes = String(dataNascimento).split("/");
+    if (partes.length !== 3) return null;
+
+    const [dia, mes, ano] = partes.map(Number);
+    if (!dia || !mes || !ano) return null;
+
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - ano;
+    const mesAtual = hoje.getMonth() + 1;
+    const aindaNaoFezAniversario =
+      mesAtual < mes || (mesAtual === mes && hoje.getDate() < dia);
+
+    if (aindaNaoFezAniversario) {
+      idade -= 1;
+    }
+
+    return idade;
   }
 
   function mostrarBloqueio(tipo) {
@@ -326,6 +425,10 @@
       const botao = document.createElement("button");
       botao.type = "button";
       botao.className = "item-card";
+      botao.setAttribute(
+        "aria-label",
+        `Selecionar ${item.nome}. ${item.descricao}. ${item.recomendacaoTexto || ""}`,
+      );
 
       botao.innerHTML = `
         <span class="item-icon" aria-hidden="true">
@@ -335,6 +438,11 @@
         <span class="item-info">
           <span class="item-title">${item.nome}</span>
           <span class="item-desc">${item.descricao}</span>
+          ${
+            item.recomendacaoTexto
+              ? `<span class="item-badge ${item.recomendacaoDestaque ? "is-recommended" : ""}">${item.recomendacaoTexto}</span>`
+              : ""
+          }
         </span>
 
         <svg class="item-arrow" viewBox="0 0 24 24" aria-hidden="true">
@@ -377,7 +485,7 @@
 
     if (locais.length === 0) {
       lista.innerHTML = `
-      <div class="info-alert">
+      <div class="info-alert" role="alert" aria-live="assertive">
         <span class="info-alert-icon" aria-hidden="true">!</span>
         <p>Não encontramos unidades disponíveis para esse atendimento.</p>
       </div>
@@ -386,11 +494,14 @@
     }
 
     locais.forEach(({ unidade, servico, distanciaKm }) => {
-      const botao = document.createElement("button");
-      botao.type = "button";
-      botao.className = "location-card";
+      const card = document.createElement("article");
+      card.className = "location-card";
+      card.setAttribute(
+        "aria-label",
+        `Unidade ${unidade.nome}. Endereco: ${unidade.endereco}. ${formatarDistancia(distanciaKm)} de voce.`,
+      );
 
-      botao.innerHTML = `
+      card.innerHTML = `
       <div class="location-card-header">
         <span class="location-pin" aria-hidden="true">
           <svg viewBox="0 0 24 24" focusable="false">
@@ -421,10 +532,20 @@
         <span>A ${formatarDistancia(distanciaKm)} de você</span>
       </div>
 
-      <span class="btn btn-primary location-select-button">Selecionar</span>
+      <div class="location-actions">
+        <button type="button" class="btn btn-primary location-select-button" aria-label="Selecionar ${unidade.nome} para este agendamento">
+          Selecionar local
+        </button>
+
+        <a class="btn btn-secondary location-maps-button" href="${criarLinkMaps(unidade)}" target="_blank" rel="noopener noreferrer" aria-label="Abrir ${unidade.nome} no Google Maps em uma nova aba">
+          Ver no Maps
+        </a>
+      </div>
     `;
 
-      botao.addEventListener("click", () => {
+      const botaoSelecionar = card.querySelector(".location-select-button");
+
+      botaoSelecionar.addEventListener("click", () => {
         estadoAgendamento.unidade = unidade;
         estadoAgendamento.servico = servico;
         estadoAgendamento.profissional = null;
@@ -434,8 +555,18 @@
         renderizarProfissionais();
       });
 
-      lista.appendChild(botao);
+      lista.appendChild(card);
     });
+  }
+
+  function criarLinkMaps(unidade) {
+    const coordenadas = unidade?.coordenadas;
+    const consulta =
+      coordenadas && coordenadas.lat && coordenadas.lon
+        ? `${coordenadas.lat},${coordenadas.lon}`
+        : unidade?.endereco || unidade?.nome || "";
+
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consulta)}`;
   }
 
   function obterLocaisDisponiveis() {
@@ -536,52 +667,6 @@
     return `${distanciaKm.toFixed(1).replace(".", ",")} km`;
   }
 
-  function ordenarLocaisPorDistancia(locais) {
-    return locais.sort((a, b) => {
-      if (a.distanciaKm === null) return 1;
-      if (b.distanciaKm === null) return -1;
-
-      return a.distanciaKm - b.distanciaKm;
-    });
-  }
-
-  function calcularDistanciaKm(lat1, lon1, lat2, lon2) {
-    const raioTerraKm = 6371;
-
-    const diferencaLat = converterGrausParaRadianos(lat2 - lat1);
-    const diferencaLon = converterGrausParaRadianos(lon2 - lon1);
-
-    const origemLat = converterGrausParaRadianos(lat1);
-    const destinoLat = converterGrausParaRadianos(lat2);
-
-    const a =
-      Math.sin(diferencaLat / 2) * Math.sin(diferencaLat / 2) +
-      Math.cos(origemLat) *
-        Math.cos(destinoLat) *
-        Math.sin(diferencaLon / 2) *
-        Math.sin(diferencaLon / 2);
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return raioTerraKm * c;
-  }
-
-  function converterGrausParaRadianos(graus) {
-    return graus * (Math.PI / 180);
-  }
-
-  function formatarDistancia(distanciaKm) {
-    if (distanciaKm === null || Number.isNaN(distanciaKm)) {
-      return "distância não informada";
-    }
-
-    if (distanciaKm < 1) {
-      return `${Math.round(distanciaKm * 1000)} m`;
-    }
-
-    return `${distanciaKm.toFixed(1).replace(".", ",")} km`;
-  }
-
   function renderizarProfissionais() {
     const resumo = document.getElementById("resumo-profissional");
     const lista = document.getElementById("lista-profissionais");
@@ -617,6 +702,10 @@
 
       const quantidadeHorarios =
         contarHorariosDisponiveisDoProfissional(profissional);
+      botao.setAttribute(
+        "aria-label",
+        `Selecionar ${profissional.nome}. ${quantidadeHorarios} horarios disponiveis.`,
+      );
 
       botao.innerHTML = `
         <span class="professional-icon" aria-hidden="true">
@@ -730,6 +819,10 @@
       botao.type = "button";
       botao.className = "date-card";
       botao.disabled = horarios.length === 0;
+      botao.setAttribute(
+        "aria-label",
+        `${horarios.length === 0 ? "Sem horarios disponiveis em" : "Selecionar"} ${formatarDataComDiaSemana(dataISO)}. ${horarios.length} horarios disponiveis.`,
+      );
 
       botao.innerHTML = `
         <div class="date-card-main">
@@ -795,10 +888,23 @@
     lista.innerHTML = "";
     btnConfirmar.disabled = true;
 
-    obterHorariosLivres(estadoAgendamento.data).forEach((hora) => {
+    const horariosLivres = obterHorariosLivres(estadoAgendamento.data);
+
+    if (horariosLivres.length === 0) {
+      lista.innerHTML = `
+        <div class="info-alert" role="alert" aria-live="assertive">
+          <span class="info-alert-icon" aria-hidden="true">!</span>
+          <p>Nao encontramos horarios disponiveis para esta escolha. Volte uma etapa e tente outra data, profissional ou unidade.</p>
+        </div>
+      `;
+      return;
+    }
+
+    horariosLivres.forEach((hora) => {
       const botao = document.createElement("button");
       botao.type = "button";
       botao.className = "time-card";
+      botao.setAttribute("aria-label", `Selecionar horario ${hora}`);
 
       botao.innerHTML = `
         <span class="time-text">${hora}</span>
@@ -983,13 +1089,21 @@
       criadoEm: new Date().toISOString(),
     };
 
-    const agendamentos = JSON.parse(
-      localStorage.getItem("viva_agendamentos") || "[]",
-    );
+    try {
+      const agendamentos = JSON.parse(
+        localStorage.getItem("viva_agendamentos") || "[]",
+      );
 
-    agendamentos.push(novoAgendamento);
+      agendamentos.push(novoAgendamento);
 
-    localStorage.setItem("viva_agendamentos", JSON.stringify(agendamentos));
+      localStorage.setItem("viva_agendamentos", JSON.stringify(agendamentos));
+    } catch (erro) {
+      console.error("Erro ao salvar agendamento:", erro);
+      mostrarErroNaTela(
+        "Nao foi possivel salvar o agendamento. Confira os dados escolhidos e tente confirmar novamente.",
+      );
+      return;
+    }
 
     estadoAgendamento.agendamentoConfirmado = novoAgendamento;
 
@@ -1069,6 +1183,12 @@ Código: ${agendamento.id}
     ];
 
     const etapaAtualEhBloqueio = etapasDeBloqueio.includes(idEtapa);
+    const etapasSemBotaoVoltar = [
+      ...etapasDeBloqueio,
+      "step-confirmar-cancelamento",
+      "step-error",
+      "step-sucesso",
+    ];
 
     document.querySelectorAll(".step").forEach((secao) => {
       secao.hidden = true;
@@ -1085,7 +1205,7 @@ Código: ${agendamento.id}
     }
 
     if (botaoVoltar) {
-      botaoVoltar.hidden = etapaAtualEhBloqueio;
+      botaoVoltar.hidden = etapasSemBotaoVoltar.includes(idEtapa);
     }
 
     window.scrollTo({
@@ -1097,6 +1217,11 @@ Código: ${agendamento.id}
   function voltarEtapa() {
     const etapaAtual = document.querySelector(".step:not([hidden])");
 
+    if (etapaAtual?.id === "step-confirmar-cancelamento") {
+      fecharConfirmacaoCancelamento();
+      return;
+    }
+
     if (
       !etapaAtual ||
       etapaAtual.id === "step-consulta-tipo" ||
@@ -1105,18 +1230,35 @@ Código: ${agendamento.id}
       etapaAtual.id === "step-bloqueio-exame" ||
       etapaAtual.id === "step-bloqueio-vacina"
     ) {
-      irPara("home.html");
+      mostrarConfirmacaoCancelamento();
       return;
     }
 
     const etapaAnterior = historicoEtapas.pop();
 
     if (!etapaAnterior || etapaAnterior === "step-loading") {
-      irPara("home.html");
+      mostrarConfirmacaoCancelamento();
       return;
     }
 
     mostrarEtapaSemHistorico(etapaAnterior);
+  }
+
+  function mostrarConfirmacaoCancelamento() {
+    const etapaAtual = document.querySelector(".step:not([hidden])");
+
+    if (etapaAtual?.id !== "step-confirmar-cancelamento") {
+      etapaAntesCancelamento = etapaAtual?.id || "step-consulta-tipo";
+    }
+
+    mostrarEtapaSemHistorico("step-confirmar-cancelamento");
+  }
+
+  function fecharConfirmacaoCancelamento() {
+    const etapaParaRestaurar = etapaAntesCancelamento || "step-consulta-tipo";
+
+    etapaAntesCancelamento = null;
+    mostrarEtapaSemHistorico(etapaParaRestaurar);
   }
 
   function mostrarErroNaTela(mensagem) {
@@ -1124,6 +1266,8 @@ Código: ${agendamento.id}
 
     if (mensagemErro) {
       mensagemErro.textContent = mensagem;
+      mensagemErro.setAttribute("role", "alert");
+      mensagemErro.setAttribute("aria-live", "assertive");
       mostrarEtapaSemHistorico("step-error");
       return;
     }

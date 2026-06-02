@@ -1,7 +1,9 @@
-/**
- * js/api.js
- * Camada de simulação de banco de dados usando JSON + localStorage.
- */
+/*
+  api.js
+  Inicializa o banco simulado do projeto.
+  Le os arquivos JSON de usuarios e convenios e copia os dados para o localStorage,
+  permitindo que as paginas alterem informacoes sem mexer diretamente no JSON.
+*/
 async function inicializarBancoDeDados() {
   try {
     if (!localStorage.getItem("viva_usuarios")) {

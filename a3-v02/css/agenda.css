@@ -1,3 +1,9 @@
+/*
+  agenda.css
+  Estilos da pagina Agenda: lista, abas, detalhes,
+  comprovante, cancelamento e estados de sucesso/erro.
+*/
+
 body {
     background-color: var(--bg-color);
 }
@@ -237,39 +243,49 @@ body {
 }
 
 .status-confirmado {
-    background-color: #D7F6E9;
-    color: #016645;
-    border: 1px solid #72C9A8;
+    background-color: color-mix(in srgb, var(--status-confirmed-color) 18%, var(--card-bg));
+    color: var(--status-confirmed-color);
+    border: 1px solid var(--status-confirmed-color);
 }
 
 .status-confirmado::before {
-    background-color: #0BB07B;
+    background-color: var(--status-confirmed-color);
     color: white;
 }
 
 .status-realizado {
-    background-color: #DCE9FF;
-    color: var(--primary-color);
-    border: 1px solid #7DA8FF;
+    background-color: color-mix(in srgb, var(--status-finished-color) 18%, var(--card-bg));
+    color: var(--status-finished-color);
+    border: 1px solid var(--status-finished-color);
 }
 
 .status-realizado::before {
-    background-color: var(--primary-color);
+    background-color: var(--status-finished-color);
     color: white;
 }
 
 .status-cancelado,
 .status-nao-compareceu {
-    background-color: #FFE2E2;
-    color: #8A1F1F;
-    border: 1px solid #E68787;
+    background-color: color-mix(in srgb, var(--status-canceled-color) 18%, var(--card-bg));
+    color: var(--status-canceled-color);
+    border: 1px solid var(--status-canceled-color);
+}
+
+.status-nao-compareceu {
+    background-color: color-mix(in srgb, var(--status-no-show-color) 18%, var(--card-bg));
+    color: var(--status-no-show-color);
+    border-color: var(--status-no-show-color);
 }
 
 .status-cancelado::before,
 .status-nao-compareceu::before {
     content: "×";
-    background-color: var(--error);
+    background-color: var(--status-canceled-color);
     color: white;
+}
+
+.status-nao-compareceu::before {
+    background-color: var(--status-no-show-color);
 }
 
 /* Alerta */

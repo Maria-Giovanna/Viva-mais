@@ -1,18 +1,47 @@
-(function () {
+﻿(function () {
   "use strict";
 
   /*
-    Arquivo responsável por aplicar as preferências de acessibilidade
-    em todas as páginas do sistema Viva+.
-
-    Ele controla:
+    a11y.js
+    Aplica as preferencias de acessibilidade em todas as paginas:
     - tema claro, escuro e alto contraste;
     - tamanho da fonte;
-    - botões grandes;
+    - botoes grandes;
     - leitura assistida em voz alta;
-    - salvamento das preferências no localStorage e no usuário logado.
+    - modos de cor para diferentes tipos de daltonismo.
+
+    As escolhas ficam no localStorage e tambem podem ser copiadas
+    para o usuario logado no banco simulado.
   */
 
+  const STORAGE_KEY = "viva_accessibility_settings";
+  const DEFAULT_SETTINGS = {
+    theme: "light",
+    fontSize: "standard",
+    largeButtons: false,
+    screenReader: false,
+    colorMode: "default",
+  };
+
+  const LABELS = {
+    theme: {
+      light: "tema claro",
+      dark: "tema escuro",
+      "high-contrast": "tema alto contraste",
+    },
+    fontSize: {
+      small: "fonte pequena",
+      standard: "fonte padrao",
+      medium: "fonte media",
+      large: "fonte grande",
+    },
+    colorMode: {
+      default: "cores padrao",
+      deuteranopia: "vermelho e verde parecidos",
+      tritanopia: "azul e amarelo parecidos",
+      achromatopsia: "pouca ou nenhuma cor",
+    },
+  };
   let leitorAssistidoAtivo = false;
   let eventosLeitorConfigurados = false;
   let ultimaFala = "";
@@ -21,22 +50,197 @@
   document.addEventListener("DOMContentLoaded", aplicarAcessibilidadeSalva);
 
   /*
-    Aplica as preferências salvas assim que qualquer página do sistema carrega.
-    Isso garante que o usuário mantenha suas configurações ao navegar.
+    Aplica as preferencias salvas assim que qualquer pagina do sistema carrega.
+    Isso garante que o usuario mantenha suas configuracoes ao navegar.
   */
   function aplicarAcessibilidadeSalva() {
-    const tema = localStorage.getItem("viva_theme") || "light";
-    const tamanhoFonte = localStorage.getItem("viva_fontsize") || "standard";
-    const botoesGrandes = localStorage.getItem("viva_large_buttons") || "false";
-    const leitorTela = localStorage.getItem("viva_screen_reader") || "false";
+    const configuracoes = obterConfiguracoesAtuais();
 
-    aplicarTema(tema, false);
-    aplicarTamanhoFonte(tamanhoFonte, false);
-    aplicarBotoesGrandes(botoesGrandes === "true", false);
-    aplicarLeitorAssistido(leitorTela === "true", false, false);
+    aplicarConfiguracoes(configuracoes, {
+      deveSalvarUsuario: false,
+      deveFalarLeitor: false,
+      deveDispararEvento: false,
+    });
 
     criarPainelRapidoAcessibilidade();
     sincronizarPainelRapidoAcessibilidade();
+  }
+
+  function obterConfiguracoesAtuais() {
+    const salvas = lerJSONLocalStorage(STORAGE_KEY, null);
+    const usuario = JSON.parse(
+      sessionStorage.getItem("viva_usuario_logado") || "null",
+    );
+    const preferenciasUsuario = usuario?.preferencias || {};
+    const deveIniciarComFontePadrao = !usuario;
+
+    const legadas = {
+      theme:
+        localStorage.getItem("viva_theme") ||
+        preferenciasUsuario.tema ||
+        undefined,
+      fontSize: deveIniciarComFontePadrao
+        ? DEFAULT_SETTINGS.fontSize
+        : localStorage.getItem("viva_fontsize") ||
+          preferenciasUsuario.tamanhoFonte ||
+          undefined,
+      largeButtons:
+        localStorage.getItem("viva_large_buttons") !== null
+          ? localStorage.getItem("viva_large_buttons") === "true"
+          : preferenciasUsuario.botoesGrandes,
+      screenReader:
+        localStorage.getItem("viva_screen_reader") !== null
+          ? localStorage.getItem("viva_screen_reader") === "true"
+          : preferenciasUsuario.leitorTela,
+      colorMode:
+        localStorage.getItem("viva_color_mode") ||
+        preferenciasUsuario.modoCores ||
+        undefined,
+    };
+
+    const configuracoesCombinadas = {
+      ...DEFAULT_SETTINGS,
+      ...legadas,
+      ...(salvas || {}),
+    };
+
+    if (deveIniciarComFontePadrao) {
+      configuracoesCombinadas.fontSize = DEFAULT_SETTINGS.fontSize;
+    }
+
+    return normalizarConfiguracoes(configuracoesCombinadas);
+  }
+
+  function lerJSONLocalStorage(chave, fallback) {
+    try {
+      const valor = localStorage.getItem(chave);
+      return valor ? JSON.parse(valor) : fallback;
+    } catch (erro) {
+      console.warn(`Nao foi possivel ler ${chave}.`, erro);
+      return fallback;
+    }
+  }
+
+  function normalizarConfiguracoes(configuracoes) {
+    const temasPermitidos = ["light", "dark", "high-contrast"];
+    const tamanhosPermitidos = ["small", "standard", "medium", "large"];
+    const modosPermitidos = [
+      "default",
+      "deuteranopia",
+      "tritanopia",
+      "achromatopsia",
+    ];
+    const aliasesModoCores = {
+      "colorblind-safe": "deuteranopia",
+      "blue-orange": "deuteranopia",
+      "purple-green": "tritanopia",
+    };
+    const modoRecebido =
+      aliasesModoCores[configuracoes.colorMode] || configuracoes.colorMode;
+
+    return {
+      theme: temasPermitidos.includes(configuracoes.theme)
+        ? configuracoes.theme
+        : DEFAULT_SETTINGS.theme,
+      fontSize: tamanhosPermitidos.includes(configuracoes.fontSize)
+        ? configuracoes.fontSize
+        : DEFAULT_SETTINGS.fontSize,
+      largeButtons: Boolean(configuracoes.largeButtons),
+      screenReader: Boolean(configuracoes.screenReader),
+      colorMode: modosPermitidos.includes(modoRecebido)
+        ? modoRecebido
+        : DEFAULT_SETTINGS.colorMode,
+    };
+  }
+
+  function atualizarConfiguracoes(
+    alteracoes,
+    deveSalvarUsuario = true,
+    deveFalarLeitor = true,
+  ) {
+    const configuracoes = normalizarConfiguracoes({
+      ...obterConfiguracoesAtuais(),
+      ...alteracoes,
+    });
+
+    aplicarConfiguracoes(configuracoes, {
+      deveSalvarUsuario,
+      deveFalarLeitor,
+      deveDispararEvento: true,
+    });
+  }
+
+  function aplicarConfiguracoes(
+    configuracoes,
+    { deveSalvarUsuario, deveFalarLeitor, deveDispararEvento },
+  ) {
+    const configuracoesFinais = normalizarConfiguracoes(configuracoes);
+    const leitorAnterior = leitorAssistidoAtivo;
+
+    leitorAssistidoAtivo = configuracoesFinais.screenReader;
+
+    document.documentElement.setAttribute("data-theme", configuracoesFinais.theme);
+    document.documentElement.setAttribute(
+      "data-fontsize",
+      configuracoesFinais.fontSize,
+    );
+    document.documentElement.setAttribute(
+      "data-large-buttons",
+      configuracoesFinais.largeButtons ? "true" : "false",
+    );
+    document.documentElement.setAttribute(
+      "data-screen-reader",
+      configuracoesFinais.screenReader ? "true" : "false",
+    );
+    document.documentElement.setAttribute(
+      "data-color-mode",
+      configuracoesFinais.colorMode,
+    );
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(configuracoesFinais));
+    localStorage.setItem("viva_theme", configuracoesFinais.theme);
+    localStorage.setItem("viva_fontsize", configuracoesFinais.fontSize);
+    localStorage.setItem(
+      "viva_large_buttons",
+      configuracoesFinais.largeButtons ? "true" : "false",
+    );
+    localStorage.setItem(
+      "viva_screen_reader",
+      configuracoesFinais.screenReader ? "true" : "false",
+    );
+    localStorage.setItem("viva_color_mode", configuracoesFinais.colorMode);
+
+    if (deveSalvarUsuario) {
+      salvarPreferenciasNoUsuario({
+        tema: configuracoesFinais.theme,
+        tamanhoFonte: configuracoesFinais.fontSize,
+        botoesGrandes: configuracoesFinais.largeButtons,
+        leitorTela: configuracoesFinais.screenReader,
+        modoCores: configuracoesFinais.colorMode,
+      });
+    }
+
+    if (configuracoesFinais.screenReader) {
+      configurarEventosLeitorAssistido();
+
+      if (deveFalarLeitor && !leitorAnterior) {
+        falarTexto("Leitura em voz alta ativada.");
+      }
+    } else {
+      pararLeitura();
+
+      if (deveFalarLeitor && leitorAnterior) {
+        falarTexto("Leitura em voz alta desativada.");
+      }
+    }
+
+    sincronizarPainelRapidoAcessibilidade();
+
+    if (deveDispararEvento) {
+      document.dispatchEvent(
+        new CustomEvent("viva:a11ychange", { detail: configuracoesFinais }),
+      );
+    }
   }
 
   /*
@@ -44,17 +248,7 @@
     O CSS reage ao atributo data-theme.
   */
   function aplicarTema(tema, deveSalvarUsuario = true) {
-    const temasPermitidos = ["light", "dark", "high-contrast"];
-    const temaFinal = temasPermitidos.includes(tema) ? tema : "light";
-
-    document.documentElement.setAttribute("data-theme", temaFinal);
-    localStorage.setItem("viva_theme", temaFinal);
-
-    if (deveSalvarUsuario) {
-      salvarPreferenciasNoUsuario({
-        tema: temaFinal,
-      });
-    }
+    atualizarConfiguracoes({ theme: tema }, deveSalvarUsuario);
   }
 
   /*
@@ -62,86 +256,41 @@
     O CSS reage ao atributo data-fontsize.
   */
   function aplicarTamanhoFonte(tamanho, deveSalvarUsuario = true) {
-    const tamanhosPermitidos = ["small", "standard", "medium", "large"];
-
-    const tamanhoFinal = tamanhosPermitidos.includes(tamanho)
-      ? tamanho
-      : "standard";
-
-    document.documentElement.setAttribute("data-fontsize", tamanhoFinal);
-    localStorage.setItem("viva_fontsize", tamanhoFinal);
-
-    if (deveSalvarUsuario) {
-      salvarPreferenciasNoUsuario({
-        tamanhoFonte: tamanhoFinal,
-      });
-    }
+    atualizarConfiguracoes({ fontSize: tamanho }, deveSalvarUsuario);
   }
 
   /*
-    Ativa ou desativa botões grandes no sistema inteiro.
+    Ativa ou desativa botoes grandes no sistema inteiro.
     O CSS reage ao atributo data-large-buttons.
   */
   function aplicarBotoesGrandes(ativo, deveSalvarUsuario = true) {
-    document.documentElement.setAttribute(
-      "data-large-buttons",
-      ativo ? "true" : "false",
-    );
-
-    localStorage.setItem("viva_large_buttons", ativo ? "true" : "false");
-
-    if (deveSalvarUsuario) {
-      salvarPreferenciasNoUsuario({
-        botoesGrandes: ativo,
-      });
-    }
+    atualizarConfiguracoes({ largeButtons: ativo }, deveSalvarUsuario);
   }
 
   /*
     Ativa ou desativa a leitura assistida em voz alta.
-    Essa função usa a API speechSynthesis do navegador.
+    Essa funcao usa a API speechSynthesis do navegador.
   */
   function aplicarLeitorAssistido(
     ativo,
     deveFalarConfirmacao = true,
     deveSalvarUsuario = true,
   ) {
-    leitorAssistidoAtivo = ativo;
-
-    document.documentElement.setAttribute(
-      "data-screen-reader",
-      ativo ? "true" : "false",
+    atualizarConfiguracoes(
+      { screenReader: ativo },
+      deveSalvarUsuario,
+      deveFalarConfirmacao,
     );
+  }
 
-    localStorage.setItem("viva_screen_reader", ativo ? "true" : "false");
-
-    if (deveSalvarUsuario) {
-      salvarPreferenciasNoUsuario({
-        leitorTela: ativo,
-      });
-    }
-
-    if (ativo) {
-      configurarEventosLeitorAssistido();
-
-      if (deveFalarConfirmacao) {
-        falarTexto("Leitura em voz alta ativada.");
-      }
-
-      return;
-    }
-
-    pararLeitura();
-
-    if (deveFalarConfirmacao) {
-      falarTexto("Leitura em voz alta desativada.");
-    }
+  function aplicarModoCores(modo, deveSalvarUsuario = true) {
+    atualizarConfiguracoes({ colorMode: modo }, deveSalvarUsuario);
   }
 
   /*
-    Cria um atalho visível de acessibilidade no desktop.
-    Ele evita que o usuário precise entrar em Perfil para ajustar fonte,
-    tema, contraste, botões grandes ou leitura assistida.
+    Cria um atalho visivel de acessibilidade no desktop.
+    Ele evita que o usuario precise entrar em Perfil para ajustar fonte,
+    tema, contraste, botoes grandes ou leitura assistida.
   */
   function criarPainelRapidoAcessibilidade() {
     if (document.getElementById("quick-a11y")) return;
@@ -156,6 +305,7 @@
         type="button"
         class="quick-a11y-toggle"
         id="quick-a11y-toggle"
+        aria-label="Acessibilidade"
         aria-expanded="false"
         aria-controls="quick-a11y-panel"
       >
@@ -163,11 +313,11 @@
         <span class="quick-a11y-toggle-text">Acessibilidade</span>
       </button>
 
-      <div class="quick-a11y-panel" id="quick-a11y-panel" hidden>
+      <div class="quick-a11y-panel" id="quick-a11y-panel" role="dialog" aria-modal="false" aria-labelledby="quick-a11y-title" aria-describedby="quick-a11y-desc" hidden>
         <div class="quick-a11y-header">
           <div>
-            <strong>Ajustar tela</strong>
-            <small>Escolha como prefere visualizar o sistema.</small>
+            <strong id="quick-a11y-title">Ajustar tela</strong>
+            <small id="quick-a11y-desc">Escolha como prefere visualizar o sistema.</small>
           </div>
 
           <button
@@ -176,7 +326,7 @@
             id="quick-a11y-close"
             aria-label="Fechar painel de acessibilidade"
           >
-            ×
+            X
           </button>
         </div>
 
@@ -185,8 +335,8 @@
 
           <div class="quick-a11y-options quick-a11y-options-grid" role="group" aria-label="Tamanho do texto">
             <button type="button" class="quick-a11y-option" data-quick-font="small">Pequeno</button>
-            <button type="button" class="quick-a11y-option" data-quick-font="standard">Padrão</button>
-            <button type="button" class="quick-a11y-option" data-quick-font="medium">Médio</button>
+            <button type="button" class="quick-a11y-option" data-quick-font="standard">Padrao</button>
+            <button type="button" class="quick-a11y-option" data-quick-font="medium">Medio</button>
             <button type="button" class="quick-a11y-option" data-quick-font="large">Grande</button>
           </div>
         </section>
@@ -205,27 +355,38 @@
           <h2 id="quick-a11y-support-title">Apoio</h2>
 
           <div class="quick-a11y-support-list">
-            <button type="button" class="quick-a11y-support" data-quick-toggle="large-buttons" aria-pressed="false">
-              <span>Botões grandes</span>
+            <button type="button" class="quick-a11y-support" data-quick-toggle="large-buttons" role="switch" aria-checked="false">
+              <span>Botoes grandes</span>
               <strong>Desligado</strong>
             </button>
 
-            <button type="button" class="quick-a11y-support" data-quick-toggle="screen-reader" aria-pressed="false">
+            <button type="button" class="quick-a11y-support" data-quick-toggle="screen-reader" role="switch" aria-checked="false">
               <span>Leitura em voz alta</span>
               <strong>Desligado</strong>
             </button>
+          </div>
+        </section>
+
+        <section class="quick-a11y-section" aria-labelledby="quick-a11y-color-title">
+          <h2 id="quick-a11y-color-title">Modo de cores</h2>
+
+          <div class="quick-a11y-options quick-a11y-options-grid" role="group" aria-label="Modo de cores">
+            <button type="button" class="quick-a11y-option" data-quick-color="default">Padrao</button>
+            <button type="button" class="quick-a11y-option" data-quick-color="deuteranopia">Vermelho/verde</button>
+            <button type="button" class="quick-a11y-option" data-quick-color="tritanopia">Azul/amarelo</button>
+            <button type="button" class="quick-a11y-option" data-quick-color="achromatopsia">Tons de cinza</button>
           </div>
         </section>
       </div>
     `;
 
     /*
-      Coloca o atalho de acessibilidade no slot do cabeçalho quando ele existir.
-      Assim, em telas como a Home, os botões "Sair" e "Acessibilidade"
+      Coloca o atalho de acessibilidade no slot do cabecalho quando ele existir.
+      Assim, em telas como a Home, os botoes "Sair" e "Acessibilidade"
       ficam no mesmo grupo visual e se ajustam juntos.
 
-      Nas páginas que não possuem esse slot, o painel continua funcionando
-      como botão flutuante no canto superior direito.
+      Nas paginas que nao possuem esse slot, o painel continua funcionando
+      como botao flutuante no canto superior direito.
     */
     const slotAcessibilidade = document.getElementById("a11y-shortcut-slot");
 
@@ -268,7 +429,7 @@
     painel.querySelectorAll("[data-quick-toggle]").forEach((botao) => {
       botao.addEventListener("click", () => {
         const tipo = botao.dataset.quickToggle;
-        const ativoAtual = botao.getAttribute("aria-pressed") === "true";
+        const ativoAtual = botao.getAttribute("aria-checked") === "true";
 
         if (tipo === "large-buttons") {
           aplicarBotoesGrandes(!ativoAtual);
@@ -278,6 +439,13 @@
           aplicarLeitorAssistido(!ativoAtual);
         }
 
+        sincronizarPainelRapidoAcessibilidade();
+      });
+    });
+
+    painel.querySelectorAll("[data-quick-color]").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        aplicarModoCores(botao.dataset.quickColor);
         sincronizarPainelRapidoAcessibilidade();
       });
     });
@@ -305,6 +473,7 @@
 
     painel.hidden = !deveAbrir;
     botao.setAttribute("aria-expanded", deveAbrir ? "true" : "false");
+    painel.setAttribute("aria-modal", deveAbrir ? "true" : "false");
   }
 
   function sincronizarPainelRapidoAcessibilidade() {
@@ -314,12 +483,13 @@
 
     const configuracoes = window.getVivaAccessibilitySettings
       ? window.getVivaAccessibilitySettings()
-      : {
-          theme: localStorage.getItem("viva_theme") || "light",
-          fontSize: localStorage.getItem("viva_fontsize") || "standard",
-          largeButtons: localStorage.getItem("viva_large_buttons") === "true",
-          screenReader: localStorage.getItem("viva_screen_reader") === "true",
-        };
+      : obterConfiguracoesAtuais();
+
+    const botaoToggle = painel.querySelector("#quick-a11y-toggle");
+
+    if (botaoToggle) {
+      botaoToggle.setAttribute("aria-label", montarResumoAcessibilidade(configuracoes));
+    }
 
     painel.querySelectorAll("[data-quick-font]").forEach((botao) => {
       const selecionado = botao.dataset.quickFont === configuracoes.fontSize;
@@ -329,6 +499,12 @@
 
     painel.querySelectorAll("[data-quick-theme]").forEach((botao) => {
       const selecionado = botao.dataset.quickTheme === configuracoes.theme;
+      botao.classList.toggle("is-selected", selecionado);
+      botao.setAttribute("aria-pressed", selecionado ? "true" : "false");
+    });
+
+    painel.querySelectorAll("[data-quick-color]").forEach((botao) => {
+      const selecionado = botao.dataset.quickColor === configuracoes.colorMode;
       botao.classList.toggle("is-selected", selecionado);
       botao.setAttribute("aria-pressed", selecionado ? "true" : "false");
     });
@@ -346,16 +522,36 @@
     const status = botao.querySelector("strong");
 
     botao.classList.toggle("is-selected", ativo);
-    botao.setAttribute("aria-pressed", ativo ? "true" : "false");
+    botao.setAttribute("aria-checked", ativo ? "true" : "false");
+    botao.setAttribute(
+      "aria-label",
+      `${tipo === "large-buttons" ? "Botoes grandes" : "Leitura em voz alta"} ${ativo ? "ativado" : "desativado"}`,
+    );
 
     if (status) {
       status.textContent = ativo ? "Ligado" : "Desligado";
     }
   }
 
+  function montarResumoAcessibilidade(configuracoes) {
+    const partes = [
+      LABELS.fontSize[configuracoes.fontSize],
+      LABELS.theme[configuracoes.theme],
+      LABELS.colorMode[configuracoes.colorMode],
+      configuracoes.largeButtons
+        ? "botoes grandes ativados"
+        : "botoes grandes desativados",
+      configuracoes.screenReader
+        ? "leitura em voz alta ativada"
+        : "leitura em voz alta desativada",
+    ];
+
+    return `Acessibilidade. ${partes.join(", ")}.`;
+  }
+
   /*
-    Salva as preferências dentro do usuário logado.
-    Isso mantém os dados consistentes entre sessionStorage e localStorage.
+    Salva as preferencias dentro do usuario logado.
+    Isso mantem os dados consistentes entre sessionStorage e localStorage.
   */
   function salvarPreferenciasNoUsuario(preferenciasNovas) {
     const usuarioLogado = JSON.parse(
@@ -400,7 +596,7 @@
 
   /*
     Configura os eventos globais da leitura assistida.
-    Eles são adicionados apenas uma vez.
+    Eles sao adicionados apenas uma vez.
   */
   function configurarEventosLeitorAssistido() {
     if (eventosLeitorConfigurados) return;
@@ -412,8 +608,8 @@
   }
 
   /*
-    Lê o conteúdo de elementos quando recebem foco.
-    Isso ajuda na navegação por teclado e leitores assistivos.
+    Le o conteudo de elementos quando recebem foco.
+    Isso ajuda na navegacao por teclado e leitores assistivos.
   */
   function aoFocarElemento(evento) {
     if (!leitorAssistidoAtivo) return;
@@ -428,7 +624,7 @@
   }
 
   /*
-    Lê o conteúdo de elementos quando são clicados ou tocados.
+    Le o conteudo de elementos quando sao clicados ou tocados.
     Isso ajuda principalmente no uso mobile.
   */
   function aoClicarElemento(evento) {
@@ -444,8 +640,8 @@
   }
 
   /*
-    Procura o elemento interativo mais próximo do alvo do clique/foco.
-    Isso permite ler cards, botões, links, inputs e switches.
+    Procura o elemento interativo mais proximo do alvo do clique/foco.
+    Isso permite ler cards, botoes, links, inputs e switches.
   */
   function encontrarElementoInterativo(alvo) {
     if (!alvo || !alvo.closest) return null;
@@ -464,6 +660,8 @@
         ".agenda-card",
         ".item-card",
         ".location-card",
+        ".choice-card",
+        ".professional-card",
         ".date-card",
         ".time-card",
         ".profile-menu-card",
@@ -474,12 +672,12 @@
   }
 
   /*
-    Obtém o melhor texto possível para leitura.
+    Obtem o melhor texto possivel para leitura.
     Prioridade:
     1. aria-label;
     2. switches com estado ligado/desligado;
     3. labels de campos;
-    4. texto visível do elemento.
+    4. texto visivel do elemento.
   */
   function obterTextoAcessivel(elemento) {
     if (!elemento) return "";
@@ -511,15 +709,15 @@
   }
 
   /*
-    Busca o texto do card onde um switch está localizado.
-    Remove o próprio botão de switch para evitar leitura duplicada.
+    Busca o texto do card onde um switch esta localizado.
+    Remove o proprio botao de switch para evitar leitura duplicada.
   */
   function obterTextoDoCardPai(elemento) {
     const card = elemento.closest(
       ".accessibility-card, .profile-menu-card, .font-size-card",
     );
 
-    if (!card) return "Opção";
+    if (!card) return "Opcao";
 
     const clone = card.cloneNode(true);
     const switchDentro = clone.querySelector(".switch");
@@ -528,12 +726,12 @@
       switchDentro.remove();
     }
 
-    return limparTexto(clone.innerText || clone.textContent || "Opção");
+    return limparTexto(clone.innerText || clone.textContent || "Opcao");
   }
 
   /*
-    Gera uma fala adequada para campos de formulário.
-    Por segurança, campos de senha não têm o valor lido em voz alta.
+    Gera uma fala adequada para campos de formulario.
+    Por seguranca, campos de senha nao tem o valor lido em voz alta.
   */
   function obterTextoDeCampo(campo) {
     const id = campo.id;
@@ -552,7 +750,7 @@
   }
 
   /*
-    Limpa espaços duplicados para que a fala não fique estranha.
+    Limpa espacos duplicados para que a fala nao fique estranha.
   */
   function limparTexto(texto) {
     return String(texto || "")
@@ -562,7 +760,7 @@
 
   /*
     Usa a API speechSynthesis do navegador para falar um texto.
-    Também evita repetir a mesma fala várias vezes em sequência.
+    Tambem evita repetir a mesma fala varias vezes em sequencia.
   */
   function falarTexto(texto) {
     const textoLimpo = limparTexto(texto);
@@ -570,7 +768,7 @@
     if (!textoLimpo) return;
 
     if (!("speechSynthesis" in window)) {
-      console.warn("Este navegador não possui suporte a speechSynthesis.");
+      console.warn("Este navegador nao possui suporte a speechSynthesis.");
       return;
     }
 
@@ -602,8 +800,8 @@
   }
 
   /*
-    Tenta escolher uma voz em português.
-    Se não encontrar, o navegador usa a voz padrão.
+    Tenta escolher uma voz em portugues.
+    Se nao encontrar, o navegador usa a voz padrao.
   */
   function escolherVozPortugues() {
     if (!("speechSynthesis" in window)) return null;
@@ -627,7 +825,7 @@
   }
 
   /*
-    Função antiga mantida para compatibilidade com telas anteriores.
+    Funcao antiga mantida para compatibilidade com telas anteriores.
     Ela altera tema e tamanho de fonte ao mesmo tempo.
   */
   window.changeAccessibilitySettings = function (theme, fontSize) {
@@ -636,25 +834,22 @@
   };
 
   /*
-    Funções globais usadas pelo perfil.js.
-    Elas permitem alterar preferências diretamente pela tela de Perfil.
+    Funcoes globais usadas pelo perfil.js.
+    Elas permitem alterar preferencias diretamente pela tela de Perfil.
   */
   window.setVivaTheme = aplicarTema;
   window.setVivaFontSize = aplicarTamanhoFonte;
   window.setVivaLargeButtons = aplicarBotoesGrandes;
   window.setVivaScreenReader = aplicarLeitorAssistido;
+  window.setVivaColorMode = aplicarModoCores;
   window.stopVivaSpeech = pararLeitura;
 
   /*
-    Retorna as preferências atuais.
-    Útil para sincronizar toggles e estados visuais.
+    Retorna as preferencias atuais.
+    Util para sincronizar toggles e estados visuais.
   */
   window.getVivaAccessibilitySettings = function () {
-    return {
-      theme: localStorage.getItem("viva_theme") || "light",
-      fontSize: localStorage.getItem("viva_fontsize") || "standard",
-      largeButtons: localStorage.getItem("viva_large_buttons") === "true",
-      screenReader: localStorage.getItem("viva_screen_reader") === "true",
-    };
+    return obterConfiguracoesAtuais();
   };
 })();
+

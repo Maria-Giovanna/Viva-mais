@@ -13,7 +13,13 @@
 </head>
 
 <body>
+    <!--
+        Pagina de cadastro / ativacao de acesso.
+        O usuario informa o CPF, o sistema confere o convenio no JSON,
+        cria senha e finaliza a conta.
+    -->
     <main id="main-content" class="auth-container">
+        <!-- Area visual lateral, usada como reforco da marca. -->
         <section class="auth-sidebar" aria-hidden="true">
             <div class="sidebar-wrapper">
                 <img src="assets/img/LOGO-VIVA+.svg" alt="" class="sidebar-mascot">
@@ -23,6 +29,7 @@
 
         <section class="auth-content">
             <div class="form-card-wrapper">
+                <!-- Etapa 1: CPF e dados que vem do convenio simulado. -->
                 <div id="etapa-1" class="form-step">
                     <header class="auth-header">
                         <button type="button" class="btn-back" aria-label="Voltar para a tela inicial"
@@ -44,7 +51,7 @@
                                     maxlength="14" required aria-required="true" aria-invalid="false"
                                     aria-describedby="cpf-cadastro-error">
                             </div>
-                            <span id="cpf-cadastro-error" class="field-error" aria-live="polite" hidden>
+                            <span id="cpf-cadastro-error" class="field-error" role="alert" aria-live="assertive" hidden>
                                 Não encontramos um plano ativo com este CPF. Verifique se possui um plano ativo na
                                 Viva+.
                             </span>
@@ -103,7 +110,7 @@
                                             aria-hidden="true">
                                     </button>
                                 </div>
-                                <span id="senha-match-error" class="field-error" aria-live="polite" hidden>As senhas
+                                <span id="senha-match-error" class="field-error" role="alert" aria-live="assertive" hidden>As senhas
                                     digitadas não são iguais.</span>
                             </div>
                         </fieldset>
@@ -115,6 +122,7 @@
                     </form>
                 </div>
 
+                <!-- Etapa 2: escolha inicial do tamanho de leitura. -->
                 <div id="etapa-2" class="form-step hidden">
                     <header class="auth-header">
                         <button type="button" class="btn-back" id="btn-voltar-1"
@@ -155,6 +163,7 @@
                     </div>
                 </div>
 
+                <!-- Etapa 3: revisao dos dados antes de gravar no localStorage. -->
                 <div id="etapa-3" class="form-step hidden">
                     <header class="auth-header">
                         <button type="button" class="btn-back" id="btn-voltar-2"
@@ -191,6 +200,7 @@
                     </div>
                 </div>
 
+                <!-- Etapa 4: tela final de sucesso com mascote. -->
                 <div id="etapa-4" class="form-step hidden">
                     <div class="success-header">
                         <img src="assets/img/Mascote-Parabens.svg" alt="Mascote comemorando" class="success-mascot">

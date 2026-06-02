@@ -1,7 +1,11 @@
-/**
- * js/cadastro.js
- * Controla o fluxo multi-etapas de criação de conta.
- */
+/*
+  cadastro.js
+  Controla o cadastro em etapas:
+  - valida CPF e convenio;
+  - coleta dados pessoais e senha;
+  - revisa as informacoes;
+  - salva o novo usuario no banco simulado.
+*/
 document.addEventListener("DOMContentLoaded", () => {
   const step1 = document.getElementById("etapa-1");
   const step2 = document.getElementById("etapa-2");
@@ -111,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!usuarioTemporario) {
       mostrarEtapa(step2, step1);
       cpfError.textContent =
-        "Não foi possível recuperar os dados do cadastro. Verifique o CPF novamente.";
+        "Nao foi possivel recuperar os dados do cadastro. Confira o CPF informado e tente novamente.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       cpfInput.focus();
@@ -134,6 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tamanhoFonte: acessibilidadeEscolhida,
         botoesGrandes: localStorage.getItem("viva_large_buttons") === "true",
         leitorTela: localStorage.getItem("viva_screen_reader") === "true",
+        modoCores: localStorage.getItem("viva_color_mode") || "default",
       },
     };
 
@@ -180,7 +185,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (s2.length > 0 && s1 !== s2) {
-      senhaMatchError.textContent = "As senhas não coincidem.";
+      senhaMatchError.textContent =
+        "A senha precisa ter 8 numeros e os dois campos devem ser iguais. Evite sequencias ou numeros repetidos.";
       senhaMatchError.hidden = false;
       inputConfirmaSenha.setAttribute("aria-invalid", "true");
       return false;
@@ -210,7 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!validarCPF(cpfLimpo)) {
-      cpfError.textContent = "CPF inválido. Verifique os números digitados.";
+      cpfError.textContent =
+        "Nao conseguimos validar este CPF. Confira se digitou os 11 numeros corretamente, sem pontos ou tracos.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       bloquearDados();
@@ -222,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     if (usuariosBD.find((user) => user.cpf === cpfLimpo)) {
       cpfError.innerHTML =
-        "Você já possui uma conta. <a href='login.html'>Clique para entrar</a>.";
+        "Este CPF ja possui uma conta no Viva+. Use a tela de login ou <a href='recuperar-senha.html'>recupere sua senha</a> se nao lembrar o acesso.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       bloquearDados();
@@ -238,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!dadosConvenio) {
       cpfError.textContent =
-        "Não encontramos um plano ativo associado a este CPF.";
+        "Nao encontramos um plano ativo para este CPF. Confira se o CPF esta correto ou fale com o atendimento do seu convenio antes de continuar.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       bloquearDados();
@@ -322,6 +329,28 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem(
         "viva_fontsize",
         tempUserData.preferencias.tamanhoFonte,
+      );
+      localStorage.setItem(
+        "viva_accessibility_settings",
+        JSON.stringify({
+          theme: tempUserData.preferencias.tema,
+          fontSize: tempUserData.preferencias.tamanhoFonte,
+          largeButtons: tempUserData.preferencias.botoesGrandes,
+          screenReader: tempUserData.preferencias.leitorTela,
+          colorMode: tempUserData.preferencias.modoCores || "default",
+        }),
+      );
+      localStorage.setItem(
+        "viva_large_buttons",
+        tempUserData.preferencias.botoesGrandes ? "true" : "false",
+      );
+      localStorage.setItem(
+        "viva_screen_reader",
+        tempUserData.preferencias.leitorTela ? "true" : "false",
+      );
+      localStorage.setItem(
+        "viva_color_mode",
+        tempUserData.preferencias.modoCores || "default",
       );
 
       mostrarEtapa(step3, step4);

@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="pt-BR" data-theme="light" data-fontsize="standard">
 
 <head>
@@ -17,7 +16,13 @@
 
 <body>
 
+    <!--
+        Pagina Agendamento.
+        Simula o fluxo mobile de consulta, exame e vacina em etapas curtas.
+        O agendamento.js decide qual etapa mostrar e guarda as escolhas do usuario.
+    -->
     <div class="scheduling-layout">
+        <!-- Menu lateral/fixo do app; no fluxo de agendamento ele e escondido no layout responsivo. -->
         <nav class="app-nav" aria-label="Menu principal">
             <ul class="nav-list">
                 <li class="nav-item">
@@ -67,6 +72,7 @@
         </nav>
 
 
+        <!-- Bloqueios com mascote: explicam por que o usuario nao pode seguir em alguns casos. -->
         <section class="step mascot-message mascot-message--warning" id="step-bloqueio-especialidade" hidden>
             <div class="mascot-message-hero">
                 <img src="assets/img/Mascote-Erro.svg" alt="" class="mascot-message-image" aria-hidden="true">
@@ -123,7 +129,7 @@
 
         <section class="step mascot-message mascot-message--info" id="step-bloqueio-vacina" hidden>
             <div class="mascot-message-hero">
-                <img src="assets/img/Mascote-Olá.svg" alt="" class="mascot-message-image" aria-hidden="true">
+                <img src="assets/img/Mascote-Ol%23U00e1.svg" alt="" class="mascot-message-image" aria-hidden="true">
 
                 <div class="mascot-speech" role="alert" aria-live="assertive">
                     <h1>Não há vacinas disponíveis para agendamento agora</h1>
@@ -177,6 +183,7 @@
 
 
 
+        <!-- Fluxo principal: cada .step e uma tela do passo a passo. -->
         <main id="main-content" class="scheduling-main">
             <button type="button" class="scheduling-back" id="btn-voltar">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -186,6 +193,7 @@
                 <span>Voltar</span>
             </button>
 
+            <!-- Carregamento inicial enquanto JSON e usuario sao preparados. -->
             <section class="step" id="step-loading" hidden>
                 <div class="state-message">
                     <h1 class="scheduling-title">Carregando...</h1>
@@ -193,6 +201,7 @@
                 </div>
             </section>
 
+            <!-- Primeiro passo de consulta: clinico geral ou especialista. -->
             <section class="step" id="step-consulta-tipo" hidden>
                 <header class="scheduling-header">
                     <h1 class="scheduling-title align-left">Escolha sua consulta!</h1>
@@ -224,6 +233,7 @@
                 </div>
             </section>
 
+            <!-- Lista dinamica: especialidades, exames ou vacinas vindos do JSON. -->
             <section class="step" id="step-lista-itens" hidden>
                 <header class="scheduling-header">
                     <h1 class="scheduling-title" id="titulo-lista-itens">Disponíveis</h1>
@@ -232,6 +242,7 @@
                 <div class="option-list" id="lista-itens"></div>
             </section>
 
+            <!-- Local: unidades disponiveis para o item escolhido. -->
             <section class="step" id="step-local" hidden>
                 <header class="scheduling-header">
                     <h1 class="scheduling-title">Escolha o local</h1>
@@ -240,6 +251,7 @@
                 <div class="location-list" id="lista-locais"></div>
             </section>
 
+            <!-- Profissional/equipe: depende do servico e da unidade selecionados. -->
             <section class="step" id="step-profissional" hidden>
                 <div class="summary-box" id="resumo-profissional"></div>
                 <header class="scheduling-header">
@@ -249,6 +261,7 @@
                 <div class="professional-list" id="lista-profissionais"></div>
             </section>
 
+            <!-- Data: mostra os dias disponiveis para o atendimento. -->
             <section class="step" id="step-data" hidden>
                 <div class="summary-box" id="resumo-data"></div>
                 <header class="scheduling-header">
@@ -258,6 +271,7 @@
                 <div class="date-list" id="lista-datas"></div>
             </section>
 
+            <!-- Horario: o usuario escolhe um horario antes da revisao. -->
             <section class="step" id="step-horario" hidden>
                 <div class="summary-box" id="resumo-horario"></div>
                 <header class="scheduling-header">
@@ -271,6 +285,7 @@
                 </div>
             </section>
 
+            <!-- Revisao final antes de gravar no banco simulado. -->
             <section class="step" id="step-revisao" hidden>
                 <header class="scheduling-header">
                     <h1 class="scheduling-title">Revise seu<br>Agendamento</h1>
@@ -284,6 +299,7 @@
                 </div>
             </section>
 
+            <!-- Confirmacao com mascote apos salvar o agendamento. -->
             <section class="step" id="step-sucesso" hidden>
                 <div class="success-hero">
                     <img src="assets/img/Mascote-Parabens.svg" alt="" aria-hidden="true">
@@ -300,9 +316,54 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Confirmacao do botao Voltar/Cancelar para nao perder escolhas sem perceber. -->
+            <section class="step" id="step-confirmar-cancelamento" hidden role="dialog" aria-modal="true"
+                aria-labelledby="titulo-confirmar-cancelamento" aria-describedby="texto-confirmar-cancelamento">
+                <div class="confirm-cancel-card">
+                    <div class="confirm-cancel-hero">
+                        <img src="assets/img/Mascote-Tem Certeza_.svg" alt="" aria-hidden="true">
+                    </div>
+                    <div class="confirm-cancel-content">
+                        <h1 class="scheduling-title" id="titulo-confirmar-cancelamento">Cancelar este agendamento?</h1>
+                        <p class="scheduling-subtitle" id="texto-confirmar-cancelamento">
+                            Se sair agora, as escolhas feitas nesta tela serao perdidas.
+                        </p>
+                        <div class="step-actions">
+                            <button type="button" class="btn btn-primary" id="btn-continuar-agendamento">
+                                Continuar agendando
+                            </button>
+                            <button type="button" class="btn-secondary-outline" id="btn-confirmar-cancelamento">
+                                Sim, cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Erro com mascote para manter a linguagem visual do sistema. -->
+            <section class="step" id="step-error" hidden>
+                <div class="confirm-cancel-card confirm-cancel-card--error">
+                    <div class="confirm-cancel-hero">
+                        <img src="assets/img/Mascote-Erro.svg" alt="" aria-hidden="true">
+                    </div>
+                    <div class="confirm-cancel-content">
+                        <h1 class="scheduling-title">Nao foi possivel continuar</h1>
+                        <p class="scheduling-subtitle" id="mensagem-erro" role="alert" aria-live="assertive">
+                            Ocorreu um problema ao carregar esta etapa.
+                        </p>
+                        <div class="step-actions">
+                            <button type="button" class="btn btn-primary" data-voltar-home>
+                                Voltar para o inicio
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
+    <!-- Scripts em ordem: preferencias globais e controle do fluxo de agendamento. -->
     <script src="js/a11y.js"></script>
     <script src="js/agendamento.js"></script>
 </body>

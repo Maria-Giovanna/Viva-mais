@@ -1,3 +1,9 @@
+/*
+  agendamento.css
+  Estilos do fluxo de agendamento em etapas: escolhas, listas,
+  resumo, confirmacao, erro e responsividade tablet/mobile.
+*/
+
 body {
     background-color: var(--bg-color);
 }
@@ -206,6 +212,25 @@ body {
     display: block;
 }
 
+.item-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-top: 0.55rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    background-color: var(--subcard-secondary-bg);
+    color: var(--primary-color);
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.item-badge.is-recommended {
+    background-color: var(--primary-color);
+    color: var(--text-button);
+}
+
 .item-arrow {
     width: 20px;
     height: 20px;
@@ -231,6 +256,34 @@ body {
 .blocked-content,
 .success-content {
     text-align: center;
+}
+
+.confirm-cancel-card {
+    overflow: hidden;
+    background-color: var(--card-bg);
+    border: 1px solid var(--secondary-border);
+    border-radius: 0.75rem;
+}
+
+.confirm-cancel-hero {
+    background-color: var(--mascot-bg);
+    padding: 1.25rem 1rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.confirm-cancel-hero img {
+    width: min(14rem, 72vw);
+    height: auto;
+}
+
+.confirm-cancel-content {
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.confirm-cancel-content .step-actions {
+    margin-top: 1.25rem;
 }
 
 .blocked-title,
@@ -295,7 +348,7 @@ body {
     border-radius: 0.75rem;
     padding: 1.25rem;
     color: var(--text-main);
-    cursor: pointer;
+    cursor: default;
     text-align: left;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
@@ -389,6 +442,24 @@ body {
     font-size: 1rem;
     font-weight: 700;
     border-radius: 0.5rem;
+}
+
+.location-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.location-maps-button {
+    min-height: 3.25rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+}
+
+@media (max-width: 420px) {
+    .location-actions {
+        grid-template-columns: 1fr;
+    }
 }
 
 .summary-box {
@@ -1372,53 +1443,28 @@ html[data-fontsize="large"] .review-icon svg {
         padding-right: 0.75rem;
     }
 }
-/* =========================================
-   CORREÇÃO — AGENDAMENTO DESKTOP SEM SOBREPOR MENU
-   O menu lateral estava com position: fixed e saía do fluxo.
-   Por isso, em telas desktop/tablet, algumas etapas como Exames
-   ficavam renderizadas por baixo da sidebar. Agora o layout vira
-   grid: menu ocupa a primeira coluna e o conteúdo fica na segunda.
-   ========================================= */
-@media (min-width: 768px) {
-    .scheduling-layout {
-        display: grid !important;
-        grid-template-columns: clamp(220px, 18vw, 280px) minmax(0, 1fr);
-        align-items: start;
-        min-height: 100vh;
-    }
+/* O fluxo de agendamento usa tela focada para evitar menu lateral cortado. */
+.scheduling-layout > .app-nav {
+    display: none !important;
+}
 
-    .scheduling-layout > .app-nav {
-        position: fixed !important;
-        top: 0 !important;
-        left: auto !important;
-        right: auto !important;
-        bottom: auto !important;
-        grid-column: 1;
-        grid-row: 1;
-        width: auto !important;
-        height: 100vh;
-        align-self: start;
-        order: initial;
-    }
+.scheduling-layout,
+.scheduling-layout.is-blocked-step {
+    display: block !important;
+    grid-template-columns: none !important;
+}
 
-    .scheduling-layout > .scheduling-main {
-        grid-column: 2;
-        grid-row: 1;
-        min-width: 0;
-        width: min(100%, 760px);
-        max-width: 760px;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 3rem clamp(1.25rem, 4vw, 3rem);
-    }
+.scheduling-main {
+    width: min(100%, 760px);
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem clamp(1rem, 4vw, 3rem) 5rem;
+}
 
-    .scheduling-layout > .mascot-message:not([hidden]) {
-        grid-column: 2;
-        grid-row: 1;
-        min-width: 0;
-    }
-
-    .scheduling-layout.is-blocked-step {
-        grid-template-columns: clamp(220px, 18vw, 280px) minmax(0, 1fr) !important;
-    }
+.scheduling-layout > .mascot-message:not([hidden]) {
+    width: min(100%, 760px);
+    margin-left: auto;
+    margin-right: auto;
+    grid-column: auto !important;
 }

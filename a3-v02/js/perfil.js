@@ -2,12 +2,13 @@
   "use strict";
 
   /*
-    Controla toda a página de Perfil:
+    perfil.js
+    Controla toda a pagina de Perfil:
     - menu de perfil;
-    - visualização e edição de dados;
-    - preferências de acessibilidade;
-    - alteração de senha;
-    - saída da conta.
+    - visualizacao e edicao de dados;
+    - preferencias de acessibilidade;
+    - alteracao de senha;
+    - saida da conta.
   */
   const estadoPerfil = {
     usuario: null,
@@ -57,10 +58,10 @@
   }
 
   /*
-    Corrige/garante a estrutura esperada do usuário.
-    O erro principal do seu arquivo anterior estava aqui:
-    havia um trecho solto com "tamanhoFonte:" fora de qualquer função,
-    causando erro de execução e impedindo os cliques do perfil.
+    Corrige/garante a estrutura esperada do usuario.
+    O erro principal do arquivo anterior estava aqui:
+    havia um trecho solto com "tamanhoFonte:" fora de qualquer funcao,
+    causando erro de execucao e impedindo os cliques do perfil.
   */
   function normalizarUsuario(usuario) {
     const preferencias = usuario.preferencias || {};
@@ -83,6 +84,10 @@
           preferencias.botoesGrandes ||
           localStorage.getItem("viva_large_buttons") === "true" ||
           false,
+        modoCores:
+          preferencias.modoCores ||
+          localStorage.getItem("viva_color_mode") ||
+          "default",
       },
     };
   }
@@ -142,6 +147,16 @@
       botao.addEventListener("click", () => {
         selecionarTamanhoFonte(botao.dataset.fontOption);
       });
+    });
+
+    document.querySelectorAll("[data-color-option]").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        selecionarModoCores(botao.dataset.colorOption);
+      });
+    });
+
+    document.addEventListener("viva:a11ychange", () => {
+      sincronizarPreferenciasNaTela();
     });
 
     escutarClique("btn-salvar-fonte", salvarTamanhoFonte);
@@ -237,7 +252,8 @@
     erro.hidden = true;
 
     if (!endereco || !telefone) {
-      erro.textContent = "Preencha endereço e telefone para continuar.";
+      erro.textContent =
+        "Alguns campos obrigatorios nao foram preenchidos. Informe endereco e telefone para salvar seus dados.";
       erro.hidden = false;
       return;
     }
@@ -280,25 +296,29 @@
     erro.hidden = true;
 
     if (senhaAtual !== String(estadoPerfil.usuario.senha || "")) {
-      erro.textContent = "A senha atual não confere.";
+      erro.textContent =
+        "A senha atual nao confere. Digite novamente sua senha de 8 numeros antes de criar uma nova.";
       erro.hidden = false;
       return;
     }
 
     if (!/^\d{8}$/.test(novaSenha)) {
-      erro.textContent = "A nova senha deve ter exatamente 8 números.";
+      erro.textContent =
+        "A nova senha precisa ter exatamente 8 numeros. Digite somente numeros, sem espacos.";
       erro.hidden = false;
       return;
     }
 
     if (ehSenhaInsegura(novaSenha)) {
-      erro.textContent = "Evite senhas repetidas ou em sequência.";
+      erro.textContent =
+        "Esta senha e muito facil de adivinhar. Evite numeros repetidos ou em sequencia.";
       erro.hidden = false;
       return;
     }
 
     if (novaSenha !== confirmaSenha) {
-      erro.textContent = "As senhas digitadas não são iguais.";
+      erro.textContent =
+        "As senhas digitadas nao sao iguais. Repita a mesma senha nos dois campos.";
       erro.hidden = false;
       return;
     }
@@ -343,17 +363,32 @@
   }
 
   function sincronizarPreferenciasNaTela() {
-    const tema = localStorage.getItem("viva_theme") || "light";
-    const tamanhoFonte = normalizarTamanhoFonte(
-      localStorage.getItem("viva_fontsize") ||
-        estadoPerfil.usuario.preferencias?.tamanhoFonte ||
-        "standard",
-    );
-    const leitorTela =
-      localStorage.getItem("viva_screen_reader") === "true" ||
-      estadoPerfil.usuario.preferencias?.leitorTela ||
-      false;
-    const botoesGrandes = localStorage.getItem("viva_large_buttons") === "true";
+    const configuracoes = window.getVivaAccessibilitySettings
+      ? window.getVivaAccessibilitySettings()
+      : {
+          theme: localStorage.getItem("viva_theme") || "light",
+          fontSize:
+            localStorage.getItem("viva_fontsize") ||
+            estadoPerfil.usuario.preferencias?.tamanhoFonte ||
+            "standard",
+          screenReader:
+            localStorage.getItem("viva_screen_reader") === "true" ||
+            estadoPerfil.usuario.preferencias?.leitorTela ||
+            false,
+          largeButtons:
+            localStorage.getItem("viva_large_buttons") === "true" ||
+            estadoPerfil.usuario.preferencias?.botoesGrandes ||
+            false,
+          colorMode:
+            localStorage.getItem("viva_color_mode") ||
+            estadoPerfil.usuario.preferencias?.modoCores ||
+            "default",
+        };
+
+    const tema = configuracoes.theme;
+    const tamanhoFonte = normalizarTamanhoFonte(configuracoes.fontSize);
+    const leitorTela = configuracoes.screenReader;
+    const botoesGrandes = configuracoes.largeButtons;
 
     estadoPerfil.tamanhoFonteSelecionado = tamanhoFonte;
 
@@ -363,6 +398,7 @@
     atualizarSwitch("toggle-botoes", botoesGrandes);
 
     marcarTamanhoFonte(tamanhoFonte);
+    marcarModoCores(configuracoes.colorMode || "default");
   }
 
   function alternarAltoContraste() {
@@ -382,7 +418,9 @@
   }
 
   function alternarLeitorTela() {
-    const atual = localStorage.getItem("viva_screen_reader") === "true";
+    const atual = window.getVivaAccessibilitySettings
+      ? window.getVivaAccessibilitySettings().screenReader
+      : localStorage.getItem("viva_screen_reader") === "true";
     const novoValor = !atual;
 
     if (window.setVivaScreenReader) {
@@ -410,7 +448,9 @@
   }
 
   function alternarBotoesGrandes() {
-    const atual = localStorage.getItem("viva_large_buttons") === "true";
+    const atual = window.getVivaAccessibilitySettings
+      ? window.getVivaAccessibilitySettings().largeButtons
+      : localStorage.getItem("viva_large_buttons") === "true";
     const novoValor = !atual;
 
     if (window.setVivaLargeButtons) {
@@ -497,12 +537,56 @@
     mostrarEtapa("step-acessibilidade");
   }
 
+  function selecionarModoCores(modo) {
+    const modoNormalizado = normalizarModoCores(modo);
+
+    if (window.setVivaColorMode) {
+      window.setVivaColorMode(modoNormalizado);
+    } else {
+      document.documentElement.setAttribute("data-color-mode", modoNormalizado);
+      localStorage.setItem("viva_color_mode", modoNormalizado);
+    }
+
+    const usuarioAtualizado = {
+      ...estadoPerfil.usuario,
+      preferencias: {
+        ...estadoPerfil.usuario.preferencias,
+        modoCores: modoNormalizado,
+      },
+    };
+
+    salvarUsuario(usuarioAtualizado);
+    estadoPerfil.usuario = usuarioAtualizado;
+    sincronizarPreferenciasNaTela();
+  }
+
+  function marcarModoCores(modo) {
+    const modoNormalizado = normalizarModoCores(modo);
+
+    document.querySelectorAll("[data-color-option]").forEach((botao) => {
+      const selecionado = botao.dataset.colorOption === modoNormalizado;
+      botao.classList.toggle("selected", selecionado);
+      botao.setAttribute("aria-pressed", selecionado ? "true" : "false");
+    });
+  }
+
   function atualizarSwitch(id, ativo) {
     const botao = document.getElementById(id);
 
     if (!botao) return;
 
+    if (!botao.dataset.switchLabel) {
+      botao.dataset.switchLabel =
+        botao
+          .getAttribute("aria-label")
+          ?.replace(/^(Ativar|Desativar)\s+/i, "") || "Opcao";
+    }
+
     botao.setAttribute("aria-checked", ativo ? "true" : "false");
+    botao.setAttribute(
+      "aria-label",
+      `${botao.dataset.switchLabel} ${ativo ? "ativada" : "desativada"}`,
+    );
   }
 
   function salvarUsuario(usuarioAtualizado) {
@@ -598,16 +682,6 @@
       .toUpperCase();
   }
 
-  function formatarCPF(cpf) {
-    const numeros = String(cpf || "").replace(/\D/g, "");
-
-    if (numeros.length !== 11) {
-      return cpf || "CPF não informado";
-    }
-
-    return numeros.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-  }
-
   function formatarTelefone(telefone) {
     const numeros = String(telefone || "").replace(/\D/g, "");
 
@@ -628,5 +702,20 @@
     }
 
     return "standard";
+  }
+
+  function normalizarModoCores(modo) {
+    const aliases = {
+      "colorblind-safe": "deuteranopia",
+      "blue-orange": "deuteranopia",
+      "purple-green": "tritanopia",
+    };
+    const modoNormalizado = aliases[modo] || modo;
+
+    if (["default", "deuteranopia", "tritanopia", "achromatopsia"].includes(modoNormalizado)) {
+      return modoNormalizado;
+    }
+
+    return "default";
   }
 })();

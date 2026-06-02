@@ -1,6 +1,13 @@
 (function () {
   "use strict";
 
+  /*
+    agendamento-storage.js
+    Simula o banco de dados dos agendamentos usando localStorage.
+    As paginas Home e Agenda usam este arquivo para evitar regras repetidas
+    de status, datas e filtro por CPF.
+  */
+
   function limparCPF(cpf) {
     return String(cpf || "").replace(/\D/g, "");
   }

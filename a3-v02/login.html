@@ -13,7 +13,13 @@
 </head>
 
 <body>
+    <!--
+        Pagina de login.
+        Recebe CPF e senha, valida os dados em js/auth.js e inicia a sessao
+        salvando o usuario logado no sessionStorage.
+    -->
     <main id="main-content" class="auth-container">
+        <!-- Faixa lateral visual usada no desktop; fica escondida de leitores de tela. -->
         <section class="auth-sidebar" aria-hidden="true">
             <div class="sidebar-wrapper">
                 <img src="assets/img/LOGO-VIVA+.svg" alt="" class="sidebar-mascot">
@@ -23,6 +29,7 @@
     
         <section class="auth-content">
             <div class="form-card-wrapper">
+                <!-- Formulario principal de acesso. Os erros aparecem nos spans field-error. -->
                 <header class="auth-header">
                     <button type="button" class="btn-back" aria-label="Voltar para a tela inicial"
                         onclick="window.location.href='index.html'">
@@ -41,7 +48,7 @@
                                 inputmode="numeric" pattern="[0-9]*" maxlength="14" required aria-required="true"
                                 aria-invalid="false" aria-describedby="cpf-error">
                         </div>
-                        <span id="cpf-error" class="field-error" aria-live="polite" hidden>
+                        <span id="cpf-error" class="field-error" role="alert" aria-live="assertive" hidden>
                             Não encontramos uma conta ativa com este CPF.
                         </span>
                     </div>
@@ -59,7 +66,7 @@
                                 <img src="assets/icons/icon-nao-visivel.svg" class="olho-fechado" alt="" aria-hidden="true">
                             </button>
                         </div>
-                        <span id="senha-error" class="field-error" aria-live="polite" hidden>
+                        <span id="senha-error" class="field-error" role="alert" aria-live="assertive" hidden>
                             A senha digitada não confere. Lembre-se que sua senha deve ter 8 números.
                         </span>
                     </div>

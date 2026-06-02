@@ -1,3 +1,9 @@
+/*
+  auth-pages.css
+  Layout das telas de entrada: login, cadastro e recuperacao de senha.
+  Usa mobile-first e depois adapta para telas maiores.
+*/
+
 /* =========================================
    LAYOUT AUTH (MOBILE FIRST)
    ========================================= */

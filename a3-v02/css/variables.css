@@ -1,3 +1,9 @@
+/*
+  variables.css
+  Guarda os tokens do sistema: cores, raios, sombras e variaveis
+  alteradas pelos temas, contraste, tamanho de texto e modos de cor.
+*/
+
 /* =========================================
    TOKENS DE COR E TIPOGRAFIA
    ========================================= */
@@ -19,6 +25,7 @@
     --primary-color: #0047CC;
     --primary-color-rgb: 0, 71, 204;
     --primary-border: #0047CC;
+    --accent-color: #6D5DF6;
     --hyperlink: #0059FF;
     --hover-color: #00318D;
 
@@ -31,11 +38,20 @@
     --secondary-border: #9EB4D3;
     --input-border: #9EB4D3;
 
-    --error: #F03D3D;
-    --success: #0BB07B;
-    --warning: #F67D24;
-    --status-no-show: #680101;
-    --status-confirmed: #016645;
+    --success-color: #0B7F60;
+    --warning-color: #B85C00;
+    --danger-color: #B42318;
+    --focus-color: #0047CC;
+    --active-color: #0047CC;
+    --status-confirmed-color: #016645;
+    --status-canceled-color: #B42318;
+    --status-finished-color: #0047CC;
+    --status-no-show-color: #680101;
+    --error: var(--danger-color);
+    --success: var(--success-color);
+    --warning: var(--warning-color);
+    --status-no-show: var(--status-no-show-color);
+    --status-confirmed: var(--status-confirmed-color);
 
     --radius-sm: 0.5rem;
     --radius-md: 0.75rem;
@@ -60,6 +76,7 @@
     --primary-color: #3D7BFF;
     --primary-color-rgb: 61, 123, 255;
     --primary-border: #3D7BFF;
+    --accent-color: #9C8CFF;
     --hyperlink: #89B4FF;
     --hover-color: #2A5FE0;
 
@@ -71,8 +88,17 @@
     --mascot-bg: #1A2230;
     --secondary-border: #2A3342;
     --input-border: #3B4658;
-    --status-no-show: #FF6767;
-    --status-confirmed: #7EFFD5;
+    --success-color: #7EFFD5;
+    --warning-color: #FFB45C;
+    --danger-color: #FF6767;
+    --focus-color: #89B4FF;
+    --active-color: #89B4FF;
+    --status-confirmed-color: #7EFFD5;
+    --status-canceled-color: #FF8C8C;
+    --status-finished-color: #89B4FF;
+    --status-no-show-color: #FF6767;
+    --status-no-show: var(--status-no-show-color);
+    --status-confirmed: var(--status-confirmed-color);
 }
 
 [data-theme="high-contrast"] {
@@ -92,6 +118,7 @@
     --primary-color: #FFFF00;
     --primary-color-rgb: 255, 255, 0;
     --primary-border: #FFFF00;
+    --accent-color: #66B2FF;
     --hyperlink: #6EB6FF;
     --hover-color: #E8E800;
 
@@ -103,8 +130,83 @@
     --mascot-bg: #000000;
     --secondary-border: #FFFFFF;
     --input-border: #FFFFFF;
-    --status-no-show: #FF6767;
-    --status-confirmed: #7EFFD5;
+    --success-color: #7EFFD5;
+    --warning-color: #FFD166;
+    --danger-color: #FF6767;
+    --focus-color: #FFFF00;
+    --active-color: #FFFF00;
+    --status-confirmed-color: #7EFFD5;
+    --status-canceled-color: #FF9A9A;
+    --status-finished-color: #66B2FF;
+    --status-no-show-color: #FF6767;
+    --status-no-show: var(--status-no-show-color);
+    --status-confirmed: var(--status-confirmed-color);
+}
+
+html[data-color-mode="deuteranopia"] {
+    --primary-color: #005FCC;
+    --primary-color-rgb: 0, 95, 204;
+    --primary-border: #005FCC;
+    --accent-color: #F28E00;
+    --hover-color: #003F8F;
+    --success-color: #007ACC;
+    --warning-color: #F28E00;
+    --danger-color: #D83A8E;
+    --focus-color: #D83A8E;
+    --active-color: #00A66A;
+    --status-confirmed-color: #007ACC;
+    --status-canceled-color: #D83A8E;
+    --status-finished-color: #00A66A;
+    --status-no-show-color: #E85D00;
+}
+
+html[data-color-mode="tritanopia"] {
+    --primary-color: #8A2BE2;
+    --primary-color-rgb: 138, 43, 226;
+    --primary-border: #8A2BE2;
+    --accent-color: #008F45;
+    --hover-color: #6420A8;
+    --success-color: #008F45;
+    --warning-color: #C46B00;
+    --danger-color: #D6007F;
+    --focus-color: #008F45;
+    --active-color: #8A2BE2;
+    --status-confirmed-color: #008F45;
+    --status-canceled-color: #D6007F;
+    --status-finished-color: #8A2BE2;
+    --status-no-show-color: #C46B00;
+}
+
+html[data-color-mode="achromatopsia"] {
+    --bg-color: #F2F2F2;
+    --card-bg: #FFFFFF;
+    --text-main: #050505;
+    --text-color: var(--text-main);
+    --text-secondary: #262626;
+    --text-button: #FFFFFF;
+    --text-muted: #3A3A3A;
+    --agenda-status-bg: #050505;
+    --primary-color: #050505;
+    --primary-color-rgb: 5, 5, 5;
+    --primary-border: #050505;
+    --accent-color: #4A4A4A;
+    --hover-color: #262626;
+    --subcard-primary-bg: #DEDEDE;
+    --subcard-secondary-bg: #DEDEDE;
+    --subcard-primary-text: #050505;
+    --subcard-secondary-text: #262626;
+    --mascot-bg: #3A3A3A;
+    --secondary-border: #8A8A8A;
+    --input-border: #4A4A4A;
+    --success-color: #262626;
+    --warning-color: #3A3A3A;
+    --danger-color: #050505;
+    --focus-color: #000000;
+    --active-color: #050505;
+    --status-confirmed-color: #050505;
+    --status-canceled-color: #262626;
+    --status-finished-color: #3A3A3A;
+    --status-no-show-color: #000000;
 }
 
 /* =========================================

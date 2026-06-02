@@ -15,6 +15,11 @@
 </head>
 
 <body>
+    <!--
+        Pagina Agenda.
+        Mostra agendamentos futuros e historico, abre detalhes,
+        permite baixar comprovante e cancelar com confirmacao.
+    -->
     <div class="agenda-layout">
 
         <main id="main-content" class="agenda-main">
@@ -27,7 +32,7 @@
                 <span>Voltar</span>
             </button>
 
-            <!-- LISTA DE AGENDA -->
+            <!-- Lista principal: as abas filtram entre proximos atendimentos e historico. -->
             <section class="agenda-step" id="step-agenda-lista">
                 <header class="agenda-header">
                     <h1 class="agenda-title">Sua Agenda</h1>
@@ -63,7 +68,7 @@
                 </div>
             </section>
 
-            <!-- DETALHES DO AGENDAMENTO -->
+            <!-- Detalhes: comprovante visual do atendimento selecionado na lista. -->
             <section class="agenda-step" id="step-detalhes" hidden>
                 <header class="agenda-header centered">
                     <h1 class="agenda-title">Comprovante de Agendamento</h1>
@@ -85,6 +90,7 @@
                 </div>
             </section>
 
+        <!-- Confirmacao com mascote para evitar cancelamento acidental. -->
         <section class="agenda-step app-dialog-step" id="step-confirmar-cancelamento" hidden role="dialog" aria-modal="true"
             aria-labelledby="titulo-cancelamento">
             <div class="app-dialog-card app-dialog-card--warning">
@@ -118,7 +124,7 @@
             </div>
         </section>
         
-        <!-- SUCESSO DO CANCELAMENTO -->
+        <!-- Sucesso do cancelamento: orienta o usuario depois que a vaga foi liberada. -->
         <section class="agenda-step" id="step-cancelado" hidden>
             <div class="success-hero">
                 <img src="assets/img/Mascote-Parabens.svg" alt="" aria-hidden="true">
@@ -144,7 +150,7 @@
         </section>
 
 
-            <!-- ERRO -->
+            <!-- Erro: tela simples para falhas ao carregar ou manipular a agenda. -->
             <section class="agenda-step" id="step-error" hidden>
                 <div class="empty-state">
                     <h1 class="agenda-title">Algo deu errado</h1>
@@ -159,6 +165,7 @@
 
         </main>
 
+        <!-- Navegacao fixa do aplicativo. -->
         <nav class="app-nav" aria-label="Menu principal">
             <ul class="nav-list">
                 <li>
@@ -209,6 +216,7 @@
 
     </div>
 
+    <!-- Scripts em ordem: acessibilidade, armazenamento simulado e controle da agenda. -->
     <script src="js/a11y.js"></script>
     <script src="js/agendamento-storage.js"></script>
     <script src="js/agenda.js"></script>

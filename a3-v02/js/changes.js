@@ -1,2 +1,5 @@
-// Arquivo reservado para futuras alterações de tema/fonte.
-// No momento, a lógica de acessibilidade está centralizada em js/a11y.js.
+/*
+  changes.js
+  Arquivo reservado para futuras alteracoes de tema/fonte.
+  No momento, a logica real de acessibilidade esta centralizada em js/a11y.js.
+*/

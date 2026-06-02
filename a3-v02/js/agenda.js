@@ -1,6 +1,15 @@
 (function () {
   "use strict";
 
+  /*
+    agenda.js
+    Controla a pagina Agenda:
+    - separa agendamentos futuros e historico;
+    - mostra detalhes do atendimento escolhido;
+    - cancela agendamentos com confirmacao;
+    - gera comprovante em arquivo de texto.
+  */
+
   const estadoAgenda = {
     usuario: null,
     agendamentos: [],
@@ -12,7 +21,7 @@
 
   function iniciarAgenda() {
     try {
-      const usuarioLogado = obterUsuarioLogado();
+      const usuarioLogado = window.VivaAgendamentos.obterUsuarioLogado();
 
       if (!usuarioLogado) {
         window.location.href = "login.html";
@@ -31,13 +40,9 @@
     }
   }
 
-  function obterUsuarioLogado() {
-    return JSON.parse(sessionStorage.getItem("viva_usuario_logado") || "null");
+  function obterAgendamentosDoUsuario(cpf) {
+    return window.VivaAgendamentos.listarDoUsuario(cpf);
   }
-
-function obterAgendamentosDoUsuario(cpf) {
-  return window.VivaAgendamentos.listarDoUsuario(cpf);
-}
 
   function configurarEventos() {
     document.querySelectorAll("[data-tab]").forEach((botao) => {
@@ -117,35 +122,19 @@ function obterAgendamentosDoUsuario(cpf) {
     });
   }
 
- function filtrarAgendamentosPorAba() {
-  if (estadoAgenda.abaAtual === "proximos") {
-    return window.VivaAgendamentos.listarProximos(estadoAgenda.usuario.cpf);
-  }
+  function filtrarAgendamentosPorAba() {
+    if (estadoAgenda.abaAtual === "proximos") {
+      return window.VivaAgendamentos.listarProximos(estadoAgenda.usuario.cpf);
+    }
 
-  return window.VivaAgendamentos.listarHistorico(estadoAgenda.usuario.cpf);
-}
-
-  function obterStatusCalculado(agendamento) {
-  return window.VivaAgendamentos.obterStatusCalculado(agendamento);
-}
-
-  function normalizarStatus(status) {
-    const valor = String(status || "confirmado")
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .trim();
-
-    if (valor.includes("cancel")) return "cancelado";
-    if (valor.includes("nao") || valor.includes("no-show")) return "nao-compareceu";
-    if (valor.includes("realiz")) return "realizado";
-
-    return "confirmado";
+    return window.VivaAgendamentos.listarHistorico(estadoAgenda.usuario.cpf);
   }
 
   function montarCardAgendamento(agendamento) {
     const data = obterPartesData(agendamento.data);
-    const status = agendamento.statusCalculado || obterStatusCalculado(agendamento);
+    const status =
+      agendamento.statusCalculado ||
+      window.VivaAgendamentos.obterStatusCalculado(agendamento);
     const titulo = obterTituloAgendamento(agendamento);
     const local = agendamento.unidadeNome || "Unidade não informada";
     const profissional = agendamento.profissional || "Equipe da unidade";
@@ -193,7 +182,7 @@ function obterAgendamentosDoUsuario(cpf) {
       return;
     }
 
-    const status = obterStatusCalculado(agendamento);
+    const status = window.VivaAgendamentos.obterStatusCalculado(agendamento);
     const podeCancelar = status === "confirmado";
     const dataFormatada = formatarDataCompleta(agendamento.data);
 
@@ -318,7 +307,7 @@ Local: ${agendamento.unidadeNome || "Unidade não informada"}
 Endereço: ${agendamento.endereco || "Endereço não informado"}
 Profissional/Equipe: ${agendamento.profissional || "Equipe da unidade"}
 
-Status: ${obterTextoStatus(obterStatusCalculado(agendamento))}
+Status: ${obterTextoStatus(window.VivaAgendamentos.obterStatusCalculado(agendamento))}
 Código: ${agendamento.id}
     `.trim();
 
@@ -395,10 +384,6 @@ Código: ${agendamento.id}
       </div>
     `;
   }
-
-  function criarDataHora(dataISO, hora) {
-  return window.VivaAgendamentos.criarDataHora(dataISO, hora);
-}
 
   function obterPartesData(dataISO) {
     const [ano, mes, dia] = dataISO.split("-").map(Number);
