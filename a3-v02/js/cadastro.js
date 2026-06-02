@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!usuarioTemporario) {
       mostrarEtapa(step2, step1);
       cpfError.textContent =
-        "Nao foi possivel recuperar os dados do cadastro. Confira o CPF informado e tente novamente.";
+        "Não foi possivel recuperar os dados do cadastro. Confira o CPF informado e tente novamente.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       cpfInput.focus();
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (s2.length > 0 && s1 !== s2) {
       senhaMatchError.textContent =
-        "A senha precisa ter 8 numeros e os dois campos devem ser iguais. Evite sequencias ou numeros repetidos.";
+        "A senha precisa ter 8 números e os dois campos devem ser iguais. Não use sequencias ou números repetidos.";
       senhaMatchError.hidden = false;
       inputConfirmaSenha.setAttribute("aria-invalid", "true");
       return false;
