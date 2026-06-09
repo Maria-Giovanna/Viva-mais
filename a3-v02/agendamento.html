@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light" data-fontsize="standard">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento - Viva+</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/agendamento.css">
+    <link rel="stylesheet" href="css/icon-system.css">
+</head>
+
+<body>
+
+    <!--
+        Pagina Agendamento.
+        Simula o fluxo mobile de consulta, exame e vacina em etapas curtas.
+        O agendamento.js decide qual etapa mostrar e guarda as escolhas do usuario.
+    -->
+    <div class="scheduling-layout">
+        <!-- Menu lateral/fixo do app; no fluxo de agendamento ele e escondido no layout responsivo. -->
+        <nav class="app-nav" aria-label="Menu principal">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="home.html" class="nav-link active" aria-current="page">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path class="nav-icon-outline"
+                                d="M3 10.8L12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.8Z" />
+                            <path class="nav-icon-fill"
+                                d="M3 10.8L12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.8Z" />
+                        </svg>
+                        <span>Início</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="agenda.html" class="nav-link">
+                        <svg class="nav-icon nav-icon-calendar" viewBox="0 0 24 24" aria-hidden="true">
+                            <g class="nav-icon-outline">
+                                <path
+                                    d="M18 1C18.053 1 18.1041 1.02109 18.1416 1.05859C18.179 1.09609 18.2002 1.14719 18.2002 1.2002V4.59961H20.4004C21.0897 4.59971 21.7508 4.87395 22.2383 5.36133C22.7259 5.84892 23 6.51063 23 7.2002V7.40039H1V7.2002C1 6.51063 1.27412 5.84892 1.76172 5.36133C2.2492 4.87395 2.91028 4.59971 3.59961 4.59961H5.7998V1.2002C5.7998 1.1472 5.82095 1.09609 5.8584 1.05859C5.88656 1.03043 5.92245 1.01157 5.96094 1.00391L6 1C6.05304 1 6.10409 1.02109 6.1416 1.05859C6.17905 1.09609 6.2002 1.1472 6.2002 1.2002V4.59961H17.7998V1.2002C17.7998 1.14719 17.821 1.09609 17.8584 1.05859C17.8866 1.03043 17.9224 1.01157 17.9609 1.00391L18 1Z" />
+                                <path
+                                    d="M23 11.8V20.3997C23 21.0892 22.7259 21.7509 22.2383 22.2385C21.7508 22.726 21.0898 23.0001 20.4004 23.0002H3.59961C2.91023 23.0001 2.24921 22.726 1.76172 22.2385C1.27412 21.7509 1 21.0892 1 20.3997V11.8H23Z" />
+                            </g>
+                            <g class="nav-icon-fill">
+                                <path
+                                    d="M20.4 3.6H19.2V1.2C19.2 0.88174 19.0736 0.576515 18.8485 0.351472C18.6235 0.126428 18.3183 0 18 0C17.6817 0 17.3765 0.126428 17.1515 0.351472C16.9264 0.576515 16.8 0.88174 16.8 1.2V3.6H7.2V1.2C7.2 0.88174 7.07357 0.576515 6.84853 0.351472C6.62348 0.126428 6.31826 0 6 0C5.68174 0 5.37652 0.126428 5.15147 0.351472C4.92643 0.576515 4.8 0.88174 4.8 1.2V3.6H3.6C2.64522 3.6 1.72955 3.97929 1.05442 4.65442C0.379285 5.32955 0 6.24522 0 7.2V8.4H24V7.2C24 6.24522 23.6207 5.32955 22.9456 4.65442C22.2705 3.97929 21.3548 3.6 20.4 3.6Z" />
+                                <path
+                                    d="M0 20.4C0 21.3548 0.379285 22.2705 1.05442 22.9456C1.72955 23.6208 2.64522 24 3.6 24H20.4C21.3548 24 22.2705 23.6208 22.9456 22.9456C23.6207 22.2705 24 21.3548 24 20.4V10.8H0V20.4Z" />
+                            </g>
+                        </svg>
+                        <span>Agenda</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="perfil.html" class="nav-link">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle class="nav-icon-outline" cx="12" cy="8" r="4" />
+                            <path class="nav-icon-outline" d="M4 21a8 8 0 0 1 16 0" />
+                            <path class="nav-icon-fill"
+                                d="M12 12a4.5 4.5 0 1 0 0-9a4.5 4.5 0 0 0 0 9Zm0 2c-4.8 0-8.5 2.8-8.5 6.4c0 .9.7 1.6 1.6 1.6h13.8c.9 0 1.6-.7 1.6-1.6C20.5 16.8 16.8 14 12 14Z" />
+                        </svg>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+
+        <!-- Bloqueios com mascote: explicam por que o usuario nao pode seguir em alguns casos. -->
+        <section class="step mascot-message mascot-message--warning" id="step-bloqueio-especialidade" hidden>
+            <div class="mascot-message-hero">
+                <img src="assets/img/Mascote-Erro.svg" alt="" class="mascot-message-image" aria-hidden="true">
+
+                <div class="mascot-speech" role="alert" aria-live="assertive">
+                    <h1>Você ainda não pode agendar uma especialidade</h1>
+                    <p>Para marcar esse tipo de consulta, é preciso ter um encaminhamento registrado no sistema.</p>
+                </div>
+            </div>
+
+            <div class="mascot-message-content">
+                <p class="helper-text">
+                    Você pode agendar uma consulta com clínico geral para fazer uma avaliação inicial.
+                </p>
+
+                <div class="step-actions">
+                    <button type="button" class="btn btn-primary" data-agendar-clinico>
+                        Agendar clínico geral
+                    </button>
+
+                    <button type="button" class="btn-secondary-outline" data-voltar-home>
+                        Voltar para o início
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="step mascot-message mascot-message--warning" id="step-bloqueio-exame" hidden>
+            <div class="mascot-message-hero">
+                <img src="assets/img/Mascote-Erro.svg" alt="" class="mascot-message-image" aria-hidden="true">
+
+                <div class="mascot-speech" role="alert" aria-live="assertive">
+                    <h1>Você ainda não pode agendar um exame</h1>
+                    <p>Para marcar exame, é preciso ter um pedido médico registrado no sistema.</p>
+                </div>
+            </div>
+
+            <div class="mascot-message-content">
+                <p class="helper-text">
+                    Você pode agendar uma consulta com clínico geral para solicitar uma avaliação inicial.
+                </p>
+
+                <div class="step-actions">
+                    <button type="button" class="btn btn-primary" data-agendar-clinico>
+                        Agendar clínico geral
+                    </button>
+
+                    <button type="button" class="btn-secondary-outline" data-voltar-home>
+                        Voltar para o início
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="step mascot-message mascot-message--info" id="step-bloqueio-vacina" hidden>
+            <div class="mascot-message-hero">
+                <img src="assets/img/Mascote-Ol%23U00e1.svg" alt="" class="mascot-message-image" aria-hidden="true">
+
+                <div class="mascot-speech" role="alert" aria-live="assertive">
+                    <h1>Não há vacinas disponíveis para agendamento agora</h1>
+                    <p>No momento, não encontramos vacinas disponíveis para você.</p>
+                </div>
+            </div>
+
+            <div class="mascot-message-content">
+                <p class="helper-text">
+                    Você pode verificar novamente mais tarde ou procurar uma unidade de saúde mais próxima.
+                </p>
+
+                <div class="step-actions">
+                    <button type="button" class="btn btn-primary" data-agendar-clinico>
+                        Agendar clínico geral
+                    </button>
+
+                    <button type="button" class="btn-secondary-outline" data-voltar-home>
+                        Voltar para o início
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="step mascot-message mascot-message--warning" id="step-bloqueio-clinico-aberto" hidden>
+            <div class="mascot-message-hero">
+                <img src="assets/img/Mascote-Erro.svg" alt="" class="mascot-message-image" aria-hidden="true">
+
+                <div class="mascot-speech" role="alert" aria-live="assertive">
+                    <h1>Você já possui um clínico geral agendado</h1>
+                    <p>Para evitar duplicidade, primeiro acompanhe ou cancele o agendamento atual na sua agenda.</p>
+                </div>
+            </div>
+
+            <div class="mascot-message-content">
+                <p class="helper-text">
+                    Após realizar ou cancelar a consulta aberta, você poderá agendar outro clínico geral.
+                </p>
+
+                <div class="step-actions">
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='agenda.html'">
+                        Ver minha agenda
+                    </button>
+
+                    <button type="button" class="btn-secondary-outline" data-voltar-home>
+                        Voltar para o início
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Fluxo principal: cada .step e uma tela do passo a passo. -->
+        <main id="main-content" class="scheduling-main">
+            <button type="button" class="scheduling-back" id="btn-voltar">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M15 18L9 12L15 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <span>Voltar</span>
+            </button>
+
+            <!-- Carregamento inicial enquanto JSON e usuario sao preparados. -->
+            <section class="step" id="step-loading" hidden>
+                <div class="state-message">
+                    <h1 class="scheduling-title">Carregando...</h1>
+                    <p class="scheduling-subtitle">Estamos preparando seu agendamento.</p>
+                </div>
+            </section>
+
+            <!-- Primeiro passo de consulta: clinico geral ou especialista. -->
+            <section class="step" id="step-consulta-tipo" hidden>
+                <header class="scheduling-header">
+                    <h1 class="scheduling-title align-left">Escolha sua consulta!</h1>
+                    <p class="scheduling-subtitle align-left">O que você deseja agendar?</p>
+                </header>
+
+                <div class="option-list">
+                    <button type="button" class="choice-card" data-consulta-tipo="clinico">
+                        <span class="choice-icon choice-icon-doctor" aria-hidden="true">
+                            <svg viewBox="0 0 48 55" focusable="false">
+                                <path
+                                    d="M24 27.5C27.6373 27.5 31.1255 26.0513 33.6975 23.4727C36.2694 20.8941 37.7143 17.3967 37.7143 13.75C37.7143 10.1033 36.2694 6.60591 33.6975 4.02728C31.1255 1.44866 27.6373 0 24 0C20.3627 0 16.8745 1.44866 14.3025 4.02728C11.7306 6.60591 10.2857 10.1033 10.2857 13.75C10.2857 17.3967 11.7306 20.8941 14.3025 23.4727C16.8745 26.0513 20.3627 27.5 24 27.5ZM13.7143 33.4297C5.78571 35.7607 0 43.1084 0 51.8096C0 53.5713 1.425 55 3.18214 55H44.8179C46.575 55 48 53.5713 48 51.8096C48 43.1084 42.2143 35.7607 34.2857 33.4297V38.8867C37.2429 39.6494 39.4286 42.3457 39.4286 45.5469V49.8438C39.4286 50.7891 38.6571 51.5625 37.7143 51.5625H36C35.0571 51.5625 34.2857 50.7891 34.2857 49.8438C34.2857 48.8984 35.0571 48.125 36 48.125V45.5469C36 43.6455 34.4679 42.1094 32.5714 42.1094C30.675 42.1094 29.1429 43.6455 29.1429 45.5469V48.125C30.0857 48.125 30.8571 48.8984 30.8571 49.8438C30.8571 50.7891 30.0857 51.5625 29.1429 51.5625H27.4286C26.4857 51.5625 25.7143 50.7891 25.7143 49.8438V45.5469C25.7143 42.3457 27.9 39.6494 30.8571 38.8867V32.7529C30.2143 32.6885 29.5607 32.6562 28.8964 32.6562H19.1036C18.4393 32.6562 17.7857 32.6885 17.1429 32.7529V39.7783C19.6179 40.5195 21.4286 42.8184 21.4286 45.5469C21.4286 48.8662 18.7393 51.5625 15.4286 51.5625C12.1179 51.5625 9.42857 48.8662 9.42857 45.5469C9.42857 42.8184 11.2393 40.5195 13.7143 39.7783V33.4297ZM15.4286 48.125C16.1106 48.125 16.7646 47.8534 17.2468 47.3699C17.7291 46.8864 18 46.2306 18 45.5469C18 44.8631 17.7291 44.2074 17.2468 43.7239C16.7646 43.2404 16.1106 42.9688 15.4286 42.9688C14.7466 42.9688 14.0925 43.2404 13.6103 43.7239C13.1281 44.2074 12.8571 44.8631 12.8571 45.5469C12.8571 46.2306 13.1281 46.8864 13.6103 47.3699C14.0925 47.8534 14.7466 48.125 15.4286 48.125Z" />
+                            </svg>
+                        </span>
+                        <span class="choice-title">Clínico Geral</span>
+                        <span class="choice-desc">Consulta de avaliação inicial</span>
+                    </button>
+
+                    <button type="button" class="choice-card" data-consulta-tipo="especialista">
+                        <span class="choice-icon choice-icon-doctor" aria-hidden="true">
+                            <svg viewBox="0 0 48 55" focusable="false">
+                                <path
+                                    d="M24 27.5C27.6373 27.5 31.1255 26.0513 33.6975 23.4727C36.2694 20.8941 37.7143 17.3967 37.7143 13.75C37.7143 10.1033 36.2694 6.60591 33.6975 4.02728C31.1255 1.44866 27.6373 0 24 0C20.3627 0 16.8745 1.44866 14.3025 4.02728C11.7306 6.60591 10.2857 10.1033 10.2857 13.75C10.2857 17.3967 11.7306 20.8941 14.3025 23.4727C16.8745 26.0513 20.3627 27.5 24 27.5ZM13.7143 33.4297C5.78571 35.7607 0 43.1084 0 51.8096C0 53.5713 1.425 55 3.18214 55H44.8179C46.575 55 48 53.5713 48 51.8096C48 43.1084 42.2143 35.7607 34.2857 33.4297V38.8867C37.2429 39.6494 39.4286 42.3457 39.4286 45.5469V49.8438C39.4286 50.7891 38.6571 51.5625 37.7143 51.5625H36C35.0571 51.5625 34.2857 50.7891 34.2857 49.8438C34.2857 48.8984 35.0571 48.125 36 48.125V45.5469C36 43.6455 34.4679 42.1094 32.5714 42.1094C30.675 42.1094 29.1429 43.6455 29.1429 45.5469V48.125C30.0857 48.125 30.8571 48.8984 30.8571 49.8438C30.8571 50.7891 30.0857 51.5625 29.1429 51.5625H27.4286C26.4857 51.5625 25.7143 50.7891 25.7143 49.8438V45.5469C25.7143 42.3457 27.9 39.6494 30.8571 38.8867V32.7529C30.2143 32.6885 29.5607 32.6562 28.8964 32.6562H19.1036C18.4393 32.6562 17.7857 32.6885 17.1429 32.7529V39.7783C19.6179 40.5195 21.4286 42.8184 21.4286 45.5469C21.4286 48.8662 18.7393 51.5625 15.4286 51.5625C12.1179 51.5625 9.42857 48.8662 9.42857 45.5469C9.42857 42.8184 11.2393 40.5195 13.7143 39.7783V33.4297ZM15.4286 48.125C16.1106 48.125 16.7646 47.8534 17.2468 47.3699C17.7291 46.8864 18 46.2306 18 45.5469C18 44.8631 17.7291 44.2074 17.2468 43.7239C16.7646 43.2404 16.1106 42.9688 15.4286 42.9688C14.7466 42.9688 14.0925 43.2404 13.6103 43.7239C13.1281 44.2074 12.8571 44.8631 12.8571 45.5469C12.8571 46.2306 13.1281 46.8864 13.6103 47.3699C14.0925 47.8534 14.7466 48.125 15.4286 48.125Z" />
+                            </svg>
+                        </span>
+                        <span class="choice-title">Especialista</span>
+                        <span class="choice-desc">Consulta com médico de uma área específica</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Lista dinamica: especialidades, exames ou vacinas vindos do JSON. -->
+            <section class="step" id="step-lista-itens" hidden>
+                <header class="scheduling-header">
+                    <h1 class="scheduling-title" id="titulo-lista-itens">Disponíveis</h1>
+                    <p class="scheduling-subtitle" id="subtitulo-lista-itens">Selecione uma opção para continuar.</p>
+                </header>
+                <div class="option-list" id="lista-itens"></div>
+            </section>
+
+            <!-- Local: unidades disponiveis para o item escolhido. -->
+            <section class="step" id="step-local" hidden>
+                <header class="scheduling-header">
+                    <h1 class="scheduling-title">Escolha o local</h1>
+                    <p class="scheduling-subtitle">Selecione uma unidade para seu atendimento</p>
+                </header>
+                <div class="location-list" id="lista-locais"></div>
+            </section>
+
+            <!-- Profissional/equipe: depende do servico e da unidade selecionados. -->
+            <section class="step" id="step-profissional" hidden>
+                <div class="summary-box" id="resumo-profissional"></div>
+                <header class="scheduling-header">
+                    <h1 class="scheduling-title">Escolha o profissional</h1>
+                    <p class="scheduling-subtitle">Selecione o médico ou equipe para o atendimento</p>
+                </header>
+                <div class="professional-list" id="lista-profissionais"></div>
+            </section>
+
+            <!-- Data: mostra os dias disponiveis para o atendimento. -->
+            <section class="step" id="step-data" hidden>
+                <div class="summary-box" id="resumo-data"></div>
+                <header class="scheduling-header">
+                    <h1 class="scheduling-title">Escolha a data</h1>
+                    <p class="scheduling-subtitle">Escolha uma das datas abaixo para o seu atendimento</p>
+                </header>
+                <div class="date-list" id="lista-datas"></div>
+            </section>
+
+            <!-- Horario: o usuario escolhe um horario antes da revisao. -->
+            <section class="step" id="step-horario" hidden>
+                <div class="summary-box" id="resumo-horario"></div>
+                <header class="scheduling-header">
+                    <h1 class="scheduling-title">Escolha o horário</h1>
+                    <p class="scheduling-subtitle">Selecione o melhor horário para você</p>
+                </header>
+                <div class="time-list" id="lista-horarios"></div>
+                <div class="step-actions">
+                    <button type="button" class="btn btn-primary" id="btn-confirmar-horario" disabled>Confirmar
+                        horário</button>
+                </div>
+            </section>
+
+            <!-- Revisao final antes de gravar no banco simulado. -->
+            <section class="step" id="step-revisao" hidden>
+                <header class="scheduling-header">
+                    <h1 class="scheduling-title">Revise seu<br>Agendamento</h1>
+                    <p class="scheduling-subtitle">Confira se selecionou tudo corretamente antes de confirmar</p>
+                </header>
+                <div id="conteudo-revisao"></div>
+                <div class="step-actions">
+                    <button type="button" class="btn btn-primary" id="btn-confirmar-agendamento">Confirmar
+                        Agendamento</button>
+                    <button type="button" class="btn-secondary-outline" id="btn-cancelar-agendamento">Cancelar</button>
+                </div>
+            </section>
+
+            <!-- Confirmacao com mascote apos salvar o agendamento. -->
+            <section class="step" id="step-sucesso" hidden>
+                <div class="success-hero">
+                    <img src="assets/img/Mascote-Parabens.svg" alt="" aria-hidden="true">
+                </div>
+                <div class="success-content">
+                    <h1 class="success-title">Agendamento realizado<br>com sucesso!</h1>
+                    <p class="success-text">Você pode baixar o comprovante de agendamento abaixo ou verificar seus
+                        agendamentos na aba “Agenda”.</p>
+                    <div class="step-actions">
+                        <button type="button" class="btn btn-primary" id="btn-baixar-comprovante">Baixar
+                            comprovante em PDF</button>
+                        <button type="button" class="btn-secondary-outline" id="btn-voltar-home-sucesso">Voltar para o
+                            início</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Confirmacao do botao Voltar/Cancelar para nao perder escolhas sem perceber. -->
+            <section class="step" id="step-confirmar-cancelamento" hidden role="dialog" aria-modal="true"
+                aria-labelledby="titulo-confirmar-cancelamento" aria-describedby="texto-confirmar-cancelamento">
+                <div class="confirm-cancel-card">
+                    <div class="confirm-cancel-hero">
+                        <img src="assets/img/Mascote-Tem Certeza_.svg" alt="" aria-hidden="true">
+                    </div>
+                    <div class="confirm-cancel-content">
+                        <h1 class="scheduling-title" id="titulo-confirmar-cancelamento">Cancelar este agendamento?</h1>
+                        <p class="scheduling-subtitle" id="texto-confirmar-cancelamento">
+                            Se sair agora, as escolhas feitas nesta tela serão perdidas.
+                        </p>
+                        <div class="step-actions">
+                            <button type="button" class="btn btn-primary" id="btn-continuar-agendamento">
+                                Continuar agendando
+                            </button>
+                            <button type="button" class="btn-secondary-outline" id="btn-confirmar-cancelamento">
+                                Sim, cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Erro com mascote para manter a linguagem visual do sistema. -->
+            <section class="step" id="step-error" hidden>
+                <div class="confirm-cancel-card confirm-cancel-card--error">
+                    <div class="confirm-cancel-hero">
+                        <img src="assets/img/Mascote-Erro.svg" alt="" aria-hidden="true">
+                    </div>
+                    <div class="confirm-cancel-content">
+                        <h1 class="scheduling-title">Não foi possível continuar</h1>
+                        <p class="scheduling-subtitle" id="mensagem-erro" role="alert" aria-live="assertive">
+                            Ocorreu um problema ao carregar esta etapa.
+                        </p>
+                        <div class="step-actions">
+                            <button type="button" class="btn btn-primary" data-voltar-home>
+                                Voltar para o inicio
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts em ordem: preferencias globais e controle do fluxo de agendamento. -->
+    <script src="js/a11y.js"></script>
+    <script src="js/comprovante-pdf.js"></script>
+    <script src="js/agendamento.js"></script>
+</body>
+
+</html>

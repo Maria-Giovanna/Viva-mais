@@ -1,0 +1,76 @@
+[
+ {
+    "cpf": "12345678909",
+    "senha": "12345678",
+    "nomeCompleto": "Maria da Silva",
+    "dataNascimento": "05/03/1958",
+    "endereco": "Rua Exemplo, 123 - Centro, Barueri/SP",
+    "telefone": "11947139955",
+    "coordenadas": {
+    "lat": -23.5107,
+    "lon": -46.8761
+  },
+    "preferencias": {
+      "tema": "light",
+      "tamanhoFonte": "standard"
+    },
+    "encaminhamentos": {
+      "consultas": [
+        {
+          "especialidade": "Cardiologia",
+          "status": "ativo"
+        },
+        {
+          "especialidade": "Ortopedia",
+          "status": "ativo"
+        }
+      ],
+      "exames": [
+        {
+          "nome": "Exame de sangue",
+          "status": "ativo"
+        },
+        {
+          "nome": "Raio-X",
+          "status": "ativo"
+        },
+        {
+          "nome": "Ultrassom",
+          "status": "ativo"
+        }
+      ],
+      "vacinas": [
+        {
+          "nome": "Gripe",
+          "status": "ativo"
+        },
+        {
+          "nome": "COVID-19",
+          "status": "ativo"
+        },
+        {
+          "nome": "Febre amarela",
+          "status": "ativo"
+        }
+      ]
+    }
+  },
+  {
+    "cpf": "55566677788",
+    "nomeCompleto": "Ana Oliveira",
+    "dataNascimento": "22/07/1945",
+    "endereco": "Rua das Flores, 89 - Pinheiros, São Paulo/SP",
+    "telefone": "11911112222",
+    "coordenadas": {
+    "lat": -23.5609,
+    "lon": -46.6787
+  },
+    "preferencias": {
+      "tema": "light",
+      "tamanhoFonte": "standard"
+    },
+    "encaminhamentos": [],
+    "vacinas":[],
+    "exames":[]
+  }
+]

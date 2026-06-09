@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light" data-fontsize="standard">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Minha Conta - Viva+</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/auth-pages.css">
+</head>
+
+<body>
+    <!--
+        Pagina de cadastro / ativacao de acesso.
+        O usuario informa o CPF, o sistema confere o convenio no JSON,
+        cria senha e finaliza a conta.
+    -->
+    <main id="main-content" class="auth-container">
+        <!-- Area visual lateral, usada como reforco da marca. -->
+        <section class="auth-sidebar" aria-hidden="true">
+            <div class="sidebar-wrapper">
+                <img src="assets/img/LOGO-VIVA+.svg" alt="" class="sidebar-mascot">
+                <p class="sidebar-text">Cadastre-se para gerenciar seus agendamentos.</p>
+            </div>
+        </section>
+
+        <section class="auth-content">
+            <div class="form-card-wrapper">
+                <!-- Etapa 1: CPF e dados que vem do convenio simulado. -->
+                <div id="etapa-1" class="form-step">
+                    <header class="auth-header">
+                        <button type="button" class="btn-back" aria-label="Voltar para a tela inicial"
+                            onclick="window.location.href='index.html'">
+                            <img src="assets/icons/icon-voltar.svg" alt="" aria-hidden="true">
+                            <span>Voltar</span>
+                        </button>
+                        <h1 class="auth-title">Criar minha conta</h1>
+                        <p class="auth-subtitle">Preencha seu CPF para verificarmos se você tem um plano de saúde ativo.
+                        </p>
+                    </header>
+
+                    <form id="form-cadastro" novalidate>
+                        <div class="form-group">
+                            <label for="cpf-cadastro" class="form-label">CPF</label>
+                            <div class="input-container">
+                                <input type="text" id="cpf-cadastro" name="cpf" class="form-input"
+                                    placeholder="Digite apenas os números" inputmode="numeric" pattern="[0-9]*"
+                                    maxlength="14" required aria-required="true" aria-invalid="false"
+                                    aria-describedby="cpf-cadastro-error">
+                            </div>
+                            <span id="cpf-cadastro-error" class="field-error" role="alert" aria-live="assertive" hidden>
+                                Não encontramos um plano ativo com este CPF. Verifique se possui um plano ativo na
+                                Viva+.
+                            </span>
+                        </div>
+
+                        <fieldset id="dados-convenio" class="auth-fieldset" disabled aria-hidden="true">
+                            <legend class="sr-only">Dados do seu convênio e criação de acesso</legend>
+
+                            <div class="form-group">
+                                <label for="nome" class="form-label">Nome completo</label>
+                                <input type="text" id="nome" name="nome" class="form-input input-readonly" readonly
+                                    placeholder="Nome completo">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="data-nascimento" class="form-label">Data de nascimento</label>
+                                <input type="text" id="data-nascimento" name="dataNascimento"
+                                    class="form-input input-readonly" readonly placeholder="DD/MM/AAAA">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="endereco" class="form-label">Endereço</label>
+                                <input type="text" id="endereco" name="endereco" class="form-input input-readonly"
+                                    readonly placeholder="Endereço cadastrado no convênio">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nova-senha" class="form-label">Crie sua senha</label>
+                                <div class="input-container">
+                                    <input type="password" id="nova-senha" name="novaSenha"
+                                        class="form-input has-password-toggle" placeholder="8 números"
+                                        inputmode="numeric" pattern="[0-9]*" maxlength="8" data-only-numbers="true"
+                                        aria-invalid="false" aria-describedby="senha-match-error">
+                                    <button type="button" class="btn-toggle-password"
+                                        aria-label="Mostrar senha escrita como texto" aria-pressed="false">
+                                        <img src="assets/icons/icon-visivel.svg" class="olho-aberto" alt=""
+                                            aria-hidden="true">
+                                        <img src="assets/icons/icon-nao-visivel.svg" class="olho-fechado" alt=""
+                                            aria-hidden="true">
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirma-senha" class="form-label">Confirme sua senha</label>
+                                <div class="input-container">
+                                    <input type="password" id="confirma-senha" name="confirmaSenha"
+                                        class="form-input has-password-toggle" placeholder="Digite a senha novamente"
+                                        inputmode="numeric" pattern="[0-9]*" maxlength="8" data-only-numbers="true"
+                                        aria-invalid="false" aria-describedby="senha-match-error">
+                                    <button type="button" class="btn-toggle-password"
+                                        aria-label="Mostrar senha escrita como texto" aria-pressed="false">
+                                        <img src="assets/icons/icon-visivel.svg" class="olho-aberto" alt=""
+                                            aria-hidden="true">
+                                        <img src="assets/icons/icon-nao-visivel.svg" class="olho-fechado" alt=""
+                                            aria-hidden="true">
+                                    </button>
+                                </div>
+                                <span id="senha-match-error" class="field-error" role="alert" aria-live="assertive" hidden>As senhas
+                                    digitadas não são iguais.</span>
+                            </div>
+                        </fieldset>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" id="btn-proxima-etapa" disabled>Próxima
+                                etapa</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Etapa 2: escolha inicial do tamanho de leitura. -->
+                <div id="etapa-2" class="form-step hidden">
+                    <header class="auth-header">
+                        <button type="button" class="btn-back" id="btn-voltar-1"
+                            aria-label="Voltar para a etapa anterior">
+                            <img src="assets/icons/icon-voltar.svg" alt="" aria-hidden="true">
+                            <span>Voltar</span>
+                        </button>
+                        <h1 class="auth-title">Acessibilidade</h1>
+                        <p class="auth-subtitle">Escolha a opção de leitura mais confortável para você.</p>
+                    </header>
+
+                    <fieldset class="accessibility-options">
+                        <legend class="sr-only">Opções de tamanho de fonte</legend>
+
+                        <label class="access-card">
+                            <input type="radio" name="acessibilidade" value="standard" checked class="visually-hidden">
+                            <span class="access-card-icon" aria-hidden="true">A</span>
+                            <span class="access-card-content">
+                                <span class="access-card-title">Padrão</span>
+                                <span class="access-card-desc">Texto e botões no tamanho normal.</span>
+                            </span>
+                        </label>
+
+                        <label class="access-card">
+                            <input type="radio" name="acessibilidade" value="large" class="visually-hidden">
+                            <span class="access-card-icon large-icon" aria-hidden="true">A</span>
+                            <span class="access-card-content">
+                                <span class="access-card-title">Grande</span>
+                                <span class="access-card-desc">Texto e botões aumentados.</span>
+                            </span>
+                        </label>
+                    </fieldset>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" id="btn-ir-revisao"
+                            onclick="window.vivaCadastroIrRevisao && window.vivaCadastroIrRevisao(event)">Próxima
+                            etapa</button>
+                    </div>
+                </div>
+
+                <!-- Etapa 3: revisao dos dados antes de gravar no localStorage. -->
+                <div id="etapa-3" class="form-step hidden">
+                    <header class="auth-header">
+                        <button type="button" class="btn-back" id="btn-voltar-2"
+                            aria-label="Voltar para a etapa anterior">
+                            <img src="assets/icons/icon-voltar.svg" alt="" aria-hidden="true">
+                            <span>Voltar</span>
+                        </button>
+                        <h1 class="auth-title">Confira seus dados</h1>
+                        <p class="auth-subtitle">Verifique se está tudo certo antes de continuar.</p>
+                    </header>
+
+                    <dl class="summary-list">
+                        <div class="summary-item">
+                            <dt>CPF</dt>
+                            <dd id="rev-cpf"></dd>
+                        </div>
+                        <div class="summary-item">
+                            <dt>Nome completo</dt>
+                            <dd id="rev-nome"></dd>
+                        </div>
+                        <div class="summary-item">
+                            <dt>Data de nascimento</dt>
+                            <dd id="rev-data"></dd>
+                        </div>
+                        <div class="summary-item">
+                            <dt>Endereço</dt>
+                            <dd id="rev-endereco"></dd>
+                        </div>
+                    </dl>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" id="btn-finalizar">Confirmar e ativar minha
+                            conta</button>
+                    </div>
+                </div>
+
+                <!-- Etapa 4: tela final de sucesso com mascote. -->
+                <div id="etapa-4" class="form-step hidden">
+                    <div class="success-header">
+                        <img src="assets/img/Mascote-Parabens.svg" alt="Mascote comemorando" class="success-mascot">
+                    </div>
+
+                    <div class="success-body">
+                        <h1 class="auth-title">Cadastro realizado com sucesso!</h1>
+                        <p class="auth-subtitle">Agora você pode entrar no Viva+ e começar seus agendamentos.</p>
+
+                        <div class="form-actions actions-spaced">
+                            <button type="button" class="btn btn-primary"
+                                onclick="window.location.href='login.html'">Entrar na minha conta</button>
+                            <button type="button" class="btn btn-secondary"
+                                onclick="window.location.href='index.html'">Voltar para o início</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/a11y.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/cadastro.js"></script>
+</body>
+
+</html>

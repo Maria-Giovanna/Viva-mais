@@ -1,0 +1,293 @@
+/*
+  global.css
+  Estilos compartilhados entre paginas: corpo, navegacao fixa,
+  acessibilidade global, leitores de tela e estados comuns.
+*/
+
+/* =========================================
+   ESTILOS BASE DO DOCUMENTO
+   ========================================= */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+.app-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--secondary-border);
+  padding: 0.5rem 1rem;
+  z-index: 100;
+}
+
+/* =========================================
+   ACESSIBILIDADE GLOBAL
+   ========================================= */
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 0;
+  background: var(--primary-color);
+  color: var(--text-button);
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  z-index: 9999;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--text-main);
+}
+
+.sr-only,
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+/* =========================================
+   CARTÕES DE ACESSIBILIDADE DO CADASTRO
+   ========================================= */
+.accessibility-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 2rem 0;
+  border: none;
+  padding: 0;
+}
+
+.access-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 2px solid var(--secondary-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background-color: var(--card-bg);
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.access-card:hover,
+.access-card:focus-within {
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.access-card:has(input:checked) {
+  border-color: var(--primary-color);
+  background-color: rgba(var(--primary-color-rgb), 0.07);
+}
+
+.access-card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--subcard-secondary-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  flex-shrink: 0;
+}
+
+.access-card-icon.large-icon {
+  font-size: 2.2rem;
+}
+
+.access-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.access-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.access-card-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* =========================================
+   LISTA DE REVISÃO DO CADASTRO
+   ========================================= */
+.summary-list {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.summary-item dt {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.summary-item dd {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   PREFERÊNCIA GLOBAL — BOTÕES GRANDES
+   ========================================= */
+
+:root {
+  --viva-hit-target-min: 3rem;
+  --viva-hit-target-control-min: 3.5rem;
+  --viva-hit-target-card-min: 6rem;
+  --viva-hit-target-card-large-min: 9.5rem;
+  --viva-hit-target-switch-width: 4.75rem;
+  --viva-hit-target-switch-height: 2.75rem;
+  --viva-hit-target-padding-block: clamp(0.875rem, 2.5vw, 1.25rem);
+  --viva-hit-target-padding-inline: clamp(1rem, 3vw, 1.5rem);
+}
+
+html[data-large-buttons="true"] :where(
+  a[href],
+  button,
+  textarea,
+  select,
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+  summary,
+  label[for],
+  [role="button"],
+  [role="tab"],
+  [role="switch"],
+  [tabindex]:not([tabindex="-1"])
+)[data-viva-hit-target="large"] {
+  min-inline-size: var(--viva-hit-target-min);
+  min-block-size: var(--viva-hit-target-min);
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+html[data-large-buttons="true"] :where(
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-secondary-outline,
+  .btn-secondary-small,
+  .btn-text,
+  .btn-back,
+  .btn-toggle-password,
+  .profile-back,
+  .agenda-back,
+  .scheduling-back,
+  .nav-link,
+  .agenda-tab,
+  .quick-a11y-toggle,
+  .quick-a11y-option,
+  .quick-a11y-support,
+  .location-select-button,
+  .location-maps-button
+)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-control-min);
+  padding-block: var(--viva-hit-target-padding-block);
+  padding-inline: var(--viva-hit-target-padding-inline);
+}
+
+html[data-large-buttons="true"] :where(
+  .profile-menu-card,
+  .accessibility-card,
+  .font-size-card,
+  .color-option-card,
+  .access-card,
+  .bubble-option,
+  .agenda-card,
+  .choice-card,
+  .item-card,
+  .date-card,
+  .time-card,
+  .location-card,
+  .professional-card
+)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-card-min);
+  padding-block: var(--viva-hit-target-padding-block);
+  padding-inline: var(--viva-hit-target-padding-inline);
+  gap: clamp(0.875rem, 3vw, 1.25rem);
+}
+
+html[data-large-buttons="true"] :where(.choice-card)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-card-large-min);
+}
+
+html[data-large-buttons="true"] :where(.switch)[data-viva-hit-target="large"] {
+  min-inline-size: var(--viva-hit-target-switch-width);
+  min-block-size: var(--viva-hit-target-switch-height);
+}
+
+html[data-large-buttons="true"] :where(input, textarea, select)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-control-min);
+}
+
+/* =========================================
+   FOCO ACESSÍVEL — APENAS EM ELEMENTOS INTERATIVOS
+   Evita borda aparecendo em títulos/textos comuns
+   ========================================= */
+
+:focus {
+  outline: none;
+}
+
+:is(a,
+  button,
+  input,
+  textarea,
+  select,
+  summary,
+  [role="button"],
+  [role="tab"],
+  [role="switch"],
+  [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid var(--focus-color, var(--primary-color));
+  outline-offset: 4px;
+  border-radius: 0.35rem;
+}
+
+/* Alto contraste: foco amarelo nos elementos clicáveis */
+html[data-theme="high-contrast"] :is(a,
+  button,
+  input,
+  textarea,
+  select,
+  summary,
+  [role="button"],
+  [role="tab"],
+  [role="switch"],
+  [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline-color: #ffff00;
+}

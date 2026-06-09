@@ -1,0 +1,400 @@
+/*
+  welcome.css
+  Estilos da tela de boas-vindas, com mascote, balao de fala
+  e botoes principais para entrar ou criar conta.
+*/
+
+/* =========================================
+   LAYOUT BASE DE BOAS-VINDAS
+   Mobile-first, seguro para 320px até desktop.
+   Observação importante:
+   larguras de layout usam px para não crescerem demais
+   quando o usuário escolhe fonte média/grande.
+   ========================================= */
+
+.welcome-layout {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color);
+  overflow-x: hidden;
+}
+
+.welcome-illustration,
+.welcome-content,
+.content-wrapper,
+.welcome-speech-bubble,
+.bubble-option,
+.bubble-option-text,
+.welcome-actions {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   ÁREA DA MASCOTE + BALÃO
+   ========================================= */
+
+.welcome-illustration {
+  width: 100%;
+  background-color: var(--mascot-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1rem, 4vw, 1.75rem);
+  min-height: auto;
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.welcome-speech-bubble {
+  width: 100%;
+  max-width: 560px;
+  background-color: var(--card-bg);
+  color: var(--text-main);
+  border: 1px solid var(--border-color, var(--secondary-border));
+  border-radius: 1.25rem;
+  padding: clamp(1rem, 4vw, 1.5rem);
+  text-align: left;
+  box-shadow: 0 0.5rem 1.35rem rgba(0, 0, 0, 0.14);
+  position: relative;
+  z-index: 2;
+}
+
+.welcome-speech-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -0.55rem;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--border-color, var(--secondary-border));
+  border-bottom: 1px solid var(--border-color, var(--secondary-border));
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.bubble-title {
+  color: var(--text-main);
+  font-size: clamp(1.3rem, 5.2vw, 1.8rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  overflow-wrap: break-word;
+}
+
+.bubble-option {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(0.75rem, 3vw, 1rem);
+  padding: clamp(0.85rem, 3.5vw, 1.1rem);
+  border-radius: 1rem;
+  background-color: var(--subcard-primary-bg);
+}
+
+.bubble-option+.bubble-option {
+  margin-top: 0.85rem;
+}
+
+.bubble-icon {
+  width: clamp(2.75rem, 9vw, 3.5rem);
+  height: clamp(2.75rem, 9vw, 3.5rem);
+  border-radius: 0.9rem;
+  background-color: var(--primary-color);
+  color: var(--text-button);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.bubble-icon svg {
+  width: 58%;
+  height: 58%;
+  fill: currentColor;
+  display: block;
+}
+
+.bubble-option-text {
+  min-width: 0;
+}
+
+.bubble-option-text strong {
+  display: block;
+  color: var(--primary-color);
+  font-size: clamp(1.05rem, 4.4vw, 1.35rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.bubble-option-text span {
+  display: block;
+  color: var(--text-secondary);
+  font-size: clamp(0.98rem, 4vw, 1.15rem);
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.mascot-img {
+  width: auto;
+  max-width: min(56%, 13rem);
+  max-height: 12rem;
+  height: auto;
+  object-fit: contain;
+}
+
+/* =========================================
+   CONTEÚDO PRINCIPAL
+   ========================================= */
+
+.welcome-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1rem, 5vw, 1.5rem);
+  text-align: center;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 500px;
+}
+
+.welcome-header {
+  margin-bottom: clamp(1.5rem, 5vw, 2.5rem);
+}
+
+.page-title {
+  color: var(--text-main);
+  font-size: clamp(2rem, 9vw, 3rem);
+  font-weight: 800;
+  margin: 0 0 1rem;
+  line-height: 1.18;
+  overflow-wrap: break-word;
+}
+
+.logo-inline {
+  display: inline-block;
+  height: 1.1em;
+  width: auto;
+  max-width: 5.8em;
+  vertical-align: middle;
+  margin-top: -0.15em;
+}
+
+.page-description {
+  color: var(--text-secondary);
+  font-size: clamp(1.05rem, 4.2vw, 1.25rem);
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.text-highlight {
+  color: var(--primary-color);
+  font-weight: 800;
+}
+
+.welcome-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.welcome-actions .btn {
+  width: 100%;
+  min-height: 4rem;
+  font-size: clamp(1.05rem, 4.2vw, 1.25rem);
+  font-weight: 800;
+  border-radius: 0.85rem;
+  white-space: normal;
+  text-wrap: balance;
+  padding-inline: 1rem;
+}
+
+/* =========================================
+   MOBILE MUITO PEQUENO: 320PX
+   ========================================= */
+
+@media (max-width: 360px) {
+  .welcome-illustration {
+    padding: 1rem 0.8rem;
+  }
+
+  .welcome-speech-bubble {
+    border-radius: 1rem;
+    padding: 0.9rem;
+  }
+
+  .bubble-title {
+    font-size: 1.18rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .bubble-option {
+    gap: 0.65rem;
+    padding: 0.75rem;
+  }
+
+  .bubble-icon {
+    width: 2.55rem;
+    height: 2.55rem;
+    border-radius: 0.7rem;
+  }
+
+  .bubble-option-text strong {
+    font-size: 1rem;
+  }
+
+  .bubble-option-text span {
+    font-size: 0.9rem;
+  }
+
+  .mascot-img {
+    max-width: min(50%, 9rem);
+    max-height: 9rem;
+  }
+
+  .welcome-content {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .page-title {
+    font-size: 1.85rem;
+  }
+
+  .page-description {
+    font-size: 1rem;
+  }
+}
+
+/* =========================================
+   TABLET / NOTEBOOK ESTREITO
+   Mantém a tela em coluna para não dividir 774px em duas áreas apertadas.
+   Essa é a correção principal do bug entre 768px e 1055px.
+   ========================================= */
+
+@media (min-width: 640px) and (max-width: 1059px) {
+  .welcome-layout {
+    flex-direction: column;
+  }
+
+  .welcome-illustration {
+    min-height: auto;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .welcome-speech-bubble {
+    max-width: 640px;
+  }
+
+  .mascot-img {
+    max-width: min(34%, 15rem);
+    max-height: 15rem;
+  }
+
+  .welcome-content {
+    padding: clamp(2rem, 5vw, 3rem) clamp(1.25rem, 5vw, 2rem);
+  }
+
+  .content-wrapper {
+    max-width: 560px;
+  }
+
+  .page-title {
+    font-size: clamp(2.4rem, 6vw, 3.4rem);
+  }
+}
+
+/* =========================================
+   DESKTOP REAL
+   Só divide em duas colunas quando há largura suficiente.
+   ========================================= */
+
+@media (min-width: 1060px) {
+  .welcome-layout {
+    flex-direction: row;
+  }
+
+  .welcome-illustration {
+    flex: 1;
+    min-height: 100vh;
+    padding: clamp(2rem, 4vw, 3rem);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+    z-index: 2;
+  }
+
+  .welcome-speech-bubble {
+    width: min(90%, 560px);
+  }
+
+  .mascot-img {
+    max-width: min(56%, 25rem);
+    max-height: 48vh;
+  }
+
+  .welcome-content {
+    flex: 1;
+    padding: clamp(3rem, 6vw, 4rem);
+  }
+
+  .content-wrapper {
+    max-width: 520px;
+  }
+
+  .page-title {
+    font-size: clamp(2.6rem, 5vw, 4rem);
+  }
+
+  .page-description {
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+  }
+}
+
+/* =========================================
+   ACESSIBILIDADE: TAMANHO DE FONTE GRANDE
+   O layout não usa largura em rem para não explodir quando a base vira 24px.
+   ========================================= */
+
+html[data-fontsize="medium"] .welcome-speech-bubble,
+html[data-fontsize="large"] .welcome-speech-bubble {
+  max-width: 640px;
+}
+
+html[data-fontsize="medium"] .bubble-option,
+html[data-fontsize="large"] .bubble-option {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+@media (max-width: 420px) {
+
+  html[data-fontsize="medium"] .bubble-icon,
+  html[data-fontsize="large"] .bubble-icon {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+
+  html[data-fontsize="medium"] .bubble-option-text strong,
+  html[data-fontsize="large"] .bubble-option-text strong {
+    font-size: 1rem;
+  }
+
+  html[data-fontsize="medium"] .bubble-option-text span,
+  html[data-fontsize="large"] .bubble-option-text span {
+    font-size: 0.92rem;
+  }
+}

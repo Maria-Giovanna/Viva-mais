@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light" data-fontsize="standard">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda - Viva+</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/agenda.css">
+    <link rel="stylesheet" href="css/icon-system.css">
+</head>
+
+<body>
+    <!--
+        Pagina Agenda.
+        Mostra agendamentos futuros e historico, abre detalhes,
+        permite baixar comprovante e cancelar com confirmacao.
+    -->
+    <div class="agenda-layout">
+
+        <main id="main-content" class="agenda-main">
+
+            <button type="button" class="agenda-back" id="btn-voltar">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M15 18L9 12L15 6" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span>Voltar</span>
+            </button>
+
+            <!-- Lista principal: as abas filtram entre proximos atendimentos e historico. -->
+            <section class="agenda-step" id="step-agenda-lista">
+                <header class="agenda-header">
+                    <h1 class="agenda-title">Sua Agenda</h1>
+                    <p class="agenda-subtitle">
+                        Confira seus próximos atendimentos e os seus agendamentos anteriores.
+                    </p>
+                </header>
+
+                <div class="agenda-tabs" role="tablist" aria-label="Filtrar agendamentos">
+                    <button type="button" class="agenda-tab active" id="tab-proximos" data-tab="proximos">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="3" y="4" width="18" height="17" rx="2" />
+                            <path d="M8 2v4M16 2v4M3 9h18" />
+                        </svg>
+                        <span>Próximos</span>
+                    </button>
+
+                    <button type="button" class="agenda-tab" id="tab-historico" data-tab="historico">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 8v5l3 2" />
+                            <path d="M3 12a9 9 0 1 0 3-6.7" />
+                            <path d="M3 3v5h5" />
+                        </svg>
+                        <span>Histórico</span>
+                    </button>
+                </div>
+
+                <div class="agenda-list" id="lista-agendamentos"></div>
+
+                <div class="agenda-alert">
+                    <span class="agenda-alert-icon" aria-hidden="true">!</span>
+                    <p>Chegue 30 minutos de antecedência e leve documento com foto.</p>
+                </div>
+            </section>
+
+            <!-- Detalhes: comprovante visual do atendimento selecionado na lista. -->
+            <section class="agenda-step" id="step-detalhes" hidden>
+                <header class="agenda-header centered">
+                    <h1 class="agenda-title">Comprovante de Agendamento</h1>
+                    <p class="agenda-subtitle">
+                        Confira os detalhes abaixo ou baixe o comprovante do seu atendimento.
+                    </p>
+                </header>
+
+                <div id="detalhes-agendamento"></div>
+
+                <div class="agenda-actions">
+                    <button type="button" class="btn btn-primary" id="btn-baixar-comprovante">
+                        Baixar comprovante em PDF
+                    </button>
+
+                    <button type="button" class="btn-secondary-outline" id="btn-cancelar-agendamento">
+                        Cancelar Agendamento
+                    </button>
+                </div>
+            </section>
+
+        <!-- Confirmacao com mascote para evitar cancelamento acidental. -->
+        <section class="agenda-step app-dialog-step" id="step-confirmar-cancelamento" hidden role="dialog" aria-modal="true"
+            aria-labelledby="titulo-cancelamento">
+            <div class="app-dialog-card app-dialog-card--warning">
+                <header class="agenda-header">
+                    <h1 class="agenda-title" id="titulo-cancelamento">Quer mesmo cancelar?</h1>
+                </header>
+        
+                <div class="cancel-hero">
+                    <img src="assets/img/Mascote-Tem Certeza_.svg" alt="" aria-hidden="true">
+                </div>
+        
+                <div class="cancel-content">
+                    <p class="cancel-main-text">
+                        Esse agendamento será cancelado e sua vaga será liberada no sistema.
+                    </p>
+        
+                    <p class="cancel-secondary-text">
+                        Se depois quiser agendar novamente, será preciso iniciar um novo agendamento.
+                    </p>
+        
+                    <div class="agenda-actions">
+                        <button type="button" class="btn btn-primary" id="btn-manter-agendamento">
+                            Manter agendamento
+                        </button>
+        
+                        <button type="button" class="btn-secondary-outline" id="btn-confirmar-cancelamento">
+                            Confirmar Cancelamento
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sucesso do cancelamento: orienta o usuario depois que a vaga foi liberada. -->
+        <section class="agenda-step" id="step-cancelado" hidden>
+            <div class="success-hero">
+                <img src="assets/img/Mascote-Parabens.svg" alt="" aria-hidden="true">
+            </div>
+        
+            <div class="success-content">
+                <h1 class="success-title">Agendamento<br>cancelado!</h1>
+        
+                <p class="success-text">
+                    Se quiser agendar novamente depois, será preciso iniciar um novo agendamento.
+                </p>
+        
+                <div class="agenda-actions">
+                    <button type="button" class="btn btn-primary" id="btn-ir-agenda">
+                        Ir para a Agenda
+                    </button>
+        
+                    <button type="button" class="btn-secondary-outline" id="btn-novo-agendamento">
+                        Novo Agendamento
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+            <!-- Erro: tela simples para falhas ao carregar ou manipular a agenda. -->
+            <section class="agenda-step" id="step-error" hidden>
+                <div class="empty-state">
+                    <h1 class="agenda-title">Algo deu errado</h1>
+                    <p class="agenda-subtitle" id="mensagem-erro">
+                        Não foi possível carregar sua agenda.
+                    </p>
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='home.html'">
+                        Voltar ao início
+                    </button>
+                </div>
+            </section>
+
+            <!-- Aviso em overlay antes de abrir os detalhes do atendimento. -->
+            <section class="appointment-reminder-overlay" id="agenda-reminder-overlay" hidden role="dialog"
+                aria-modal="true" aria-labelledby="agenda-reminder-title" aria-describedby="agenda-reminder-text">
+                <article class="appointment-reminder-card" role="document">
+                    <div class="appointment-reminder-hero">
+                        <img src="assets/img/Mascote-Ol%23U00e1.svg" alt="" aria-hidden="true">
+                    </div>
+
+                    <div class="appointment-reminder-content">
+                        <p class="appointment-reminder-kicker">Antes do atendimento</p>
+                        <h2 class="appointment-reminder-title" id="agenda-reminder-title">
+                            Não esqueça os documentos
+                        </h2>
+
+                        <p class="appointment-reminder-text" id="agenda-reminder-text">
+                            Para evitar problemas no atendimento, confira estas orientações antes de sair de casa.
+                        </p>
+
+                        <ul class="appointment-reminder-list">
+                            <li>Chegue com <strong>30 minutos de antecedência</strong>.</li>
+                            <li>Leve um <strong>documento oficial com foto</strong>.</li>
+                            <li id="agenda-reminder-referral" hidden>
+                                Leve também o <strong>encaminhamento recebido do médico</strong>.
+                            </li>
+                        </ul>
+
+                        <button type="button" class="btn btn-primary" id="btn-continuar-aviso-agenda">
+                            Entendi, ver comprovante
+                        </button>
+                    </div>
+                </article>
+            </section>
+
+        </main>
+
+        <!-- Navegacao fixa do aplicativo. -->
+        <nav class="app-nav" aria-label="Menu principal">
+            <ul class="nav-list">
+                <li>
+                    <a href="home.html" class="nav-link">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path class="nav-icon-outline"
+                                d="M3 10.8L12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.8Z" />
+                            <path class="nav-icon-fill"
+                                d="M3 10.8L12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.8Z" />
+                        </svg>
+                        <span>Início</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="agenda.html" class="nav-link active" aria-current="page">
+                        <svg class="nav-icon nav-icon-calendar" viewBox="0 0 24 24" aria-hidden="true">
+                            <!-- Ícone normal: contorno -->
+                            <g class="nav-icon-outline">
+                                <path d="M18 1C18.053 1 18.1041 1.02109 18.1416 1.05859C18.179 1.09609 18.2002 1.14719 18.2002 1.2002V4.59961H20.4004C21.0897 4.59971 21.7508 4.87395 22.2383 5.36133C22.7259 5.84892 23 6.51063 23 7.2002V7.40039H1V7.2002C1 6.51063 1.27412 5.84892 1.76172 5.36133C2.2492 4.87395 2.91028 4.59971 3.59961 4.59961H5.7998V1.2002C5.7998 1.1472 5.82095 1.09609 5.8584 1.05859C5.88656 1.03043 5.92245 1.01157 5.96094 1.00391L6 1C6.05304 1 6.10409 1.02109 6.1416 1.05859C6.17905 1.09609 6.2002 1.1472 6.2002 1.2002V4.59961H17.7998V1.2002C17.7998 1.14719 17.821 1.09609 17.8584 1.05859C17.8866 1.03043 17.9224 1.01157 17.9609 1.00391L18 1Z" />
+                                <path d="M23 11.8V20.3997C23 21.0892 22.7259 21.7509 22.2383 22.2385C21.7508 22.726 21.0898 23.0001 20.4004 23.0002H3.59961C2.91023 23.0001 2.24921 22.726 1.76172 22.2385C1.27412 21.7509 1 21.0892 1 20.3997V11.8H23Z" />
+                            </g>
+
+                            <!-- Ícone ativo: preenchido -->
+                            <g class="nav-icon-fill">
+                                <path d="M20.4 3.6H19.2V1.2C19.2 0.88174 19.0736 0.576515 18.8485 0.351472C18.6235 0.126428 18.3183 0 18 0C17.6817 0 17.3765 0.126428 17.1515 0.351472C16.9264 0.576515 16.8 0.88174 16.8 1.2V3.6H7.2V1.2C7.2 0.88174 7.07357 0.576515 6.84853 0.351472C6.62348 0.126428 6.31826 0 6 0C5.68174 0 5.37652 0.126428 5.15147 0.351472C4.92643 0.576515 4.8 0.88174 4.8 1.2V3.6H3.6C2.64522 3.6 1.72955 3.97929 1.05442 4.65442C0.379285 5.32955 0 6.24522 0 7.2V8.4H24V7.2C24 6.24522 23.6207 5.32955 22.9456 4.65442C22.2705 3.97929 21.3548 3.6 20.4 3.6Z" />
+                                <path d="M0 20.4C0 21.3548 0.379285 22.2705 1.05442 22.9456C1.72955 23.6208 2.64522 24 3.6 24H20.4C21.3548 24 22.2705 23.6208 22.9456 22.9456C23.6207 22.2705 24 21.3548 24 20.4V10.8H0V20.4Z" />
+                            </g>
+                        </svg>
+                        <span>Agenda</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="perfil.html" class="nav-link">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle class="nav-icon-outline" cx="12" cy="8" r="4" />
+                            <path class="nav-icon-outline" d="M4 21a8 8 0 0 1 16 0" />
+
+                            <path class="nav-icon-fill"
+                                d="M12 12a4.5 4.5 0 1 0 0-9a4.5 4.5 0 0 0 0 9Zm0 2c-4.8 0-8.5 2.8-8.5 6.4c0 .9.7 1.6 1.6 1.6h13.8c.9 0 1.6-.7 1.6-1.6C20.5 16.8 16.8 14 12 14Z" />
+                        </svg>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+    <!-- Scripts em ordem: acessibilidade, armazenamento simulado e controle da agenda. -->
+    <script src="js/a11y.js"></script>
+    <script src="js/comprovante-pdf.js"></script>
+    <script src="js/agendamento-storage.js"></script>
+    <script src="js/agenda.js"></script>
+</body>
+
+</html>

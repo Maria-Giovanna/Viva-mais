@@ -1,0 +1,73 @@
+/*
+  reset.css
+  Remove estilos padrao do navegador e define uma base previsivel
+  para todos os HTML do projeto.
+*/
+
+/* =========================================
+   RESET GLOBAL
+   ========================================= */
+*, 
+*::before, 
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: none;
+  background: none;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+p,
+a,
+button,
+span,
+strong,
+small,
+label {
+  overflow-wrap: break-word;
+  word-break: normal;
+}

@@ -1,0 +1,342 @@
+[
+  {
+    "cpf": "12345678909",
+    "nomeCompleto": "Maria da Silva",
+    "dataNascimento": "05/03/1958",
+    "endereco": "Rua Exemplo, 123 - Centro, Barueri/SP",
+    "telefone": "11947139955",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5107,
+    "lon": -46.8761
+    }
+  },
+  {
+    "cpf": "98765432100",
+    "nomeCompleto": "João de Souza",
+    "dataNascimento": "12/10/1955",
+    "endereco": "Av. Brasil, 456 - Bela Vista, São Paulo/SP",
+    "telefone": "11988887777",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5349,
+    "lon": -46.6708
+    }
+  },
+  {
+    "cpf": "70548445052",
+    "nomeCompleto": "Ana Oliveira",
+    "dataNascimento": "22/07/1945",
+    "endereco": "Rua das Flores, 89 - Pinheiros, São Paulo/SP",
+    "telefone": "11911112222",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5273,
+    "lon": -46.9028
+    }
+  },
+  {
+    "cpf": "52998224725",
+    "nomeCompleto": "Roberto Costa",
+    "dataNascimento": "30/11/1950",
+    "endereco": "Rua do Comércio, 900 - Tatuapé, São Paulo/SP",
+    "telefone": "11977776666",
+    "planoAtivo": false,
+    "coordenadas": {
+    "lat": -23.5228,
+    "lon": -46.8353
+    }
+  },
+  {
+    "cpf": "34567890175",
+    "nomeCompleto": "Sônia Pereira",
+    "dataNascimento": "15/02/1958",
+    "endereco": "Av. Paulista, 1000 - Bela Vista, São Paulo/SP",
+    "telefone": "11933334444",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5488,
+    "lon": -46.9343
+    }
+  },
+    {
+    "cpf": "11122233396",
+    "nomeCompleto": "João Pedro Silva",
+    "dataNascimento": "10/08/1985",
+    "telefone": "11991111111",
+    "endereco": "Rua das Acácias, 101 - Centro - Barueri/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5112,
+    "lon": -46.8764
+  }
+  },
+  {
+    "nomeCompleto": "Carla Mendes Oliveira",
+    "cpf": "24681012190",
+    "dataNascimento": "15/06/1980",
+    "telefone": "11992222222",
+    "endereco": "Av. das Palmeiras, 200 - Centro - Osasco/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5329,
+    "lon": -46.7918
+  }
+  },
+  {
+    "nomeCompleto": "Maria Fernanda Costa",
+    "cpf": "31415926590",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11992222222",
+    "endereco": "Av. Brasil, 250 - Centro - Osasco/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5329,
+    "lon": -46.7918
+  }
+  },
+  {
+    "nomeCompleto": "Lucas Henrique Souza",
+    "cpf": "90817263586",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11993333333",
+    "endereco": "Rua do Sol, 78 - Vila Dirce - Carapicuíba/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5228,
+    "lon": -46.8353
+  }
+  },
+  {
+    "nomeCompleto": "Ana Beatriz Lima",
+    "cpf": "67293840500",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11994444444",
+    "endereco": "Rua dos Ipês, 150 - Centro - Jandira/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5273,
+    "lon": -46.9028
+  }
+  },
+  {
+    "nomeCompleto": "Gabriel Martins Rocha",
+    "cpf": "80654123942",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11995555555",
+    "endereco": "Alameda Verde, 88 - Alphaville - Barueri/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.4957,
+    "lon": -46.8485
+  }
+  },
+
+  
+
+
+  {
+    "nomeCompleto": "Juliana Oliveira Santos",
+    "cpf": "25836914705",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11996666666",
+    "endereco": "Rua Primavera, 412 - Centro - Itapevi/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5488,
+    "lon": -46.9343
+  }
+  },
+  {
+    "nomeCompleto": "Rafael Nunes Ferreira",
+    "cpf": "36914725807",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11997777777",
+    "endereco": "Rua das Flores, 55 - Granja Viana - Cotia/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5931,
+    "lon": -46.8574
+  }
+  },
+  {
+    "nomeCompleto": "Mariana Silva Costa",
+    "cpf": "74185296310",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11998888888",
+    "endereco": "Av. dos Pinheiros, 300 - Centro - Barueri/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5112,
+    "lon": -46.8764
+  }
+  },
+  {
+    "nomeCompleto": "Felipe Santos Almeida",
+    "cpf": "85296374112",
+    "dataNascimento": "10/08/1985",
+    "telefone": "11999999999",
+    "endereco": "Rua do Sol, 150 - Vila Dirce - Carapicuíba/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5228,
+    "lon": -46.8353
+  }
+  },
+  {
+    "nomeCompleto": "Larissa Rodrigues Lima",
+    "cpf": "38475692018",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11990001111",
+    "endereco": "Rua dos Ipês, 200 - Centro - Jandira/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5273,
+    "lon": -46.9028
+  }
+  },
+  {
+    "nomeCompleto": "Bruno Oliveira Santos",
+    "cpf": "75938461027",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11991111111",
+    "endereco": "Alameda Verde, 150 - Alphaville - Barueri/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.4957,
+    "lon": -46.8485
+  }
+  },
+  {
+    "nomeCompleto": "Camila Mendes Ferreira",
+    "cpf": "28475692018",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11992222222",
+    "endereco": "Rua Primavera, 500 - Centro - Itapevi/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5488,
+    "lon": -46.9343
+  }
+  },
+  {
+    "nomeCompleto": "Rafael Nunes Ferreira",
+    "cpf": "29537914806",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11997777777",
+    "endereco": "Rua das Flores, 55 - Granja Viana - Cotia/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5931,
+    "lon": -46.8574 
+    }
+  },
+  {
+    "nomeCompleto": "Camila Alves Pereira",
+    "cpf": "74697131401",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11998888888",
+    "endereco": "Av. Central, 900 - Alphaville - Santana de Parnaíba/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.4694,
+    "lon": -46.8747
+    }
+  },
+  {
+    "nomeCompleto": "Bruno Carvalho Mendes",
+    "cpf": "86288366757",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11999999999",
+    "endereco": "Rua Bela Vista, 320 - Jaguaré - São Paulo/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5446,
+    "lon": -46.7467
+  }  
+},
+  {
+    "nomeCompleto": "Mariana Silva Costa",
+    "cpf": "48692017304",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11998888888",
+    "endereco": "Av. dos Pinheiros, 300 - Centro - Barueri/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5112,
+    "lon": -46.8764
+  }
+  },
+  {
+    "nomeCompleto": "Felipe Santos Almeida",
+    "cpf": "67283910457",
+    "dataNascimento": "10/08/1985",
+    "telefone": "11999999999",
+    "endereco": "Rua do Sol, 150 - Vila Dirce - Carapicuíba/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5228,
+    "lon": -46.8353
+  }
+  },
+  {
+    "nomeCompleto": "Larissa Rodrigues Lima",
+    "cpf": "38475692018",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11992222222",
+    "endereco": "Rua dos Ipês, 200 - Centro - Jandira/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5273,
+    "lon": -46.9028
+  }
+  },
+  {
+    "nomeCompleto": "Bruno Oliveira Santos",
+    "cpf": "75938461027",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11991111111",
+    "endereco": "Alameda Verde, 150 - Alphaville - Barueri/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.4957,
+    "lon": -46.8485
+  }
+  },
+  {
+    "nomeCompleto": "Camila Mendes Ferreira",
+    "cpf": "28475692018",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11992222222",
+    "endereco": "Rua Primavera, 500 - Centro - Itapevi/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5488,
+    "lon": -46.9343
+  }
+  },
+  {
+    "nomeCompleto": "Rafael Nunes Ferreira",
+    "cpf": "29537914806",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11997777777",
+    "endereco": "Rua das Flores, 55 - Granja Viana - Cotia/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5931,
+    "lon": -46.8574 
+    }
+  },
+  {
+    "nomeCompleto": "Fernanda Ribeiro Gomes",
+    "cpf": "70548445052",
+    "dataNascimento": "15/02/1958",
+    "telefone": "11990001111",
+    "endereco": "Rua Monte Alegre, 45 - Perdizes - São Paulo/SP",
+    "planoAtivo": true,
+    "coordenadas": {
+    "lat": -23.5349,
+    "lon": -46.6708
+  }
+  }
+]

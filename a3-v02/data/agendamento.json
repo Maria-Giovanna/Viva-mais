@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "cpf": "12345678909",
+    "tipo": "consulta",
+    "titulo": "Consulta médica",
+    "profissional": "Dr. Roberto",
+    "especialidade": "Cardiologista",
+    "data": "2026-06-08",
+    "hora": "14:30",
+    "status": "confirmado"
+  },
+  {
+    "id": 2,
+    "cpf": "12345678909",
+    "tipo": "exame",
+    "titulo": "Exame de sangue",
+    "profissional": "Laboratório Viva+",
+    "especialidade": "Análises clínicas",
+    "data": "2026-05-28",
+    "hora": "08:00",
+    "status": "confirmado"
+  },
+  {
+    "id": 3,
+    "cpf": "98765432100",
+    "tipo": "vacina",
+    "titulo": "Vacina contra gripe",
+    "profissional": "Enfermagem Viva+",
+    "especialidade": "Imunização",
+    "data": "2026-05-30",
+    "hora": "10:30",
+    "status": "confirmado"
+  }
+]
