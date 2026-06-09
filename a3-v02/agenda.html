@@ -81,7 +81,7 @@
 
                 <div class="agenda-actions">
                     <button type="button" class="btn btn-primary" id="btn-baixar-comprovante">
-                        Baixar Comprovante
+                        Baixar comprovante em PDF
                     </button>
 
                     <button type="button" class="btn-secondary-outline" id="btn-cancelar-agendamento">
@@ -163,6 +163,39 @@
                 </div>
             </section>
 
+            <!-- Aviso em overlay antes de abrir os detalhes do atendimento. -->
+            <section class="appointment-reminder-overlay" id="agenda-reminder-overlay" hidden role="dialog"
+                aria-modal="true" aria-labelledby="agenda-reminder-title" aria-describedby="agenda-reminder-text">
+                <article class="appointment-reminder-card" role="document">
+                    <div class="appointment-reminder-hero">
+                        <img src="assets/img/Mascote-Ol%23U00e1.svg" alt="" aria-hidden="true">
+                    </div>
+
+                    <div class="appointment-reminder-content">
+                        <p class="appointment-reminder-kicker">Antes do atendimento</p>
+                        <h2 class="appointment-reminder-title" id="agenda-reminder-title">
+                            Não esqueça os documentos
+                        </h2>
+
+                        <p class="appointment-reminder-text" id="agenda-reminder-text">
+                            Para evitar problemas no atendimento, confira estas orientações antes de sair de casa.
+                        </p>
+
+                        <ul class="appointment-reminder-list">
+                            <li>Chegue com <strong>30 minutos de antecedência</strong>.</li>
+                            <li>Leve um <strong>documento oficial com foto</strong>.</li>
+                            <li id="agenda-reminder-referral" hidden>
+                                Leve também o <strong>encaminhamento recebido do médico</strong>.
+                            </li>
+                        </ul>
+
+                        <button type="button" class="btn btn-primary" id="btn-continuar-aviso-agenda">
+                            Entendi, ver comprovante
+                        </button>
+                    </div>
+                </article>
+            </section>
+
         </main>
 
         <!-- Navegacao fixa do aplicativo. -->
@@ -218,6 +251,7 @@
 
     <!-- Scripts em ordem: acessibilidade, armazenamento simulado e controle da agenda. -->
     <script src="js/a11y.js"></script>
+    <script src="js/comprovante-pdf.js"></script>
     <script src="js/agendamento-storage.js"></script>
     <script src="js/agenda.js"></script>
 </body>

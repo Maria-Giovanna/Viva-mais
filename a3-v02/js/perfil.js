@@ -77,13 +77,11 @@
             "standard",
         ),
         leitorTela:
-          preferencias.leitorTela ||
-          localStorage.getItem("viva_screen_reader") === "true" ||
-          false,
+          preferencias.leitorTela ??
+          (localStorage.getItem("viva_screen_reader") === "true"),
         botoesGrandes:
-          preferencias.botoesGrandes ||
-          localStorage.getItem("viva_large_buttons") === "true" ||
-          false,
+          preferencias.botoesGrandes ??
+          (localStorage.getItem("viva_large_buttons") === "true"),
         modoCores:
           preferencias.modoCores ||
           localStorage.getItem("viva_color_mode") ||
@@ -286,19 +284,32 @@
   function alterarSenha(evento) {
     evento.preventDefault();
 
-    const senhaAtual = document.getElementById("senha-atual").value.trim();
+    const nascimento = document
+      .getElementById("confirmar-nascimento")
+      .value.trim();
     const novaSenha = document.getElementById("nova-senha").value.trim();
     const confirmaSenha = document
       .getElementById("confirma-senha")
       .value.trim();
     const erro = document.getElementById("erro-senha");
+    const campoNascimento = document.getElementById("confirmar-nascimento");
+    const campoNovaSenha = document.getElementById("nova-senha");
+    const campoConfirmaSenha = document.getElementById("confirma-senha");
 
     erro.hidden = true;
+    campoNascimento?.setAttribute("aria-invalid", "false");
+    campoNovaSenha?.setAttribute("aria-invalid", "false");
+    campoConfirmaSenha?.setAttribute("aria-invalid", "false");
 
-    if (senhaAtual !== String(estadoPerfil.usuario.senha || "")) {
+    if (
+      normalizarDataBR(nascimento) !==
+      normalizarDataBR(estadoPerfil.usuario.dataNascimento)
+    ) {
       erro.textContent =
-        "A senha atual nao confere. Digite novamente sua senha de 8 numeros antes de criar uma nova.";
+        "A data de nascimento nao confere com seu cadastro. Confira o formato DD/MM/AAAA e tente novamente.";
       erro.hidden = false;
+      campoNascimento?.setAttribute("aria-invalid", "true");
+      campoNascimento?.focus();
       return;
     }
 
@@ -306,6 +317,8 @@
       erro.textContent =
         "A nova senha precisa ter exatamente 8 numeros. Digite somente numeros, sem espacos.";
       erro.hidden = false;
+      campoNovaSenha?.setAttribute("aria-invalid", "true");
+      campoNovaSenha?.focus();
       return;
     }
 
@@ -313,6 +326,8 @@
       erro.textContent =
         "Esta senha e muito facil de adivinhar. Evite numeros repetidos ou em sequencia.";
       erro.hidden = false;
+      campoNovaSenha?.setAttribute("aria-invalid", "true");
+      campoNovaSenha?.focus();
       return;
     }
 
@@ -320,6 +335,8 @@
       erro.textContent =
         "As senhas digitadas nao sao iguais. Repita a mesma senha nos dois campos.";
       erro.hidden = false;
+      campoConfirmaSenha?.setAttribute("aria-invalid", "true");
+      campoConfirmaSenha?.focus();
       return;
     }
 
@@ -336,6 +353,10 @@
     evento.target.reset();
 
     mostrarEtapa("step-senha-sucesso");
+  }
+
+  function normalizarDataBR(data) {
+    return String(data || "").replace(/\D/g, "");
   }
 
   function ehSenhaInsegura(senha) {

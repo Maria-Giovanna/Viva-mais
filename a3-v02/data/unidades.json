@@ -5,6 +5,7 @@
     "tipoUnidade": "UBS",
     "descricao": "Consultas básicas, vacinação, odontologia, coleta de exames laboratoriais, curativos e acompanhamento de pré-natal.",
     "endereco": "Rua Frei Xisto Teuber, 50 - Campo Limpo, São Paulo",
+    "mapsQuery": "Rua Frei Xisto Teuber, 50 - Campo Limpo, São Paulo",
     "coordenadas": {
     "lat": -23.6405,
     "lon": -46.7589
@@ -96,6 +97,7 @@
     "tipoUnidade": "Centro Especializado",
     "descricao": "Cardiologia, dermatologia, ortopedia, angiologia e exames de apoio diagnóstico.",
     "endereco": "Rua Base Hungara, 75 - Itaquera, São Paulo",
+    "mapsQuery": "Rua Base Hungara, 75 - Itaquera, São Paulo",
     "coordenadas": {
     "lat": -23.5403,
     "lon": -46.4559
@@ -179,6 +181,7 @@
     "tipoUnidade": "Hospital",
     "descricao": "Urgência, emergência, internações, cirurgias e exames diagnósticos.",
     "endereco": "Avenida Celso Garcia, 4415 - Tatuapé, São Paulo",
+    "mapsQuery": "Avenida Celso Garcia, 4415 - Tatuapé, São Paulo",
     "coordenadas": {
     "lat": -23.5399,
     "lon": -46.5768
@@ -262,6 +265,7 @@
     "tipoUnidade": "Hospital",
     "descricao": "Urgência clínica, atendimento hospitalar geral, internação e exames diagnósticos básicos.",
     "endereco": "Rua Álvares Machado, 38 - Vila Formosa, São Paulo",
+    "mapsQuery": "Rua Álvares Machado, 38 - Vila Formosa, São Paulo",
     "coordenadas": {
     "lat": -23.5602,
     "lon": -46.5364
@@ -336,6 +340,171 @@
         "especialidade": "Diagnóstico por imagem",
         "profissionaisDisponiveis": [],
         "horariosDisponiveis": ["08:30", "10:30", "14:30"]
+      }
+    ]
+  },
+  {
+    "id": "posto-saude-jardim-belval",
+    "nome": "Posto de Saúde Aurora Viva",
+    "tipoUnidade": "Posto de saúde",
+    "descricao": "Atendimento de clínico geral, vacinação, curativos e acompanhamento de rotina.",
+    "endereco": "Rua Benedita Guerra Zendron, 55 - Jardim Belval, Barueri",
+    "mapsQuery": "Rua Benedita Guerra Zendron, 55 - Jardim Belval, Barueri",
+    "coordenadas": {
+    "lat": -23.5092,
+    "lon": -46.8849
+  },
+    "profissionais": [
+      {
+        "id": "dra-livia-santos",
+        "nome": "Dra. Lívia Santos",
+        "especialidade": "Clínico Geral"
+      },
+      {
+        "id": "dr-matheus-pereira",
+        "nome": "Dr. Matheus Pereira",
+        "especialidade": "Clínico Geral"
+      },
+      {
+        "id": "dra-natalia-rocha",
+        "nome": "Dra. Natália Rocha",
+        "especialidade": "Clínico Geral"
+      }
+    ],
+    "servicosAgendaveis": [
+      {
+        "id": "consulta-clinico-geral-belval",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Clínico Geral",
+        "profissionaisDisponiveis": ["dra-livia-santos", "dr-matheus-pereira", "dra-natalia-rocha"],
+        "horariosDisponiveis": ["07:30", "08:30", "10:00", "13:00", "15:30"]
+      },
+      {
+        "id": "vacina-gripe-belval",
+        "categoria": "vacina",
+        "nome": "Gripe",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:00", "10:00", "13:30", "15:00"]
+      },
+      {
+        "id": "vacina-covid-19-belval",
+        "categoria": "vacina",
+        "nome": "COVID-19",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:00", "10:00", "13:30", "15:00"]
+      },
+      {
+        "id": "vacina-febre-amarela-belval",
+        "categoria": "vacina",
+        "nome": "Febre amarela",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:00", "10:00", "13:30", "15:00"]
+      }
+    ]
+  },
+  {
+    "id": "posto-saude-parque-imperial",
+    "nome": "Posto de Saúde Caminho Verde",
+    "tipoUnidade": "Posto de saúde",
+    "descricao": "Consultas de atenção primária, vacinação e acompanhamento de pacientes crônicos.",
+    "endereco": "Avenida Henriqueta Mendes Guerra, 1268 - Parque Imperial, Barueri",
+    "mapsQuery": "Avenida Henriqueta Mendes Guerra, 1268 - Parque Imperial, Barueri",
+    "coordenadas": {
+    "lat": -23.5221,
+    "lon": -46.8364
+  },
+    "profissionais": [
+      {
+        "id": "dra-beatriz-lima",
+        "nome": "Dra. Beatriz Lima",
+        "especialidade": "Clínico Geral"
+      },
+      {
+        "id": "dr-vinicius-martins",
+        "nome": "Dr. Vinícius Martins",
+        "especialidade": "Clínico Geral"
+      },
+      {
+        "id": "dra-sofia-almeida",
+        "nome": "Dra. Sofia Almeida",
+        "especialidade": "Clínico Geral"
+      }
+    ],
+    "servicosAgendaveis": [
+      {
+        "id": "consulta-clinico-geral-imperial",
+        "categoria": "consulta",
+        "nome": "Consulta médica",
+        "especialidade": "Clínico Geral",
+        "profissionaisDisponiveis": ["dra-beatriz-lima", "dr-vinicius-martins", "dra-sofia-almeida"],
+        "horariosDisponiveis": ["08:00", "09:00", "11:00", "14:00", "16:00"]
+      },
+      {
+        "id": "vacina-gripe-imperial",
+        "categoria": "vacina",
+        "nome": "Gripe",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:30", "09:30", "10:30", "14:00", "15:30"]
+      },
+      {
+        "id": "vacina-covid-19-imperial",
+        "categoria": "vacina",
+        "nome": "COVID-19",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:30", "09:30", "10:30", "14:00", "15:30"]
+      },
+      {
+        "id": "vacina-febre-amarela-imperial",
+        "categoria": "vacina",
+        "nome": "Febre amarela",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:30", "09:30", "10:30", "14:00", "15:30"]
+      }
+    ]
+  },
+  {
+    "id": "posto-vacinacao-vila-yara",
+    "nome": "Posto de Vacinação Sol Nascente",
+    "tipoUnidade": "Posto de vacinação",
+    "descricao": "Posto dedicado a vacinação de rotina, reforços e campanhas sazonais.",
+    "endereco": "Avenida dos Autonomistas, 1828 - Vila Yara, Osasco",
+    "mapsQuery": "Avenida dos Autonomistas, 1828 - Vila Yara, Osasco",
+    "coordenadas": {
+    "lat": -23.5405,
+    "lon": -46.7673
+  },
+    "profissionais": [],
+    "servicosAgendaveis": [
+      {
+        "id": "vacina-gripe-vila-yara",
+        "categoria": "vacina",
+        "nome": "Gripe",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:30", "11:00", "13:30", "15:00"]
+      },
+      {
+        "id": "vacina-covid-19-vila-yara",
+        "categoria": "vacina",
+        "nome": "COVID-19",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:30", "11:00", "13:30", "15:00"]
+      },
+      {
+        "id": "vacina-febre-amarela-vila-yara",
+        "categoria": "vacina",
+        "nome": "Febre amarela",
+        "especialidade": "Vacinação",
+        "profissionaisDisponiveis": [],
+        "horariosDisponiveis": ["08:00", "09:30", "11:00", "13:30", "15:00"]
       }
     ]
   }

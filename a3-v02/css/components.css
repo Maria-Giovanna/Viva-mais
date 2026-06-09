@@ -480,7 +480,11 @@
 }
 
 .quick-a11y-option.is-selected,
-.quick-a11y-support.is-selected {
+.quick-a11y-option[aria-pressed="true"],
+.quick-a11y-option[data-selected="true"],
+.quick-a11y-support.is-selected,
+.quick-a11y-support[aria-checked="true"],
+.quick-a11y-support[data-selected="true"] {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
   color: var(--text-button);
@@ -502,7 +506,31 @@
   text-align: left;
 }
 
-.quick-a11y-support span {
+.quick-a11y-support-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.quick-a11y-support-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  min-width: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+.quick-a11y-support-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: currentColor;
+}
+
+.quick-a11y-support-label {
   font-size: 0.95rem;
 }
 
@@ -514,17 +542,6 @@
 @media (max-width: 767px) {
   .quick-a11y {
     display: block !important;
-  }
-}
-
-@media (max-width: 1249px) {
-
-  #a11y-shortcut-slot,
-  #a11y-shortcut-slot .quick-a11y,
-  .quick-a11y,
-  .quick-a11y.quick-a11y--header,
-  .quick-a11y.quick-a11y--floating {
-    display: none !important;
   }
 }
 
@@ -777,14 +794,26 @@
   }
 
   .quick-a11y-toggle {
-    min-height: 2.9rem;
-    padding: 0.5rem 0.65rem;
+    width: 3.15rem;
+    min-width: 3.15rem;
+    height: 3.15rem;
+    min-height: 3.15rem;
+    padding: 0;
+    border-radius: 999px;
+    background-color: var(--primary-color);
+    color: var(--text-button);
   }
 
   .quick-a11y-toggle-text {
-    max-width: 7.5rem;
-    white-space: normal;
-    font-size: 0.82rem;
+    display: none;
+  }
+
+  .quick-a11y-toggle-icon {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: currentColor;
+    font-size: 1.05rem;
   }
 
   .quick-a11y-panel,
@@ -797,3 +826,94 @@
     max-height: calc(100dvh - 5rem) !important;
   }
 }
+
+/* Preferencia global: aumenta a area de contato dos controles sem mudar a funcao deles. */
+:root {
+  --viva-hit-target-min: 3rem;
+  --viva-hit-target-control-min: 3.5rem;
+  --viva-hit-target-card-min: 6rem;
+  --viva-hit-target-card-large-min: 9.5rem;
+  --viva-hit-target-switch-width: 4.75rem;
+  --viva-hit-target-switch-height: 2.75rem;
+  --viva-hit-target-padding-block: clamp(0.875rem, 2.5vw, 1.25rem);
+  --viva-hit-target-padding-inline: clamp(1rem, 3vw, 1.5rem);
+}
+
+html[data-large-buttons="true"] :where(
+  a[href],
+  button,
+  textarea,
+  select,
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+  summary,
+  label[for],
+  [role="button"],
+  [role="tab"],
+  [role="switch"],
+  [tabindex]:not([tabindex="-1"])
+)[data-viva-hit-target="large"] {
+  min-inline-size: var(--viva-hit-target-min);
+  min-block-size: var(--viva-hit-target-min);
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+html[data-large-buttons="true"] :where(
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-secondary-outline,
+  .btn-secondary-small,
+  .btn-text,
+  .btn-back,
+  .btn-toggle-password,
+  .profile-back,
+  .agenda-back,
+  .scheduling-back,
+  .nav-link,
+  .agenda-tab,
+  .quick-a11y-toggle,
+  .quick-a11y-option,
+  .quick-a11y-support,
+  .location-select-button,
+  .location-maps-button
+)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-control-min);
+  padding-block: var(--viva-hit-target-padding-block);
+  padding-inline: var(--viva-hit-target-padding-inline);
+}
+
+html[data-large-buttons="true"] :where(
+  .profile-menu-card,
+  .accessibility-card,
+  .font-size-card,
+  .color-option-card,
+  .access-card,
+  .bubble-option,
+  .agenda-card,
+  .choice-card,
+  .item-card,
+  .date-card,
+  .time-card,
+  .location-card,
+  .professional-card
+)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-card-min);
+  padding-block: var(--viva-hit-target-padding-block);
+  padding-inline: var(--viva-hit-target-padding-inline);
+  gap: clamp(0.875rem, 3vw, 1.25rem);
+}
+
+html[data-large-buttons="true"] :where(.choice-card)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-card-large-min);
+}
+
+html[data-large-buttons="true"] :where(.switch)[data-viva-hit-target="large"] {
+  min-inline-size: var(--viva-hit-target-switch-width);
+  min-block-size: var(--viva-hit-target-switch-height);
+}
+
+html[data-large-buttons="true"] :where(input, textarea, select)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-control-min);
+}
+

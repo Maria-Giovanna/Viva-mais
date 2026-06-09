@@ -31,21 +31,22 @@
     },
     fontSize: {
       small: "fonte pequena",
-      standard: "fonte padrao",
-      medium: "fonte media",
+      standard: "fonte padrão",
+      medium: "fonte média",
       large: "fonte grande",
     },
     colorMode: {
-      default: "cores padrao",
-      deuteranopia: "vermelho e verde parecidos",
-      tritanopia: "azul e amarelo parecidos",
-      achromatopsia: "pouca ou nenhuma cor",
+      default: "cores padrão do Viva+",
+      deuteranopia: "ajuste para daltonismo vermelho e verde",
+      tritanopia: "ajuste para daltonismo azul e amarelo",
+      achromatopsia: "modo sem cores, em tons de cinza",
     },
   };
   let leitorAssistidoAtivo = false;
   let eventosLeitorConfigurados = false;
   let ultimaFala = "";
   let ultimoMomentoFala = 0;
+  let observadorBotoesGrandes = null;
 
   document.addEventListener("DOMContentLoaded", aplicarAcessibilidadeSalva);
 
@@ -63,6 +64,7 @@
     });
 
     criarPainelRapidoAcessibilidade();
+    melhorarAcessibilidadeARIA();
     sincronizarPainelRapidoAcessibilidade();
   }
 
@@ -72,16 +74,14 @@
       sessionStorage.getItem("viva_usuario_logado") || "null",
     );
     const preferenciasUsuario = usuario?.preferencias || {};
-    const deveIniciarComFontePadrao = !usuario;
 
     const legadas = {
       theme:
         localStorage.getItem("viva_theme") ||
         preferenciasUsuario.tema ||
         undefined,
-      fontSize: deveIniciarComFontePadrao
-        ? DEFAULT_SETTINGS.fontSize
-        : localStorage.getItem("viva_fontsize") ||
+      fontSize:
+        localStorage.getItem("viva_fontsize") ||
           preferenciasUsuario.tamanhoFonte ||
           undefined,
       largeButtons:
@@ -103,10 +103,6 @@
       ...legadas,
       ...(salvas || {}),
     };
-
-    if (deveIniciarComFontePadrao) {
-      configuracoesCombinadas.fontSize = DEFAULT_SETTINGS.fontSize;
-    }
 
     return normalizarConfiguracoes(configuracoesCombinadas);
   }
@@ -196,6 +192,7 @@
       "data-color-mode",
       configuracoesFinais.colorMode,
     );
+    aplicarAreasDeContatoGrandes(configuracoesFinais.largeButtons);
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(configuracoesFinais));
     localStorage.setItem("viva_theme", configuracoesFinais.theme);
@@ -237,6 +234,7 @@
     sincronizarPainelRapidoAcessibilidade();
 
     if (deveDispararEvento) {
+      anunciarMudancaAcessibilidade(configuracoesFinais);
       document.dispatchEvent(
         new CustomEvent("viva:a11ychange", { detail: configuracoesFinais }),
       );
@@ -335,8 +333,8 @@
 
           <div class="quick-a11y-options quick-a11y-options-grid" role="group" aria-label="Tamanho do texto">
             <button type="button" class="quick-a11y-option" data-quick-font="small">Pequeno</button>
-            <button type="button" class="quick-a11y-option" data-quick-font="standard">Padrao</button>
-            <button type="button" class="quick-a11y-option" data-quick-font="medium">Medio</button>
+            <button type="button" class="quick-a11y-option" data-quick-font="standard">Padrão</button>
+            <button type="button" class="quick-a11y-option" data-quick-font="medium">Médio</button>
             <button type="button" class="quick-a11y-option" data-quick-font="large">Grande</button>
           </div>
         </section>
@@ -356,12 +354,20 @@
 
           <div class="quick-a11y-support-list">
             <button type="button" class="quick-a11y-support" data-quick-toggle="large-buttons" role="switch" aria-checked="false">
-              <span>Botoes grandes</span>
+              <span class="quick-a11y-support-main">
+                <span class="quick-a11y-support-icon" aria-hidden="true">
+                  <svg viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+                    <path d="m161.876 434.037c27.772 48.089 79.523 77.963 135.055 77.963 85.996 0 155.959-69.963 155.959-155.959v-122.11c0-21.904-17.82-39.724-39.725-39.724-8.722 0-16.796 2.825-23.355 7.609-4.461-17.056-20.003-29.678-38.438-29.678-9.223 0-17.723 3.16-24.472 8.454-5.569-15.218-20.197-26.109-37.321-26.109-8.159 0-15.753 2.473-22.069 6.709v-77.33c0-21.904-17.82-39.724-39.725-39.724-21.904 0-39.724 17.82-39.724 39.724v210.602c0 2.708-1.587 5.195-4.042 6.338-3.307 1.537-7.177.316-9-2.843l-26.488-45.878c-15.819-27.4-50.978-36.821-78.38-21.002-5.105 2.948-8.757 7.707-10.283 13.402-1.525 5.695-.741 11.642 2.207 16.748zm-84.951-184.987c.177-.659.679-1.885 2.057-2.68 6.121-3.534 12.913-5.339 19.796-5.339 3.45 0 6.924.454 10.345 1.371 10.249 2.746 18.815 9.319 24.12 18.508l26.488 45.878c6.432 11.139 20.076 15.447 31.737 10.024 8.657-4.027 14.251-12.798 14.251-22.346v-210.604c0-12.169 9.9-22.069 22.069-22.069s22.069 9.9 22.069 22.069v163.31c0 4.875 3.952 8.828 8.828 8.828s8.828-3.952 8.828-8.828v-52.965c0-12.169 9.9-22.069 22.069-22.069s22.069 9.9 22.069 22.069v52.965c0 4.875 3.952 8.828 8.828 8.828 4.875 0 8.828-3.952 8.828-8.828v-35.31c0-12.169 9.9-22.069 22.069-22.069s22.069 9.9 22.069 22.069v39.724c0 4.875 3.952 8.828 8.828 8.828 4.875 0 8.828-3.952 8.828-8.828v-17.655c0-12.169 9.9-22.069 22.069-22.069s22.069 9.9 22.069 22.069v122.11c0 76.261-62.043 138.304-138.305 138.304-49.246 0-95.137-26.492-119.766-69.138l-99.802-172.808c-.796-1.377-.618-2.69-.441-3.349z"></path>
+                    <path d="m167.556 129.479c4.202-2.473 5.602-7.884 3.129-12.085-5.956-10.119-9.105-21.714-9.105-33.532 0-36.507 29.7-66.207 66.207-66.207s66.207 29.7 66.207 66.207c0 11.862-3.172 23.497-9.172 33.645-2.481 4.197-1.091 9.611 3.106 12.092 1.41.834 2.957 1.23 4.485 1.23 3.018 0 5.959-1.549 7.607-4.336 7.609-12.867 11.63-27.609 11.63-42.631-.001-46.242-37.621-83.862-83.863-83.862s-83.862 37.62-83.862 83.862c0 14.965 3.992 29.657 11.545 42.488 2.475 4.202 7.887 5.602 12.086 3.129z"></path>
+                  </svg>
+                </span>
+                <span class="quick-a11y-support-label">Botões grandes</span>
+              </span>
               <strong>Desligado</strong>
             </button>
 
             <button type="button" class="quick-a11y-support" data-quick-toggle="screen-reader" role="switch" aria-checked="false">
-              <span>Leitura em voz alta</span>
+              <span class="quick-a11y-support-label">Leitura em voz alta</span>
               <strong>Desligado</strong>
             </button>
           </div>
@@ -371,10 +377,10 @@
           <h2 id="quick-a11y-color-title">Modo de cores</h2>
 
           <div class="quick-a11y-options quick-a11y-options-grid" role="group" aria-label="Modo de cores">
-            <button type="button" class="quick-a11y-option" data-quick-color="default">Padrao</button>
-            <button type="button" class="quick-a11y-option" data-quick-color="deuteranopia">Vermelho/verde</button>
-            <button type="button" class="quick-a11y-option" data-quick-color="tritanopia">Azul/amarelo</button>
-            <button type="button" class="quick-a11y-option" data-quick-color="achromatopsia">Tons de cinza</button>
+            <button type="button" class="quick-a11y-option" data-quick-color="default" aria-label="Usar cores padrão do Viva mais">Padrão Viva+</button>
+            <button type="button" class="quick-a11y-option" data-quick-color="deuteranopia" aria-label="Usar ajuste para daltonismo vermelho e verde">Daltonismo vermelho/verde</button>
+            <button type="button" class="quick-a11y-option" data-quick-color="tritanopia" aria-label="Usar ajuste para daltonismo azul e amarelo">Daltonismo azul/amarelo</button>
+            <button type="button" class="quick-a11y-option" data-quick-color="achromatopsia" aria-label="Usar modo sem cores em tons de cinza">Sem cores</button>
           </div>
         </section>
       </div>
@@ -415,14 +421,14 @@
     painel.querySelectorAll("[data-quick-font]").forEach((botao) => {
       botao.addEventListener("click", () => {
         aplicarTamanhoFonte(botao.dataset.quickFont);
-        sincronizarPainelRapidoAcessibilidade();
+        requestAnimationFrame(sincronizarPainelRapidoAcessibilidade);
       });
     });
 
     painel.querySelectorAll("[data-quick-theme]").forEach((botao) => {
       botao.addEventListener("click", () => {
         aplicarTema(botao.dataset.quickTheme);
-        sincronizarPainelRapidoAcessibilidade();
+        requestAnimationFrame(sincronizarPainelRapidoAcessibilidade);
       });
     });
 
@@ -439,14 +445,14 @@
           aplicarLeitorAssistido(!ativoAtual);
         }
 
-        sincronizarPainelRapidoAcessibilidade();
+        requestAnimationFrame(sincronizarPainelRapidoAcessibilidade);
       });
     });
 
     painel.querySelectorAll("[data-quick-color]").forEach((botao) => {
       botao.addEventListener("click", () => {
         aplicarModoCores(botao.dataset.quickColor);
-        sincronizarPainelRapidoAcessibilidade();
+        requestAnimationFrame(sincronizarPainelRapidoAcessibilidade);
       });
     });
 
@@ -494,18 +500,21 @@
     painel.querySelectorAll("[data-quick-font]").forEach((botao) => {
       const selecionado = botao.dataset.quickFont === configuracoes.fontSize;
       botao.classList.toggle("is-selected", selecionado);
+      botao.dataset.selected = selecionado ? "true" : "false";
       botao.setAttribute("aria-pressed", selecionado ? "true" : "false");
     });
 
     painel.querySelectorAll("[data-quick-theme]").forEach((botao) => {
       const selecionado = botao.dataset.quickTheme === configuracoes.theme;
       botao.classList.toggle("is-selected", selecionado);
+      botao.dataset.selected = selecionado ? "true" : "false";
       botao.setAttribute("aria-pressed", selecionado ? "true" : "false");
     });
 
     painel.querySelectorAll("[data-quick-color]").forEach((botao) => {
       const selecionado = botao.dataset.quickColor === configuracoes.colorMode;
       botao.classList.toggle("is-selected", selecionado);
+      botao.dataset.selected = selecionado ? "true" : "false";
       botao.setAttribute("aria-pressed", selecionado ? "true" : "false");
     });
 
@@ -522,10 +531,11 @@
     const status = botao.querySelector("strong");
 
     botao.classList.toggle("is-selected", ativo);
+    botao.dataset.selected = ativo ? "true" : "false";
     botao.setAttribute("aria-checked", ativo ? "true" : "false");
     botao.setAttribute(
       "aria-label",
-      `${tipo === "large-buttons" ? "Botoes grandes" : "Leitura em voz alta"} ${ativo ? "ativado" : "desativado"}`,
+      `${tipo === "large-buttons" ? "Botões grandes" : "Leitura em voz alta"} ${ativo ? "ativado" : "desativado"}`,
     );
 
     if (status) {
@@ -539,14 +549,177 @@
       LABELS.theme[configuracoes.theme],
       LABELS.colorMode[configuracoes.colorMode],
       configuracoes.largeButtons
-        ? "botoes grandes ativados"
-        : "botoes grandes desativados",
+        ? "botões grandes ativados"
+        : "botões grandes desativados",
       configuracoes.screenReader
         ? "leitura em voz alta ativada"
         : "leitura em voz alta desativada",
     ];
 
     return `Acessibilidade. ${partes.join(", ")}.`;
+  }
+
+  function anunciarMudancaAcessibilidade(configuracoes) {
+    const regiao = document.getElementById("viva-live-region");
+
+    if (!regiao) return;
+
+    regiao.textContent = montarResumoAcessibilidade(configuracoes);
+  }
+
+  function aplicarAreasDeContatoGrandes(ativo) {
+    /*
+      A opção "botões grandes" aumenta a área de contato de todos os
+      elementos acionáveis do sistema, incluindo cards clicáveis.
+      A função apenas marca os elementos; o tamanho visual fica no CSS,
+      respeitando cascata, responsividade, box-sizing e estados existentes.
+    */
+    const seletoresAreaContato = [
+      "a[href]",
+      "button",
+      "input",
+      "textarea",
+      "select",
+      "summary",
+      "label[for]",
+      "[role='button']",
+      "[role='tab']",
+      "[role='switch']",
+      "[tabindex]:not([tabindex='-1'])",
+
+      /* Botões e links estilizados */
+      ".btn",
+      ".btn-primary",
+      ".btn-secondary",
+      ".btn-secondary-outline",
+      ".btn-secondary-small",
+      ".btn-text",
+      ".btn-back",
+      ".btn-toggle-password",
+      ".profile-back",
+      ".agenda-back",
+      ".scheduling-back",
+      ".nav-link",
+
+      /* Cards e superfícies clicáveis do fluxo */
+      ".profile-menu-card",
+      ".accessibility-card",
+      ".font-size-card",
+      ".color-option-card",
+      ".access-card",
+      ".bubble-option",
+      ".agenda-card",
+      ".agenda-tab",
+      ".choice-card",
+      ".item-card",
+      ".date-card",
+      ".time-card",
+      ".location-card",
+      ".location-select-button",
+      ".location-maps-button",
+      ".professional-card",
+
+      /* Painel rapido de acessibilidade */
+      ".quick-a11y-toggle",
+      ".quick-a11y-option",
+      ".quick-a11y-support",
+      ".switch",
+    ].join(",");
+
+    function atualizarMarcacaoAreaContato() {
+      if (!ativo) {
+        document
+          .querySelectorAll('[data-viva-hit-target="large"]')
+          .forEach((elemento) => {
+            elemento.removeAttribute("data-viva-hit-target");
+          });
+        return;
+      }
+
+      document.querySelectorAll(seletoresAreaContato).forEach((elemento) => {
+        elemento.setAttribute("data-viva-hit-target", "large");
+      });
+    }
+
+    atualizarMarcacaoAreaContato();
+
+    if (observadorBotoesGrandes) {
+      observadorBotoesGrandes.disconnect();
+      observadorBotoesGrandes = null;
+    }
+
+    if (!ativo) return;
+
+    observadorBotoesGrandes = new MutationObserver(atualizarMarcacaoAreaContato);
+
+    observadorBotoesGrandes.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class", "role", "tabindex", "href", "for"],
+    });
+  }
+
+  function melhorarAcessibilidadeARIA() {
+    garantirSkipLink();
+    garantirRegiaoViva();
+    marcarNavegacaoAtual();
+
+    document.querySelectorAll("main").forEach((main) => {
+      if (!main.id) main.id = "main-content";
+      if (!main.hasAttribute("tabindex")) main.setAttribute("tabindex", "-1");
+    });
+
+    document.querySelectorAll("img:not([alt])").forEach((imagem) => {
+      imagem.setAttribute("alt", "");
+      imagem.setAttribute("aria-hidden", "true");
+    });
+  }
+
+  function garantirSkipLink() {
+    if (document.querySelector(".skip-link")) return;
+
+    const main = document.querySelector("main");
+    const destino = main?.id || "main-content";
+
+    if (main && !main.id) {
+      main.id = destino;
+    }
+
+    const link = document.createElement("a");
+    link.className = "skip-link";
+    link.href = `#${destino}`;
+    link.textContent = "Pular para o conteúdo principal";
+
+    document.body.insertBefore(link, document.body.firstChild);
+  }
+
+  function garantirRegiaoViva() {
+    if (document.getElementById("viva-live-region")) return;
+
+    const regiao = document.createElement("div");
+    regiao.id = "viva-live-region";
+    regiao.className = "sr-only";
+    regiao.setAttribute("role", "status");
+    regiao.setAttribute("aria-live", "polite");
+    regiao.setAttribute("aria-atomic", "true");
+
+    document.body.appendChild(regiao);
+  }
+
+  function marcarNavegacaoAtual() {
+    const paginaAtual = window.location.pathname.split("/").pop() || "index.html";
+
+    document.querySelectorAll("nav a[href]").forEach((link) => {
+      const destino = link.getAttribute("href").split("?")[0].split("#")[0];
+      const destinoArquivo = destino.split("/").pop();
+
+      if (destinoArquivo === paginaAtual) {
+        link.setAttribute("aria-current", "page");
+      } else if (link.getAttribute("aria-current") === "page") {
+        link.removeAttribute("aria-current");
+      }
+    });
   }
 
   /*
@@ -768,7 +941,7 @@
     if (!textoLimpo) return;
 
     if (!("speechSynthesis" in window)) {
-      console.warn("Este navegador nao possui suporte a speechSynthesis.");
+      console.warn("Este navegador não possui suporte a speechSynthesis.");
       return;
     }
 

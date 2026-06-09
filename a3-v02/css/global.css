@@ -165,14 +165,93 @@ body {
    PREFERÊNCIA GLOBAL — BOTÕES GRANDES
    ========================================= */
 
-html[data-large-buttons="true"] .btn,
-html[data-large-buttons="true"] button {
-  min-height: 3.5rem;
+:root {
+  --viva-hit-target-min: 3rem;
+  --viva-hit-target-control-min: 3.5rem;
+  --viva-hit-target-card-min: 6rem;
+  --viva-hit-target-card-large-min: 9.5rem;
+  --viva-hit-target-switch-width: 4.75rem;
+  --viva-hit-target-switch-height: 2.75rem;
+  --viva-hit-target-padding-block: clamp(0.875rem, 2.5vw, 1.25rem);
+  --viva-hit-target-padding-inline: clamp(1rem, 3vw, 1.5rem);
 }
 
-html[data-large-buttons="true"] .btn {
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem;
+html[data-large-buttons="true"] :where(
+  a[href],
+  button,
+  textarea,
+  select,
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+  summary,
+  label[for],
+  [role="button"],
+  [role="tab"],
+  [role="switch"],
+  [tabindex]:not([tabindex="-1"])
+)[data-viva-hit-target="large"] {
+  min-inline-size: var(--viva-hit-target-min);
+  min-block-size: var(--viva-hit-target-min);
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+html[data-large-buttons="true"] :where(
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-secondary-outline,
+  .btn-secondary-small,
+  .btn-text,
+  .btn-back,
+  .btn-toggle-password,
+  .profile-back,
+  .agenda-back,
+  .scheduling-back,
+  .nav-link,
+  .agenda-tab,
+  .quick-a11y-toggle,
+  .quick-a11y-option,
+  .quick-a11y-support,
+  .location-select-button,
+  .location-maps-button
+)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-control-min);
+  padding-block: var(--viva-hit-target-padding-block);
+  padding-inline: var(--viva-hit-target-padding-inline);
+}
+
+html[data-large-buttons="true"] :where(
+  .profile-menu-card,
+  .accessibility-card,
+  .font-size-card,
+  .color-option-card,
+  .access-card,
+  .bubble-option,
+  .agenda-card,
+  .choice-card,
+  .item-card,
+  .date-card,
+  .time-card,
+  .location-card,
+  .professional-card
+)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-card-min);
+  padding-block: var(--viva-hit-target-padding-block);
+  padding-inline: var(--viva-hit-target-padding-inline);
+  gap: clamp(0.875rem, 3vw, 1.25rem);
+}
+
+html[data-large-buttons="true"] :where(.choice-card)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-card-large-min);
+}
+
+html[data-large-buttons="true"] :where(.switch)[data-viva-hit-target="large"] {
+  min-inline-size: var(--viva-hit-target-switch-width);
+  min-block-size: var(--viva-hit-target-switch-height);
+}
+
+html[data-large-buttons="true"] :where(input, textarea, select)[data-viva-hit-target="large"] {
+  min-block-size: var(--viva-hit-target-control-min);
 }
 
 /* =========================================

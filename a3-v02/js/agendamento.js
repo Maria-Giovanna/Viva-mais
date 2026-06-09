@@ -286,11 +286,17 @@
         }))
       : prepararVacinasPorIdade(itensPermitidos);
 
+    const idadeUsuario = calcularIdade(
+      estadoAgendamento.usuarioCompleto?.dataNascimento,
+    );
+
     renderizarListaItens({
       titulo: ehExame ? "Exames disponíveis" : "Vacinas disponíveis",
       subtitulo: ehExame
         ? "Encontramos encaminhamento para os exames abaixo:"
-        : "Organizamos as vacinas pensando na sua idade:",
+        : idadeUsuario
+          ? `Organizamos as vacinas pensando na sua idade: ${idadeUsuario} anos.`
+          : "Organizamos as vacinas pensando na sua idade:",
       itens: itensDaLista,
     });
 
@@ -332,8 +338,8 @@
     const nomeNormalizado = normalizarTexto(nomeVacina);
 
     const recomendacaoPadrao = {
-      texto: "Disponivel para agendar",
-      descricao: "Dose disponivel",
+      texto: idade ? `Disponivel para ${idade} anos` : "Disponivel para agendar",
+      descricao: "Dose disponivel para agendamento",
       destaque: false,
     };
 
@@ -359,8 +365,32 @@
 
     if (idade >= 60 && nomeNormalizado.includes("febre")) {
       return {
-        texto: "Avaliar na unidade",
-        descricao: "A unidade confirma se a dose e indicada para voce",
+        texto: "Disponivel para agendar",
+        descricao: "Protecao contra febre amarela conforme seu historico vacinal",
+        destaque: false,
+      };
+    }
+
+    if (idade < 60 && nomeNormalizado.includes("febre")) {
+      return {
+        texto: "Recomendada ate 59 anos",
+        descricao: "Vacina indicada para protecao contra febre amarela",
+        destaque: true,
+      };
+    }
+
+    if (idade < 60 && nomeNormalizado.includes("gripe")) {
+      return {
+        texto: "Anual conforme calendario",
+        descricao: "Vacina anual disponivel para grupos indicados",
+        destaque: false,
+      };
+    }
+
+    if (idade < 60 && nomeNormalizado.includes("covid")) {
+      return {
+        texto: "Reforco conforme calendario",
+        descricao: "Dose de reforco disponivel conforme sua faixa etaria",
         destaque: false,
       };
     }
@@ -537,7 +567,7 @@
           Selecionar local
         </button>
 
-        <a class="btn btn-secondary location-maps-button" href="${criarLinkMaps(unidade)}" target="_blank" rel="noopener noreferrer" aria-label="Abrir ${unidade.nome} no Google Maps em uma nova aba">
+        <a class="btn btn-secondary location-maps-button" href="${criarLinkMaps(unidade)}" target="_blank" rel="noopener noreferrer" aria-label="Abrir o endereço ${unidade.endereco} no Google Maps em uma nova aba">
           Ver no Maps
         </a>
       </div>
@@ -560,11 +590,11 @@
   }
 
   function criarLinkMaps(unidade) {
-    const coordenadas = unidade?.coordenadas;
     const consulta =
-      coordenadas && coordenadas.lat && coordenadas.lon
-        ? `${coordenadas.lat},${coordenadas.lon}`
-        : unidade?.endereco || unidade?.nome || "";
+      unidade?.endereco ||
+      unidade?.mapsQuery ||
+      unidade?.nome ||
+      "";
 
     return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consulta)}`;
   }
@@ -905,6 +935,7 @@
       botao.type = "button";
       botao.className = "time-card";
       botao.setAttribute("aria-label", `Selecionar horario ${hora}`);
+      botao.setAttribute("aria-pressed", "false");
 
       botao.innerHTML = `
         <span class="time-text">${hora}</span>
@@ -914,9 +945,11 @@
       botao.addEventListener("click", () => {
         document.querySelectorAll(".time-card").forEach((item) => {
           item.classList.remove("selected");
+          item.setAttribute("aria-pressed", "false");
         });
 
         botao.classList.add("selected");
+        botao.setAttribute("aria-pressed", "true");
         estadoAgendamento.hora = hora;
         btnConfirmar.disabled = false;
       });
@@ -1115,37 +1148,17 @@
 
     if (!agendamento) return;
 
-    const conteudo = `
-VIVA+ — COMPROVANTE DE AGENDAMENTO
+    if (!window.VivaPDF) {
+      mostrarErroNaTela("Nao foi possivel gerar o PDF do comprovante.");
+      return;
+    }
 
-Paciente: ${estadoAgendamento.usuario.nomeCompleto}
-CPF: ${estadoAgendamento.usuario.cpf}
-
-Serviço: ${agendamento.servico}
-Tipo: ${agendamento.item}
-Data: ${formatarDataComDiaSemana(agendamento.data)}
-Horário: ${agendamento.hora}
-
-Local: ${agendamento.unidadeNome}
-Endereço: ${agendamento.endereco}
-Profissional/Equipe: ${agendamento.profissional}
-
-Status: ${agendamento.status}
-Código: ${agendamento.id}
-    `.trim();
-
-    const arquivo = new Blob([conteudo], {
-      type: "text/plain;charset=utf-8",
+    window.VivaPDF.baixarComprovanteAgendamento({
+      usuario: estadoAgendamento.usuario,
+      agendamento,
+      dataFormatada: formatarDataComDiaSemana(agendamento.data),
+      statusTexto: "Confirmado",
     });
-
-    const url = URL.createObjectURL(arquivo);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = `comprovante-${agendamento.id}.txt`;
-    link.click();
-
-    URL.revokeObjectURL(url);
   }
 
   function mostrarEtapa(idEtapa) {

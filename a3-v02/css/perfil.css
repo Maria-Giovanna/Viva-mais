@@ -414,6 +414,24 @@ body {
     padding: 1rem;
 }
 
+.password-form-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.password-form-card .form-group {
+    margin-bottom: 0;
+}
+
+.password-hint {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.3;
+    margin-top: 0.5rem;
+}
+
 .profile-field {
     border: 1px solid var(--secondary-border);
     border-radius: 0.65rem;
@@ -592,7 +610,8 @@ body {
     outline: none;
 }
 
-.font-size-card.selected {
+.font-size-card.selected,
+.font-size-card[aria-pressed="true"] {
     border-color: var(--primary-color);
     background-color: var(--subcard-secondary-bg);
 }
@@ -839,6 +858,7 @@ body {
     .accessibility-list,
     .font-size-list,
     .data-form-card,
+    .password-form-card,
     .profile-user-card,
     .profile-alert,
     .profile-success-content {

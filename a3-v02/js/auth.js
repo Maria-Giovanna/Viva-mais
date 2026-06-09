@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (usuarioEncontrado.preferencias) {
       const preferenciasAcessibilidade = {
         theme: usuarioEncontrado.preferencias.tema || "light",
-        fontSize: "standard",
+        fontSize: usuarioEncontrado.preferencias.tamanhoFonte || "standard",
         largeButtons: Boolean(usuarioEncontrado.preferencias.botoesGrandes),
         screenReader: Boolean(usuarioEncontrado.preferencias.leitorTela),
         colorMode: usuarioEncontrado.preferencias.modoCores || "default",
