@@ -698,7 +698,6 @@
   }
 
   function melhorarAcessibilidadeARIA() {
-    garantirSkipLink();
     garantirRegiaoViva();
     marcarNavegacaoAtual();
     atualizarAcessibilidadeDinamica(document);
@@ -1132,24 +1131,6 @@
         "[tabindex]:not([tabindex='-1'])",
       ].join(","),
     );
-  }
-
-  function garantirSkipLink() {
-    if (document.querySelector(".skip-link")) return;
-
-    const main = document.querySelector("main");
-    const destino = main?.id || "main-content";
-
-    if (main && !main.id) {
-      main.id = destino;
-    }
-
-    const link = document.createElement("a");
-    link.className = "skip-link";
-    link.href = `#${destino}`;
-    link.textContent = "Pular para o conteúdo principal";
-
-    document.body.insertBefore(link, document.body.firstChild);
   }
 
   function garantirRegiaoViva() {

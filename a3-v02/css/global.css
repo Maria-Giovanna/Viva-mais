@@ -25,26 +25,6 @@ body {
   z-index: 100;
 }
 
-/* =========================================
-   ACESSIBILIDADE GLOBAL
-   ========================================= */
-.skip-link {
-  position: absolute;
-  top: -48px;
-  left: 0;
-  background: var(--primary-color);
-  color: var(--text-button);
-  padding: 0.5rem 1rem;
-  font-weight: 700;
-  z-index: 9999;
-  transition: top 0.2s ease;
-}
-
-.skip-link:focus {
-  top: 0;
-  outline: 2px solid var(--text-main);
-}
-
 .sr-only,
 .visually-hidden {
   position: absolute;
