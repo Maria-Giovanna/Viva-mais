@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (s2.length > 0 && s1 !== s2) {
       senhaMatchError.textContent =
-        "As senhas precisam ser iguais e ter 8 números. Evite sequências, como 12345678, ou números repetidos.";
+        "As senhas precisam ser iguais e ter 8 números. Não use sequências, como 12345678, ou números repetidos.";
       senhaMatchError.hidden = false;
       inputConfirmaSenha.setAttribute("aria-invalid", "true");
       return false;
