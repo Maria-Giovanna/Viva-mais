@@ -40,25 +40,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let tempUserData = null;
   btnProximaEtapa.disabled = true;
+  btnProximaEtapa.setAttribute("aria-disabled", "true");
+
+  [cpfError, senhaMatchError].forEach((erro) => {
+    if (!erro) return;
+    erro.setAttribute("role", "alert");
+    erro.setAttribute("aria-live", "assertive");
+    erro.setAttribute("aria-atomic", "true");
+  });
+
+  [step1, step2, step3, step4].forEach((etapa) => {
+    const oculta = etapa.classList.contains("hidden");
+    etapa.hidden = oculta;
+    etapa.setAttribute("aria-hidden", oculta ? "true" : "false");
+  });
 
   function mostrarEtapa(etapaAtual, proximaEtapa) {
     if (!etapaAtual || !proximaEtapa) return;
 
     etapaAtual.classList.add("hidden");
+    etapaAtual.hidden = true;
     etapaAtual.setAttribute("aria-hidden", "true");
 
     proximaEtapa.classList.remove("hidden");
+    proximaEtapa.hidden = false;
     proximaEtapa.setAttribute("aria-hidden", "false");
 
-    const foco = proximaEtapa.querySelector("button, input, a");
-    if (foco) foco.focus();
+    window.vivaA11y?.ativarEtapa(proximaEtapa);
   }
 
   function bloquearDados() {
     tempUserData = null;
     fieldsetDados.setAttribute("disabled", "true");
     fieldsetDados.setAttribute("aria-hidden", "true");
+    fieldsetDados.setAttribute("aria-disabled", "true");
     btnProximaEtapa.disabled = true;
+    btnProximaEtapa.setAttribute("aria-disabled", "true");
 
     inputNome.value = "";
     inputDataNasc.value = "";
@@ -115,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!usuarioTemporario) {
       mostrarEtapa(step2, step1);
       cpfError.textContent =
-        "Não foi possivel recuperar os dados do cadastro. Confira o CPF informado e tente novamente.";
+        "Não conseguimos recuperar os dados do cadastro. Confira o CPF informado e tente novamente.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       cpfInput.focus();
@@ -172,6 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
     inputNovaSenha.setAttribute("aria-invalid", "false");
     inputConfirmaSenha.setAttribute("aria-invalid", "false");
     btnProximaEtapa.disabled = true;
+    btnProximaEtapa.setAttribute("aria-disabled", "true");
 
     if (!tempUserData) return false;
     if (s1.length === 0 && s2.length === 0) return false;
@@ -186,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (s2.length > 0 && s1 !== s2) {
       senhaMatchError.textContent =
-        "A senha precisa ter 8 números e os dois campos devem ser iguais. Não use sequencias ou números repetidos.";
+        "As senhas precisam ser iguais e ter 8 números. Evite sequências, como 12345678, ou números repetidos.";
       senhaMatchError.hidden = false;
       inputConfirmaSenha.setAttribute("aria-invalid", "true");
       return false;
@@ -194,6 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (s1 === s2 && s2.length === 8) {
       btnProximaEtapa.disabled = false;
+      btnProximaEtapa.setAttribute("aria-disabled", "false");
       return true;
     }
 
@@ -217,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!validarCPF(cpfLimpo)) {
       cpfError.textContent =
-        "Nao conseguimos validar este CPF. Confira se digitou os 11 numeros corretamente, sem pontos ou tracos.";
+        "Não conseguimos validar este CPF. Digite os 11 números e confira se não faltou nenhum dígito.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       bloquearDados();
@@ -229,7 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     if (usuariosBD.find((user) => user.cpf === cpfLimpo)) {
       cpfError.innerHTML =
-        "Este CPF ja possui uma conta no Viva+. Use a tela de login ou <a href='recuperar-senha.html'>recupere sua senha</a> se nao lembrar o acesso.";
+        "Este CPF já possui uma conta no Viva+. Entre pela tela de login ou <a href='recuperar-senha.html'>recupere sua senha</a> se não lembrar o acesso.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       bloquearDados();
@@ -245,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!dadosConvenio) {
       cpfError.textContent =
-        "Nao encontramos um plano ativo para este CPF. Confira se o CPF esta correto ou fale com o atendimento do seu convenio antes de continuar.";
+        "Não encontramos um plano ativo para este CPF. Confira os números digitados ou fale com o atendimento do seu convênio antes de continuar.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       bloquearDados();
@@ -258,11 +277,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fieldsetDados.removeAttribute("disabled");
     fieldsetDados.setAttribute("aria-hidden", "false");
+    fieldsetDados.setAttribute("aria-disabled", "false");
 
     tempUserData = { ...dadosConvenio };
     delete tempUserData.planoAtivo;
 
     btnProximaEtapa.disabled = true;
+    btnProximaEtapa.setAttribute("aria-disabled", "true");
+    window.vivaA11y?.anunciar("Dados do convênio encontrados. Crie sua senha para continuar.");
     inputNovaSenha.focus();
   });
 

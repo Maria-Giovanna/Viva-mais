@@ -23,14 +23,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let usuarioEncontrado = null;
 
+  [step1, step2, step3, step4].forEach((etapa) => {
+    const oculta = etapa.hidden || etapa.classList.contains("hidden");
+    etapa.setAttribute("aria-hidden", oculta ? "true" : "false");
+  });
+
+  [cpfError, nascError, senhaError].forEach((erro) => {
+    if (!erro) return;
+    erro.setAttribute("role", "alert");
+    erro.setAttribute("aria-live", "assertive");
+    erro.setAttribute("aria-atomic", "true");
+  });
+
   function trocarEtapa(etapaSaindo, etapaEntrando) {
     etapaSaindo.hidden = true;
     etapaSaindo.disabled = true;
+    etapaSaindo.setAttribute("aria-hidden", "true");
     etapaEntrando.hidden = false;
     etapaEntrando.disabled = false;
+    etapaEntrando.removeAttribute("disabled");
+    etapaEntrando.setAttribute("aria-hidden", "false");
 
-    const foco = etapaEntrando.querySelector("input, button, a");
-    if (foco) foco.focus();
+    window.vivaA11y?.ativarEtapa(etapaEntrando);
   }
 
   document.getElementById("btn-avancar-1").addEventListener("click", async () => {
@@ -43,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!validarCPF(cpfLimpo)) {
       cpfError.textContent =
-        "Nao conseguimos validar este CPF. Confira se digitou os 11 numeros corretamente, sem pontos ou tracos.";
+        "Não conseguimos validar este CPF. Digite os 11 números e confira se não faltou nenhum dígito.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       cpfInput.focus();
@@ -55,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!usuarioEncontrado) {
       cpfError.textContent =
-        "Nao encontramos uma conta ativa com este CPF. Confira os numeros digitados ou crie sua conta se ainda nao tiver cadastro.";
+        "Não encontramos uma conta ativa com este CPF. Confira os números digitados ou ative seu acesso se ainda não tiver cadastro.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       cpfInput.focus();
@@ -77,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     nascError.textContent =
-      "A data de nascimento nao confere com este CPF. Confira o formato DD/MM/AAAA e tente novamente.";
+      "A data de nascimento não confere com este CPF. Digite no formato DD/MM/AAAA e confira dia, mês e ano.";
     nascError.hidden = false;
     nascInput.setAttribute("aria-invalid", "true");
     nascInput.focus();
@@ -102,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (novaSenha !== confirmaSenha) {
       senhaError.textContent =
-        "A senha precisa ter 8 numeros e os dois campos devem ser iguais. Evite sequencias ou numeros repetidos.";
+        "As senhas precisam ser iguais e ter 8 números. Evite sequências, como 12345678, ou números repetidos.";
       senhaError.hidden = false;
       confirmaInput.setAttribute("aria-invalid", "true");
       confirmaInput.focus();

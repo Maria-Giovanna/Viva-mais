@@ -29,6 +29,7 @@
     estadoPerfil.usuario = obterUsuarioCompleto(usuarioLogado);
 
     configurarEventos();
+    prepararAlertasAcessiveis();
     renderizarUsuario();
     sincronizarPreferenciasNaTela();
     mostrarEtapa("step-menu");
@@ -181,6 +182,18 @@
     elemento.addEventListener("click", acao);
   }
 
+  function prepararAlertasAcessiveis() {
+    ["erro-dados", "erro-senha"].forEach((id) => {
+      const erro = document.getElementById(id);
+
+      if (!erro) return;
+
+      erro.setAttribute("role", "alert");
+      erro.setAttribute("aria-live", "assertive");
+      erro.setAttribute("aria-atomic", "true");
+    });
+  }
+
   function renderizarUsuario() {
     const usuario = estadoPerfil.usuario;
 
@@ -209,13 +222,17 @@
       imagem.src = caminhoFoto;
       imagem.alt = "";
       imagem.hidden = false;
+      imagem.setAttribute("aria-hidden", "true");
       inicial.hidden = true;
+      inicial.setAttribute("aria-hidden", "true");
       return;
     }
 
     imagem.hidden = true;
+    imagem.setAttribute("aria-hidden", "true");
     imagem.removeAttribute("src");
     inicial.hidden = false;
+    inicial.setAttribute("aria-hidden", "false");
   }
 
   function definirTexto(id, valor) {
@@ -251,7 +268,7 @@
 
     if (!endereco || !telefone) {
       erro.textContent =
-        "Alguns campos obrigatorios nao foram preenchidos. Informe endereco e telefone para salvar seus dados.";
+        "Para salvar seus dados, preencha endereço e telefone. Esses campos ajudam a unidade a confirmar seu atendimento, se necessário.";
       erro.hidden = false;
       return;
     }
@@ -306,7 +323,7 @@
       normalizarDataBR(estadoPerfil.usuario.dataNascimento)
     ) {
       erro.textContent =
-        "A data de nascimento nao confere com seu cadastro. Confira o formato DD/MM/AAAA e tente novamente.";
+        "A data de nascimento não confere com seu cadastro. Digite no formato DD/MM/AAAA e confira dia, mês e ano.";
       erro.hidden = false;
       campoNascimento?.setAttribute("aria-invalid", "true");
       campoNascimento?.focus();
@@ -315,7 +332,7 @@
 
     if (!/^\d{8}$/.test(novaSenha)) {
       erro.textContent =
-        "A nova senha precisa ter exatamente 8 numeros. Digite somente numeros, sem espacos.";
+        "A nova senha precisa ter exatamente 8 números. Digite somente números, sem espaços.";
       erro.hidden = false;
       campoNovaSenha?.setAttribute("aria-invalid", "true");
       campoNovaSenha?.focus();
@@ -324,7 +341,7 @@
 
     if (ehSenhaInsegura(novaSenha)) {
       erro.textContent =
-        "Esta senha e muito facil de adivinhar. Evite numeros repetidos ou em sequencia.";
+        "Esta senha é muito fácil de adivinhar. Evite números repetidos ou sequências, como 12345678.";
       erro.hidden = false;
       campoNovaSenha?.setAttribute("aria-invalid", "true");
       campoNovaSenha?.focus();
@@ -333,7 +350,7 @@
 
     if (novaSenha !== confirmaSenha) {
       erro.textContent =
-        "As senhas digitadas nao sao iguais. Repita a mesma senha nos dois campos.";
+        "As senhas digitadas não são iguais. Repita exatamente a mesma senha nos dois campos.";
       erro.hidden = false;
       campoConfirmaSenha?.setAttribute("aria-invalid", "true");
       campoConfirmaSenha?.focus();
@@ -600,7 +617,7 @@
       botao.dataset.switchLabel =
         botao
           .getAttribute("aria-label")
-          ?.replace(/^(Ativar|Desativar)\s+/i, "") || "Opcao";
+          ?.replace(/^(Ativar|Desativar)\s+/i, "") || "Opção";
     }
 
     botao.setAttribute("aria-checked", ativo ? "true" : "false");
@@ -674,9 +691,11 @@
 
     document.querySelectorAll(".profile-step").forEach((secao) => {
       secao.hidden = true;
+      secao.setAttribute("aria-hidden", "true");
     });
 
     etapa.hidden = false;
+    etapa.setAttribute("aria-hidden", "false");
 
     const titulo = etapa.querySelector("h1, h2");
 
@@ -689,6 +708,8 @@
       top: 0,
       behavior: "smooth",
     });
+
+    window.vivaA11y?.ativarEtapa(etapa);
   }
 
   function sair() {

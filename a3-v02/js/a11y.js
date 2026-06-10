@@ -47,6 +47,8 @@
   let ultimaFala = "";
   let ultimoMomentoFala = 0;
   let observadorBotoesGrandes = null;
+  let observadorARIA = null;
+  let atualizacaoARIAPendente = false;
 
   document.addEventListener("DOMContentLoaded", aplicarAcessibilidadeSalva);
 
@@ -387,22 +389,12 @@
     `;
 
     /*
-      Coloca o atalho de acessibilidade no slot do cabecalho quando ele existir.
-      Assim, em telas como a Home, os botoes "Sair" e "Acessibilidade"
-      ficam no mesmo grupo visual e se ajustam juntos.
-
-      Nas paginas que nao possuem esse slot, o painel continua funcionando
-      como botao flutuante no canto superior direito.
+      No desktop, o atalho pode ficar no slot do cabecalho. No mobile,
+      ele vira um flutuante real no body para nao competir com o botao Sair.
     */
-    const slotAcessibilidade = document.getElementById("a11y-shortcut-slot");
-
-    if (slotAcessibilidade) {
-      painel.classList.add("quick-a11y--header");
-      slotAcessibilidade.appendChild(painel);
-    } else {
-      painel.classList.add("quick-a11y--floating");
-      document.body.appendChild(painel);
-    }
+    document.body.appendChild(painel);
+    posicionarPainelRapidoAcessibilidade();
+    observarMudancaTamanhoAtalhoAcessibilidade();
 
     const botaoAbrir = painel.querySelector("#quick-a11y-toggle");
     const botaoFechar = painel.querySelector("#quick-a11y-close");
@@ -469,6 +461,46 @@
 
       alternarPainelRapidoAcessibilidade(false);
     });
+  }
+
+  function telaMobileAtalhoAcessibilidade() {
+    return window.matchMedia && window.matchMedia("(max-width: 767px)").matches;
+  }
+
+  function posicionarPainelRapidoAcessibilidade() {
+    const painel = document.getElementById("quick-a11y");
+
+    if (!painel) return;
+
+    const slotAcessibilidade = document.getElementById("a11y-shortcut-slot");
+    const deveFicarFlutuante = !slotAcessibilidade || telaMobileAtalhoAcessibilidade();
+    const destino = deveFicarFlutuante ? document.body : slotAcessibilidade;
+
+    painel.classList.toggle("quick-a11y--header", !deveFicarFlutuante);
+    painel.classList.toggle("quick-a11y--floating", deveFicarFlutuante);
+
+    if (destino && painel.parentElement !== destino) {
+      destino.appendChild(painel);
+    }
+  }
+
+  function observarMudancaTamanhoAtalhoAcessibilidade() {
+    if (!window.matchMedia) return;
+
+    const consultaMobile = window.matchMedia("(max-width: 767px)");
+    const reposicionarAtalho = () => {
+      alternarPainelRapidoAcessibilidade(false);
+      posicionarPainelRapidoAcessibilidade();
+    };
+
+    if (consultaMobile.addEventListener) {
+      consultaMobile.addEventListener("change", reposicionarAtalho);
+      return;
+    }
+
+    if (consultaMobile.addListener) {
+      consultaMobile.addListener(reposicionarAtalho);
+    }
   }
 
   function alternarPainelRapidoAcessibilidade(deveAbrir) {
@@ -605,9 +637,12 @@
       ".profile-menu-card",
       ".accessibility-card",
       ".font-size-card",
+      ".color-mode-card",
       ".color-option-card",
       ".access-card",
       ".bubble-option",
+      ".service-card",
+      ".next-appointment-card",
       ".agenda-card",
       ".agenda-tab",
       ".choice-card",
@@ -637,7 +672,9 @@
       }
 
       document.querySelectorAll(seletoresAreaContato).forEach((elemento) => {
-        elemento.setAttribute("data-viva-hit-target", "large");
+        if (elemento.getAttribute("data-viva-hit-target") !== "large") {
+          elemento.setAttribute("data-viva-hit-target", "large");
+        }
       });
     }
 
@@ -664,16 +701,437 @@
     garantirSkipLink();
     garantirRegiaoViva();
     marcarNavegacaoAtual();
+    atualizarAcessibilidadeDinamica(document);
+    observarMudancasDeAcessibilidade();
+    document.addEventListener("keydown", manterFocoEmDialogoAberto);
+  }
 
-    document.querySelectorAll("main").forEach((main) => {
-      if (!main.id) main.id = "main-content";
-      if (!main.hasAttribute("tabindex")) main.setAttribute("tabindex", "-1");
+  function atualizarAcessibilidadeDinamica(raiz = document) {
+    normalizarLandmarks(raiz);
+    normalizarSecoesEPassos(raiz);
+    normalizarFormularios(raiz);
+    normalizarControlesInterativos(raiz);
+    normalizarListasDeEscolha(raiz);
+    marcarNavegacaoAtual();
+  }
+
+  function observarMudancasDeAcessibilidade() {
+    if (observadorARIA || !document.body) return;
+
+    observadorARIA = new MutationObserver((mutacoes) => {
+      const deveAtualizar = mutacoes.some((mutacao) => {
+        if (
+          mutacao.type === "attributes" &&
+          mutacao.oldValue === mutacao.target.getAttribute(mutacao.attributeName)
+        ) {
+          return false;
+        }
+
+        return (
+          mutacao.type === "childList" ||
+          ["hidden", "class", "disabled", "aria-invalid", "aria-checked", "aria-pressed"].includes(
+            mutacao.attributeName,
+          )
+        );
+      });
+
+      if (!deveAtualizar || atualizacaoARIAPendente) return;
+
+      atualizacaoARIAPendente = true;
+
+      requestAnimationFrame(() => {
+        atualizacaoARIAPendente = false;
+        atualizarAcessibilidadeDinamica(document);
+      });
     });
 
-    document.querySelectorAll("img:not([alt])").forEach((imagem) => {
+    observadorARIA.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: [
+        "hidden",
+        "class",
+        "disabled",
+        "aria-invalid",
+        "aria-checked",
+        "aria-pressed",
+      ],
+      attributeOldValue: true,
+    });
+  }
+
+  function normalizarLandmarks(raiz) {
+    raiz.querySelectorAll?.("main").forEach((main, indice) => {
+      if (!main.id) main.id = indice === 0 ? "main-content" : `main-content-${indice + 1}`;
+      if (!main.hasAttribute("tabindex")) main.setAttribute("tabindex", "-1");
+
+      const titulo = encontrarTitulo(main);
+
+      if (titulo && !main.hasAttribute("aria-labelledby")) {
+        main.setAttribute("aria-labelledby", garantirId(titulo, "main-title"));
+      }
+    });
+
+    raiz.querySelectorAll?.("nav").forEach((nav) => {
+      if (!nav.hasAttribute("aria-label") && !nav.hasAttribute("aria-labelledby")) {
+        nav.setAttribute("aria-label", "Navegação");
+      }
+    });
+  }
+
+  function normalizarSecoesEPassos(raiz) {
+    const seletores = [
+      "section",
+      ".step",
+      ".profile-step",
+      ".agenda-step",
+      ".form-step",
+      ".success-screen",
+      ".auth-content",
+      ".welcome-content",
+      ".welcome-illustration",
+      ".greeting-section",
+      ".next-appointment-card",
+      ".action-cards-grid",
+    ].join(",");
+
+    raiz.querySelectorAll?.(seletores).forEach((secao) => {
+      const estaOculta = estaElementoOculto(secao);
+      secao.setAttribute("aria-hidden", estaOculta ? "true" : "false");
+
+      if (!secao.id) {
+        secao.id = gerarId("secao");
+      }
+
+      if (!secao.hasAttribute("tabindex")) {
+        secao.setAttribute("tabindex", "-1");
+      }
+
+      const titulo = encontrarTitulo(secao);
+
+      if (titulo && !secao.hasAttribute("role") && secao.tagName !== "FIELDSET") {
+        secao.setAttribute("role", "region");
+      }
+
+      if (titulo && !secao.hasAttribute("aria-labelledby")) {
+        secao.setAttribute("aria-labelledby", garantirId(titulo, `${secao.id}-titulo`));
+      }
+
+      const descricao = encontrarDescricao(secao);
+
+      if (descricao && !secao.hasAttribute("aria-describedby")) {
+        secao.setAttribute("aria-describedby", garantirId(descricao, `${secao.id}-descricao`));
+      }
+    });
+
+    raiz.querySelectorAll?.("[role='dialog']").forEach((dialogo) => {
+      dialogo.setAttribute("aria-modal", "true");
+
+      const titulo = encontrarTitulo(dialogo);
+      if (titulo && !dialogo.hasAttribute("aria-labelledby")) {
+        dialogo.setAttribute("aria-labelledby", garantirId(titulo, `${dialogo.id || "dialogo"}-titulo`));
+      }
+
+      const descricao = encontrarDescricao(dialogo);
+      if (descricao && !dialogo.hasAttribute("aria-describedby")) {
+        dialogo.setAttribute("aria-describedby", garantirId(descricao, `${dialogo.id || "dialogo"}-descricao`));
+      }
+    });
+
+    raiz.querySelectorAll?.("img:not([alt])").forEach((imagem) => {
       imagem.setAttribute("alt", "");
       imagem.setAttribute("aria-hidden", "true");
     });
+
+    raiz.querySelectorAll?.("svg:not([aria-hidden])").forEach((svg) => {
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+    });
+  }
+
+  function normalizarFormularios(raiz) {
+    raiz.querySelectorAll?.("form").forEach((formulario) => {
+      const titulo = encontrarTitulo(formulario.closest("section, main, .form-step") || formulario);
+      if (titulo && !formulario.hasAttribute("aria-labelledby")) {
+        formulario.setAttribute("aria-labelledby", garantirId(titulo, "form-title"));
+      }
+    });
+
+    raiz.querySelectorAll?.("input, textarea, select").forEach((campo) => {
+      if (!campo.id) campo.id = gerarId("campo");
+
+      const label = encontrarLabelDoCampo(campo);
+
+      if (!label && !campo.hasAttribute("aria-label") && campo.placeholder) {
+        campo.setAttribute("aria-label", campo.placeholder);
+      }
+
+      if (campo.required && !campo.hasAttribute("aria-required")) {
+        campo.setAttribute("aria-required", "true");
+      }
+
+      if (campo.readOnly) {
+        campo.setAttribute("aria-readonly", "true");
+      }
+
+      const grupo = campo.closest(".form-group, .profile-field, fieldset, form");
+      const descricoes = [];
+
+      if (campo.getAttribute("aria-describedby")) {
+        descricoes.push(...campo.getAttribute("aria-describedby").split(/\s+/).filter(Boolean));
+      }
+
+      grupo?.querySelectorAll(".field-error, .password-hint, small[id]").forEach((descricao) => {
+        descricoes.push(garantirId(descricao, `${campo.id}-descricao`));
+      });
+
+      const unicos = [...new Set(descricoes)];
+
+      if (unicos.length) {
+        campo.setAttribute("aria-describedby", unicos.join(" "));
+      }
+    });
+  }
+
+  function normalizarControlesInterativos(raiz) {
+    raiz.querySelectorAll?.("button, a[href], [role='button'], [role='switch']").forEach((controle) => {
+      if (controle.tagName === "BUTTON" && !controle.getAttribute("type")) {
+        controle.setAttribute("type", "button");
+      }
+
+      const texto = obterTextoAcessivel(controle);
+
+      if (!texto && !controle.hasAttribute("aria-label")) {
+        controle.setAttribute("aria-label", "Controle interativo");
+      }
+
+      if (
+        controle.matches(".profile-menu-card, .accessibility-card, .font-size-card, .color-mode-card, .choice-card, .item-card, .professional-card, .date-card, .time-card, .agenda-card") &&
+        !controle.hasAttribute("aria-label")
+      ) {
+        controle.setAttribute("aria-label", limparTexto(controle.innerText || controle.textContent));
+      }
+
+      if (controle.matches("[role='switch']") && !controle.hasAttribute("aria-checked")) {
+        controle.setAttribute("aria-checked", "false");
+      }
+    });
+
+    raiz.querySelectorAll?.("[aria-pressed], [data-selected='true']").forEach((controle) => {
+      if (controle.dataset.selected === "true" && !controle.hasAttribute("aria-pressed")) {
+        controle.setAttribute("aria-pressed", "true");
+      }
+    });
+  }
+
+  function normalizarListasDeEscolha(raiz) {
+    const grupos = [
+      [".option-list", "Opções disponíveis"],
+      [".location-list", "Locais disponíveis"],
+      [".professional-list", "Profissionais disponíveis"],
+      [".date-list", "Datas disponíveis"],
+      [".time-list", "Horários disponíveis"],
+      [".agenda-list", "Agendamentos"],
+      [".profile-menu-list", "Opções do perfil"],
+      [".accessibility-list", "Opções de acessibilidade"],
+      [".font-size-list", "Opções de ajuste"],
+      [".action-cards-grid", "Opções de agendamento"],
+    ];
+
+    grupos.forEach(([seletor, rotulo]) => {
+      raiz.querySelectorAll?.(seletor).forEach((grupo) => {
+        if (!grupo.hasAttribute("role")) grupo.setAttribute("role", "group");
+        if (!grupo.hasAttribute("aria-label") && !grupo.hasAttribute("aria-labelledby")) {
+          grupo.setAttribute("aria-label", rotulo);
+        }
+      });
+    });
+
+    raiz.querySelectorAll?.(".agenda-tabs").forEach((tablist) => {
+      tablist.setAttribute("role", "tablist");
+      tablist.querySelectorAll("[data-tab]").forEach((tab) => {
+        tab.setAttribute("role", "tab");
+      });
+    });
+  }
+
+  function ativarEtapaAcessivel(etapa, mensagem) {
+    if (!etapa) return;
+
+    atualizarAcessibilidadeDinamica(document);
+
+    etapa.removeAttribute("aria-hidden");
+    etapa.setAttribute("aria-hidden", "false");
+
+    const alvoFoco =
+      encontrarTitulo(etapa) ||
+      etapa.querySelector("legend, input:not([type='hidden']), button, a[href], [tabindex]:not([tabindex='-1'])") ||
+      etapa;
+
+    if (alvoFoco && !alvoFoco.hasAttribute("tabindex") && !ehElementoFocavel(alvoFoco)) {
+      alvoFoco.setAttribute("tabindex", "-1");
+    }
+
+    requestAnimationFrame(() => {
+      alvoFoco?.focus({ preventScroll: true });
+      anunciarTexto(mensagem || montarMensagemEtapa(etapa));
+    });
+  }
+
+  function anunciarTexto(mensagem, prioridade = "polite") {
+    const regiao = document.getElementById("viva-live-region");
+    const textoLimpo = limparTexto(mensagem);
+
+    if (!regiao || !textoLimpo) return;
+
+    regiao.setAttribute("aria-live", prioridade);
+    regiao.textContent = "";
+
+    window.setTimeout(() => {
+      regiao.textContent = textoLimpo;
+    }, 40);
+  }
+
+  function manterFocoEmDialogoAberto(evento) {
+    if (evento.key !== "Tab") return;
+
+    const dialogo = evento.target.closest("[role='dialog']");
+
+    if (!dialogo || estaElementoOculto(dialogo)) return;
+
+    const focaveis = Array.from(
+      dialogo.querySelectorAll(
+        [
+          "a[href]",
+          "button:not([disabled])",
+          "input:not([disabled])",
+          "textarea:not([disabled])",
+          "select:not([disabled])",
+          "summary",
+          "[tabindex]:not([tabindex='-1'])",
+        ].join(","),
+      ),
+    ).filter((elemento) => !estaElementoOculto(elemento));
+
+    if (focaveis.length === 0) {
+      evento.preventDefault();
+      dialogo.focus();
+      return;
+    }
+
+    const primeiro = focaveis[0];
+    const ultimo = focaveis[focaveis.length - 1];
+
+    if (evento.shiftKey && document.activeElement === primeiro) {
+      evento.preventDefault();
+      ultimo.focus();
+    } else if (!evento.shiftKey && document.activeElement === ultimo) {
+      evento.preventDefault();
+      primeiro.focus();
+    }
+  }
+
+  function montarMensagemEtapa(etapa) {
+    const titulo = encontrarTitulo(etapa);
+    const descricao = encontrarDescricao(etapa);
+    return limparTexto(
+      [titulo?.innerText || titulo?.textContent, descricao?.innerText || descricao?.textContent]
+        .filter(Boolean)
+        .join(". "),
+    );
+  }
+
+  function encontrarTitulo(elemento) {
+    return elemento?.querySelector?.(
+      [
+        "h1",
+        "h2",
+        "h3",
+        "legend:not(.sr-only):not(.visually-hidden)",
+        ".auth-title",
+        ".scheduling-title",
+        ".agenda-title",
+        ".profile-title",
+        ".success-title",
+      ].join(","),
+    );
+  }
+
+  function encontrarDescricao(elemento) {
+    return elemento?.querySelector?.(
+      [
+        ".auth-subtitle",
+        ".scheduling-subtitle",
+        ".agenda-subtitle",
+        ".profile-subtitle",
+        ".success-text",
+        ".helper-text",
+        "p",
+      ].join(","),
+    );
+  }
+
+  function encontrarLabelDoCampo(campo) {
+    if (!campo) return null;
+
+    if (campo.id) {
+      const idSeguro = window.CSS?.escape
+        ? CSS.escape(campo.id)
+        : campo.id.replace(/["\\]/g, "\\$&");
+      const label = document.querySelector(`label[for="${idSeguro}"]`);
+      if (label) return label;
+    }
+
+    return campo.closest("label");
+  }
+
+  function garantirId(elemento, prefixo) {
+    if (!elemento.id) {
+      elemento.id = gerarId(prefixo || "a11y");
+    }
+
+    return elemento.id;
+  }
+
+  function gerarId(prefixo = "a11y") {
+    return `${prefixo}-${Math.random().toString(36).slice(2, 8)}`;
+  }
+
+  function estaElementoOculto(elemento) {
+    const elementoInicial = elemento;
+    let atual = elemento;
+
+    while (atual && atual !== document.documentElement) {
+      if (
+        atual.hidden ||
+        (atual !== elementoInicial && atual.getAttribute("aria-hidden") === "true") ||
+        atual.classList?.contains("hidden") ||
+        atual.classList?.contains("is-hidden")
+      ) {
+        return true;
+      }
+
+      atual = atual.parentElement;
+    }
+
+    return false;
+  }
+
+  function ehElementoFocavel(elemento) {
+    if (!elemento) return false;
+
+    return elemento.matches(
+      [
+        "a[href]",
+        "button",
+        "input",
+        "textarea",
+        "select",
+        "summary",
+        "[tabindex]:not([tabindex='-1'])",
+      ].join(","),
+    );
   }
 
   function garantirSkipLink() {
@@ -890,7 +1348,7 @@
       ".accessibility-card, .profile-menu-card, .font-size-card",
     );
 
-    if (!card) return "Opcao";
+    if (!card) return "Opção";
 
     const clone = card.cloneNode(true);
     const switchDentro = clone.querySelector(".switch");
@@ -899,7 +1357,7 @@
       switchDentro.remove();
     }
 
-    return limparTexto(clone.innerText || clone.textContent || "Opcao");
+    return limparTexto(clone.innerText || clone.textContent || "Opção");
   }
 
   /*
@@ -1023,6 +1481,13 @@
   */
   window.getVivaAccessibilitySettings = function () {
     return obterConfiguracoesAtuais();
+  };
+
+  window.vivaA11y = {
+    atualizar: atualizarAcessibilidadeDinamica,
+    anunciar: anunciarTexto,
+    ativarEtapa: ativarEtapaAcessivel,
+    focarEtapa: ativarEtapaAcessivel,
   };
 })();
 

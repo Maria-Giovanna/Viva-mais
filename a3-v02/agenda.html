@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda - Viva+</title>
 
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/favicon_io/site.webmanifest">
+
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/global.css">
@@ -134,7 +139,7 @@
                 <h1 class="success-title">Agendamento<br>cancelado!</h1>
         
                 <p class="success-text">
-                    Se quiser agendar novamente depois, será preciso iniciar um novo agendamento.
+                    A vaga foi liberada. Se precisar de outro atendimento, inicie um novo agendamento quando quiser.
                 </p>
         
                 <div class="agenda-actions">
@@ -155,7 +160,7 @@
                 <div class="empty-state">
                     <h1 class="agenda-title">Algo deu errado</h1>
                     <p class="agenda-subtitle" id="mensagem-erro">
-                        Não foi possível carregar sua agenda.
+                        Não conseguimos carregar sua agenda agora. Volte ao início e tente novamente em alguns instantes.
                     </p>
                     <button type="button" class="btn btn-primary" onclick="window.location.href='home.html'">
                         Voltar ao início
@@ -174,11 +179,11 @@
                     <div class="appointment-reminder-content">
                         <p class="appointment-reminder-kicker">Antes do atendimento</p>
                         <h2 class="appointment-reminder-title" id="agenda-reminder-title">
-                            Não esqueça os documentos
+                            Confira antes de sair
                         </h2>
 
                         <p class="appointment-reminder-text" id="agenda-reminder-text">
-                            Para evitar problemas no atendimento, confira estas orientações antes de sair de casa.
+                            Estes cuidados ajudam o atendimento a acontecer sem atraso e evitam que você precise remarcar.
                         </p>
 
                         <ul class="appointment-reminder-list">

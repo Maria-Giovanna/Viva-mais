@@ -25,6 +25,7 @@
 
   const historicoEtapas = [];
   let etapaAntesCancelamento = null;
+  let etapaAntesBloqueioDuplicidade = null;
 
   document.addEventListener("DOMContentLoaded", iniciarPagina);
 
@@ -52,7 +53,7 @@
     } catch (erro) {
       console.error("Erro ao iniciar fluxo de agendamento:", erro);
       mostrarErroNaTela(
-        "Nao foi possivel carregar os dados do Viva+. Verifique sua conexao, recarregue a pagina e tente novamente.",
+        "Não conseguimos carregar os dados do agendamento agora. Recarregue a página e tente novamente. Se continuar acontecendo, volte para o início e tente mais tarde.",
       );
     }
   }
@@ -187,6 +188,16 @@
     escutarClique("btn-voltar", voltarEtapa);
 
     escutarClique("btn-confirmar-horario", () => {
+      const bloqueio = encontrarBloqueioAgendamentoDuplicado();
+
+      if (bloqueio) {
+        mostrarBloqueioAgendamentoDuplicado(
+          bloqueio,
+          obterEtapaRetornoBloqueio(bloqueio, "step-horario"),
+        );
+        return;
+      }
+
       renderizarRevisao();
       mostrarEtapa("step-revisao");
     });
@@ -206,6 +217,12 @@
     });
 
     escutarClique("btn-baixar-comprovante", baixarComprovante);
+
+    escutarClique("btn-ver-agenda-duplicidade", () => {
+      irPara("agenda.html");
+    });
+
+    escutarClique("btn-voltar-bloqueio-duplicidade", voltarDoBloqueioDuplicidade);
   }
 
   function escutarClique(id, acao) {
@@ -236,6 +253,20 @@
       tipo: "consulta",
       descricao: "Consulta de avaliação inicial",
     };
+
+    const bloqueio = encontrarBloqueioAgendamentoDuplicado({
+      item: estadoAgendamento.itemSelecionado,
+      data: null,
+      hora: null,
+    });
+
+    if (bloqueio) {
+      mostrarBloqueioAgendamentoDuplicado(
+        bloqueio,
+        obterEtapaRetornoBloqueio(bloqueio, "step-consulta-tipo"),
+      );
+      return;
+    }
 
     limparEscolhasPosteriores();
     renderizarLocais();
@@ -430,7 +461,7 @@
     const idTela = telasDeBloqueio[tipo];
 
     if (!idTela) {
-      mostrarErroNaTela("Tipo de bloqueio não reconhecido.");
+      mostrarErroNaTela("Não conseguimos identificar este tipo de atendimento. Volte para o início e escolha consulta, exame ou vacina novamente.");
       return;
     }
 
@@ -443,18 +474,25 @@
     const lista = document.getElementById("lista-itens");
 
     if (!tituloElemento || !subtituloElemento || !lista) {
-      mostrarErroNaTela("Elementos da lista de opções não foram encontrados.");
+      mostrarErroNaTela("Não conseguimos mostrar as opções desta etapa. Volte uma etapa e tente novamente.");
       return;
     }
 
     tituloElemento.textContent = titulo;
     subtituloElemento.textContent = subtitulo;
     lista.innerHTML = "";
+    lista.setAttribute("role", "group");
+    lista.setAttribute(
+      "aria-label",
+      `${titulo}. ${subtitulo}. ${itens.length} opções disponíveis.`,
+    );
 
-    itens.forEach((item) => {
+    itens.forEach((item, indice) => {
       const botao = document.createElement("button");
       botao.type = "button";
       botao.className = "item-card";
+      botao.setAttribute("aria-posinset", String(indice + 1));
+      botao.setAttribute("aria-setsize", String(itens.length));
       botao.setAttribute(
         "aria-label",
         `Selecionar ${item.nome}. ${item.descricao}. ${item.recomendacaoTexto || ""}`,
@@ -489,6 +527,21 @@
 
       botao.addEventListener("click", () => {
         estadoAgendamento.itemSelecionado = item;
+
+        const bloqueio = encontrarBloqueioAgendamentoDuplicado({
+          item,
+          data: null,
+          hora: null,
+        });
+
+        if (bloqueio) {
+          mostrarBloqueioAgendamentoDuplicado(
+            bloqueio,
+            obterEtapaRetornoBloqueio(bloqueio, "step-lista-itens"),
+          );
+          return;
+        }
+
         limparEscolhasPosteriores();
         renderizarLocais();
         mostrarEtapa("step-local");
@@ -496,13 +549,15 @@
 
       lista.appendChild(botao);
     });
+
+    window.vivaA11y?.atualizar(lista);
   }
 
   function renderizarLocais() {
     const lista = document.getElementById("lista-locais");
 
     if (!lista) {
-      mostrarErroNaTela("Lista de locais não encontrada.");
+      mostrarErroNaTela("Não conseguimos mostrar os locais disponíveis. Volte uma etapa e tente novamente.");
       return;
     }
 
@@ -512,23 +567,32 @@
     locais = ordenarLocaisPorDistancia(locais);
 
     lista.innerHTML = "";
+    lista.setAttribute("role", "group");
+    lista.setAttribute(
+      "aria-label",
+      `Locais disponíveis para ${estadoAgendamento.itemSelecionado?.nome || "o atendimento"}. ${locais.length} opções encontradas.`,
+    );
 
     if (locais.length === 0) {
       lista.innerHTML = `
       <div class="info-alert" role="alert" aria-live="assertive">
         <span class="info-alert-icon" aria-hidden="true">!</span>
-        <p>Não encontramos unidades disponíveis para esse atendimento.</p>
+        <p>Não encontramos uma unidade disponível para esse atendimento no momento. Volte e escolha outro atendimento ou tente novamente mais tarde.</p>
       </div>
     `;
+      window.vivaA11y?.atualizar(lista);
       return;
     }
 
-    locais.forEach(({ unidade, servico, distanciaKm }) => {
+    locais.forEach(({ unidade, servico, distanciaKm }, indice) => {
       const card = document.createElement("article");
       card.className = "location-card";
+      card.setAttribute("role", "group");
+      card.setAttribute("aria-posinset", String(indice + 1));
+      card.setAttribute("aria-setsize", String(locais.length));
       card.setAttribute(
         "aria-label",
-        `Unidade ${unidade.nome}. Endereco: ${unidade.endereco}. ${formatarDistancia(distanciaKm)} de voce.`,
+        `Unidade ${unidade.nome}. Endereço: ${unidade.endereco}. ${formatarDistancia(distanciaKm)} de você.`,
       );
 
       card.innerHTML = `
@@ -587,6 +651,8 @@
 
       lista.appendChild(card);
     });
+
+    window.vivaA11y?.atualizar(lista);
   }
 
   function criarLinkMaps(unidade) {
@@ -697,13 +763,247 @@
     return `${distanciaKm.toFixed(1).replace(".", ",")} km`;
   }
 
+  function encontrarBloqueioAgendamentoDuplicado({
+    item = estadoAgendamento.itemSelecionado,
+    data = estadoAgendamento.data,
+    hora = estadoAgendamento.hora,
+  } = {}) {
+    const agendamentosAtivos = obterAgendamentosAtivosDoUsuario();
+
+    const atendimentoDuplicado = agendamentosAtivos.find((agendamento) => {
+      return ehMesmoAtendimentoAgendado(agendamento, item);
+    });
+
+    if (atendimentoDuplicado) {
+      return {
+        motivo: "mesmo-atendimento",
+        agendamento: atendimentoDuplicado,
+      };
+    }
+
+    if (data && hora) {
+      const conflitoHorario = agendamentosAtivos.find((agendamento) => {
+        return ehMesmoHorarioAgendado(agendamento, data, hora);
+      });
+
+      if (conflitoHorario) {
+        return {
+          motivo: "horario",
+          agendamento: conflitoHorario,
+        };
+      }
+    }
+
+    return null;
+  }
+
+  function obterAgendamentosAtivosDoUsuario() {
+    const cpfUsuario = limparCPFAgendamento(estadoAgendamento.usuario?.cpf);
+    const agendamentos = JSON.parse(
+      localStorage.getItem("viva_agendamentos") || "[]",
+    );
+
+    return agendamentos.filter((agendamento) => {
+      return (
+        limparCPFAgendamento(agendamento.cpf) === cpfUsuario &&
+        agendamentoEstaAtivo(agendamento)
+      );
+    });
+  }
+
+  function agendamentoEstaAtivo(agendamento) {
+    const status = normalizarStatusAgendamento(agendamento.status);
+
+    if (status !== "confirmado") return false;
+
+    return criarDataHoraAgendamento(
+      agendamento.data,
+      agendamento.hora,
+    ) >= new Date();
+  }
+
+  function ehMesmoAtendimentoAgendado(agendamento, itemSelecionado) {
+    if (!itemSelecionado || agendamento.categoria !== estadoAgendamento.categoria) {
+      return false;
+    }
+
+    return (
+      normalizarChaveAgendamento(obterNomeItemAgendamento(agendamento)) ===
+      normalizarChaveAgendamento(itemSelecionado.nome)
+    );
+  }
+
+  function obterNomeItemAgendamento(agendamento) {
+    return (
+      agendamento.item ||
+      agendamento.especialidade ||
+      agendamento.titulo ||
+      agendamento.servico ||
+      ""
+    );
+  }
+
+  function ehMesmoHorarioAgendado(agendamento, data, hora) {
+    return (
+      normalizarDataParaISO(agendamento.data) === normalizarDataParaISO(data) &&
+      String(agendamento.hora || "").trim() === String(hora || "").trim()
+    );
+  }
+
+  function mostrarBloqueioAgendamentoDuplicado(bloqueio, etapaRetorno) {
+    if (!bloqueio?.agendamento) return false;
+
+    etapaAntesBloqueioDuplicidade = etapaRetorno || "step-consulta-tipo";
+    preencherBloqueioAgendamentoDuplicado(bloqueio);
+    mostrarEtapaSemHistorico("step-bloqueio-agendamento-duplicado");
+
+    return true;
+  }
+
+  function obterEtapaRetornoBloqueio(bloqueio, fallback) {
+    if (bloqueio?.motivo === "horario") return "step-horario";
+    if (bloqueio?.motivo === "mesmo-atendimento") {
+      if (["step-lista-itens", "step-consulta-tipo"].includes(fallback)) {
+        return fallback;
+      }
+
+      if (estadoAgendamento.categoria !== "consulta") return "step-lista-itens";
+
+      return estadoAgendamento.tipoConsulta === "Especialista"
+        ? "step-lista-itens"
+        : "step-consulta-tipo";
+    }
+
+    return fallback;
+  }
+
+  function preencherBloqueioAgendamentoDuplicado({ motivo, agendamento }) {
+    const titulo = document.getElementById("titulo-bloqueio-duplicidade");
+    const texto = document.getElementById("texto-bloqueio-duplicidade");
+    const servico = document.getElementById("duplicidade-servico");
+    const data = document.getElementById("duplicidade-data");
+    const hora = document.getElementById("duplicidade-hora");
+    const profissional = document.getElementById("duplicidade-profissional");
+    const orientacao = document.getElementById(
+      "orientacao-bloqueio-duplicidade",
+    );
+
+    const dataTexto = formatarDataBloqueio(agendamento.data);
+    const horaTexto = agendamento.hora || "horário não informado";
+    const servicoTexto = montarNomeAtendimentoAgendado(agendamento);
+    const profissionalTexto =
+      agendamento.profissional || agendamento.especialidade || "profissional não informado";
+
+    if (titulo) {
+      titulo.textContent =
+        motivo === "horario"
+          ? "Você já tem um agendamento nesse horário"
+          : "Você já tem este atendimento agendado";
+    }
+
+    if (texto) {
+      texto.textContent =
+        motivo === "horario"
+          ? "Encontramos outro atendimento confirmado na mesma data e horário. Escolha outro horário para não precisar cancelar e remarcar depois."
+          : "Encontramos esse mesmo atendimento já confirmado para você. Para não reservar duas vagas iguais, este fluxo foi pausado.";
+    }
+
+    if (servico) servico.textContent = servicoTexto;
+    if (data) data.textContent = dataTexto;
+    if (hora) hora.textContent = horaTexto;
+    if (profissional) profissional.textContent = profissionalTexto;
+
+    if (orientacao) {
+      orientacao.textContent =
+        motivo === "horario"
+          ? "Volte e escolha outro horário. Se quiser manter este horário para o novo atendimento, primeiro cancele o agendamento existente na sua Agenda."
+          : "Se você realmente precisar refazer esse agendamento, abra sua Agenda e cancele o agendamento atual para liberar a vaga. Depois disso, volte para marcar novamente.";
+    }
+
+    window.vivaA11y?.anunciar(
+      `${titulo?.textContent || "Agendamento ativo encontrado"}. Seu agendamento atual é ${servicoTexto}, marcado para ${dataTexto}, às ${horaTexto}, com ${profissionalTexto}.`,
+      "assertive",
+    );
+  }
+
+  function montarNomeAtendimentoAgendado(agendamento) {
+    const categoria = {
+      consulta: "Consulta",
+      exame: "Exame",
+      vacina: "Vacina",
+    }[agendamento.categoria] || "Atendimento";
+
+    return `${categoria}: ${obterNomeItemAgendamento(agendamento) || "não informado"}`;
+  }
+
+  function voltarDoBloqueioDuplicidade() {
+    const etapa = etapaAntesBloqueioDuplicidade || "step-consulta-tipo";
+
+    etapaAntesBloqueioDuplicidade = null;
+    mostrarEtapaSemHistorico(etapa);
+  }
+
+  function normalizarStatusAgendamento(status) {
+    const valor = normalizarTexto(status || "confirmado");
+
+    if (valor.includes("cancel")) return "cancelado";
+    if (valor.includes("realiz")) return "realizado";
+    if (valor.includes("nao") || valor.includes("no-show")) {
+      return "nao-compareceu";
+    }
+
+    return "confirmado";
+  }
+
+  function normalizarChaveAgendamento(texto) {
+    return normalizarTexto(texto)
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  }
+
+  function criarDataHoraAgendamento(data, hora) {
+    const dataISO = normalizarDataParaISO(data);
+
+    if (!dataISO) return new Date(0);
+
+    const [ano, mes, dia] = dataISO.split("-").map(Number);
+    const [horas, minutos] = String(hora || "00:00").split(":").map(Number);
+
+    return new Date(ano, mes - 1, dia, horas || 0, minutos || 0);
+  }
+
+  function normalizarDataParaISO(data) {
+    const valor = String(data || "").trim();
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
+      return valor;
+    }
+
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(valor)) {
+      const [dia, mes, ano] = valor.split("/");
+      return `${ano}-${mes}-${dia}`;
+    }
+
+    return "";
+  }
+
+  function formatarDataBloqueio(data) {
+    const dataISO = normalizarDataParaISO(data);
+
+    return dataISO ? formatarDataComDiaSemana(dataISO) : "data não informada";
+  }
+
+  function limparCPFAgendamento(cpf) {
+    return String(cpf || "").replace(/\D/g, "");
+  }
+
   function renderizarProfissionais() {
     const resumo = document.getElementById("resumo-profissional");
     const lista = document.getElementById("lista-profissionais");
 
     if (!resumo || !lista) {
       mostrarErroNaTela(
-        "Elementos da etapa de profissional não foram encontrados.",
+        "Não conseguimos mostrar os profissionais desta unidade. Volte para escolher outro local ou tente novamente.",
       );
       return;
     }
@@ -724,17 +1024,24 @@
     });
 
     lista.innerHTML = "";
+    lista.setAttribute("role", "group");
+    lista.setAttribute(
+      "aria-label",
+      `Profissionais disponíveis em ${estadoAgendamento.unidade.nome}. ${profissionais.length} opções encontradas.`,
+    );
 
-    profissionais.forEach((profissional) => {
+    profissionais.forEach((profissional, indice) => {
       const botao = document.createElement("button");
       botao.type = "button";
       botao.className = "professional-card";
+      botao.setAttribute("aria-posinset", String(indice + 1));
+      botao.setAttribute("aria-setsize", String(profissionais.length));
 
       const quantidadeHorarios =
         contarHorariosDisponiveisDoProfissional(profissional);
       botao.setAttribute(
         "aria-label",
-        `Selecionar ${profissional.nome}. ${quantidadeHorarios} horarios disponiveis.`,
+        `Selecionar ${profissional.nome}. ${quantidadeHorarios} horários disponíveis.`,
       );
 
       botao.innerHTML = `
@@ -759,6 +1066,19 @@
         estadoAgendamento.data = null;
         estadoAgendamento.hora = null;
 
+        const bloqueio = encontrarBloqueioAgendamentoDuplicado({
+          data: null,
+          hora: null,
+        });
+
+        if (bloqueio) {
+          mostrarBloqueioAgendamentoDuplicado(
+            bloqueio,
+            obterEtapaRetornoBloqueio(bloqueio, "step-profissional"),
+          );
+          return;
+        }
+
         renderizarDatas();
         mostrarEtapa("step-data");
       });
@@ -766,6 +1086,7 @@
       lista.appendChild(botao);
     });
 
+    window.vivaA11y?.atualizar(lista);
     mostrarEtapa("step-profissional");
   }
 
@@ -829,7 +1150,7 @@
     const lista = document.getElementById("lista-datas");
 
     if (!resumo || !lista) {
-      mostrarErroNaTela("Elementos da etapa de data não foram encontrados.");
+      mostrarErroNaTela("Não conseguimos mostrar as datas disponíveis. Volte uma etapa e tente novamente.");
       return;
     }
 
@@ -841,17 +1162,26 @@
     });
 
     lista.innerHTML = "";
+    const datasDisponiveis = gerarDatasDisponiveis(5);
+    lista.setAttribute("role", "group");
+    lista.setAttribute(
+      "aria-label",
+      `Datas disponíveis para ${estadoAgendamento.itemSelecionado.nome}. ${datasDisponiveis.length} opções.`,
+    );
 
-    gerarDatasDisponiveis(5).forEach((dataISO) => {
+    datasDisponiveis.forEach((dataISO, indice) => {
       const horarios = obterHorariosLivres(dataISO);
       const botao = document.createElement("button");
 
       botao.type = "button";
       botao.className = "date-card";
       botao.disabled = horarios.length === 0;
+      botao.setAttribute("aria-disabled", botao.disabled ? "true" : "false");
+      botao.setAttribute("aria-posinset", String(indice + 1));
+      botao.setAttribute("aria-setsize", String(datasDisponiveis.length));
       botao.setAttribute(
         "aria-label",
-        `${horarios.length === 0 ? "Sem horarios disponiveis em" : "Selecionar"} ${formatarDataComDiaSemana(dataISO)}. ${horarios.length} horarios disponiveis.`,
+        `${horarios.length === 0 ? "Sem horários disponíveis em" : "Selecionar"} ${formatarDataComDiaSemana(dataISO)}. ${horarios.length} horários disponíveis.`,
       );
 
       botao.innerHTML = `
@@ -889,12 +1219,26 @@
         estadoAgendamento.data = dataISO;
         estadoAgendamento.hora = null;
 
+        const bloqueio = encontrarBloqueioAgendamentoDuplicado({
+          data: dataISO,
+        });
+
+        if (bloqueio) {
+          mostrarBloqueioAgendamentoDuplicado(
+            bloqueio,
+            obterEtapaRetornoBloqueio(bloqueio, "step-data"),
+          );
+          return;
+        }
+
         renderizarHorarios();
         mostrarEtapa("step-horario");
       });
 
       lista.appendChild(botao);
     });
+
+    window.vivaA11y?.atualizar(lista);
   }
 
   function renderizarHorarios() {
@@ -903,7 +1247,7 @@
     const btnConfirmar = document.getElementById("btn-confirmar-horario");
 
     if (!resumo || !lista || !btnConfirmar) {
-      mostrarErroNaTela("Elementos da etapa de horário não foram encontrados.");
+      mostrarErroNaTela("Não conseguimos mostrar os horários disponíveis. Volte uma etapa e tente outra data.");
       return;
     }
 
@@ -916,7 +1260,13 @@
     });
 
     lista.innerHTML = "";
+    lista.setAttribute("role", "group");
+    lista.setAttribute(
+      "aria-label",
+      `Horários disponíveis em ${formatarDataComDiaSemana(estadoAgendamento.data)}.`,
+    );
     btnConfirmar.disabled = true;
+    btnConfirmar.setAttribute("aria-disabled", "true");
 
     const horariosLivres = obterHorariosLivres(estadoAgendamento.data);
 
@@ -924,18 +1274,21 @@
       lista.innerHTML = `
         <div class="info-alert" role="alert" aria-live="assertive">
           <span class="info-alert-icon" aria-hidden="true">!</span>
-          <p>Nao encontramos horarios disponiveis para esta escolha. Volte uma etapa e tente outra data, profissional ou unidade.</p>
+          <p>Não há horários livres para essa combinação. Volte uma etapa e escolha outra data, outro profissional ou outra unidade.</p>
         </div>
       `;
+      window.vivaA11y?.atualizar(lista);
       return;
     }
 
-    horariosLivres.forEach((hora) => {
+    horariosLivres.forEach((hora, indice) => {
       const botao = document.createElement("button");
       botao.type = "button";
       botao.className = "time-card";
-      botao.setAttribute("aria-label", `Selecionar horario ${hora}`);
+      botao.setAttribute("aria-label", `Selecionar horário ${hora}`);
       botao.setAttribute("aria-pressed", "false");
+      botao.setAttribute("aria-posinset", String(indice + 1));
+      botao.setAttribute("aria-setsize", String(horariosLivres.length));
 
       botao.innerHTML = `
         <span class="time-text">${hora}</span>
@@ -943,6 +1296,19 @@
       `;
 
       botao.addEventListener("click", () => {
+        const bloqueio = encontrarBloqueioAgendamentoDuplicado({
+          data: estadoAgendamento.data,
+          hora,
+        });
+
+        if (bloqueio) {
+          mostrarBloqueioAgendamentoDuplicado(
+            bloqueio,
+            obterEtapaRetornoBloqueio(bloqueio, "step-horario"),
+          );
+          return;
+        }
+
         document.querySelectorAll(".time-card").forEach((item) => {
           item.classList.remove("selected");
           item.setAttribute("aria-pressed", "false");
@@ -952,10 +1318,14 @@
         botao.setAttribute("aria-pressed", "true");
         estadoAgendamento.hora = hora;
         btnConfirmar.disabled = false;
+        btnConfirmar.setAttribute("aria-disabled", "false");
+        window.vivaA11y?.anunciar(`Horário ${hora} selecionado.`);
       });
 
       lista.appendChild(botao);
     });
+
+    window.vivaA11y?.atualizar(lista);
   }
 
   function gerarDatasDisponiveis(quantidade) {
@@ -1006,7 +1376,7 @@
     const container = document.getElementById("conteudo-revisao");
 
     if (!container) {
-      mostrarErroNaTela("Área de revisão não encontrada.");
+      mostrarErroNaTela("Não conseguimos montar a revisão do agendamento. Volte uma etapa e confira suas escolhas.");
       return;
     }
 
@@ -1097,9 +1467,26 @@
         <p>Chegue 30 minutos antes e leve documento com foto.</p>
       </div>
     `;
+
+    container.querySelector(".review-card")?.setAttribute(
+      "aria-label",
+      `Revisão do agendamento de ${obterNomeServico()} para ${estadoAgendamento.itemSelecionado.nome}.`,
+    );
+    container.querySelector(".review-card")?.setAttribute("role", "group");
+    window.vivaA11y?.atualizar(container);
   }
 
   function confirmarAgendamento() {
+    const bloqueio = encontrarBloqueioAgendamentoDuplicado();
+
+    if (bloqueio) {
+      mostrarBloqueioAgendamentoDuplicado(
+        bloqueio,
+        obterEtapaRetornoBloqueio(bloqueio, "step-revisao"),
+      );
+      return;
+    }
+
     const novoAgendamento = {
       id: `ag-${Date.now()}`,
       cpf: estadoAgendamento.usuario.cpf,
@@ -1133,7 +1520,7 @@
     } catch (erro) {
       console.error("Erro ao salvar agendamento:", erro);
       mostrarErroNaTela(
-        "Nao foi possivel salvar o agendamento. Confira os dados escolhidos e tente confirmar novamente.",
+        "Não conseguimos salvar seu agendamento agora. Confira suas escolhas e tente confirmar novamente. Sua vaga só será reservada quando a tela de sucesso aparecer.",
       );
       return;
     }
@@ -1149,7 +1536,7 @@
     if (!agendamento) return;
 
     if (!window.VivaPDF) {
-      mostrarErroNaTela("Nao foi possivel gerar o PDF do comprovante.");
+      mostrarErroNaTela("Não conseguimos gerar o PDF do comprovante agora. Seu agendamento continua salvo e pode ser consultado na Agenda.");
       return;
     }
 
@@ -1180,7 +1567,7 @@
 
     if (!etapa) {
       console.error(`Etapa não encontrada: #${idEtapa}`);
-      mostrarErroNaTela(`Etapa não encontrada: ${idEtapa}`);
+      mostrarErroNaTela("Não conseguimos abrir a próxima etapa. Volte para o início e tente novamente.");
       return;
     }
 
@@ -1192,7 +1579,7 @@
       "step-bloqueio-especialidade",
       "step-bloqueio-exame",
       "step-bloqueio-vacina",
-      "step-bloqueio-clinico-aberto",
+      "step-bloqueio-agendamento-duplicado",
     ];
 
     const etapaAtualEhBloqueio = etapasDeBloqueio.includes(idEtapa);
@@ -1205,9 +1592,11 @@
 
     document.querySelectorAll(".step").forEach((secao) => {
       secao.hidden = true;
+      secao.setAttribute("aria-hidden", "true");
     });
 
     etapa.hidden = false;
+    etapa.setAttribute("aria-hidden", "false");
 
     if (layout) {
       layout.classList.toggle("is-blocked-step", etapaAtualEhBloqueio);
@@ -1215,6 +1604,10 @@
 
     if (mainContent) {
       mainContent.hidden = etapaAtualEhBloqueio;
+      mainContent.setAttribute(
+        "aria-hidden",
+        etapaAtualEhBloqueio ? "true" : "false",
+      );
     }
 
     if (botaoVoltar) {
@@ -1225,6 +1618,8 @@
       top: 0,
       behavior: "smooth",
     });
+
+    window.vivaA11y?.ativarEtapa(etapa);
   }
 
   function voltarEtapa() {
@@ -1292,6 +1687,7 @@
   function esconderTodasEtapas() {
     document.querySelectorAll(".step").forEach((secao) => {
       secao.hidden = true;
+      secao.setAttribute("aria-hidden", "true");
     });
   }
 

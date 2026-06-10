@@ -141,6 +141,9 @@ function mostrarAvisoSomenteNumeros(inputElement) {
 
   const mensagemOriginal = spanErro.dataset.textoOriginal || spanErro.textContent;
   spanErro.dataset.textoOriginal = mensagemOriginal;
+  spanErro.setAttribute("role", "alert");
+  spanErro.setAttribute("aria-live", "assertive");
+  spanErro.setAttribute("aria-atomic", "true");
   spanErro.textContent = "Digite apenas números. A pontuação será aplicada automaticamente.";
   spanErro.hidden = false;
 

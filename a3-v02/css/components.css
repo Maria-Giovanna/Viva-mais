@@ -786,8 +786,10 @@
   .quick-a11y.quick-a11y--floating,
   #a11y-shortcut-slot .quick-a11y.quick-a11y--header {
     position: fixed !important;
-    top: 0.75rem !important;
-    right: 0.75rem !important;
+    top: auto !important;
+    right: max(0.875rem, env(safe-area-inset-right, 0px)) !important;
+    bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px)) !important;
+    left: auto !important;
     width: auto !important;
     margin: 0 !important;
     z-index: 3000 !important;
@@ -819,24 +821,46 @@
   .quick-a11y-panel,
   #a11y-shortcut-slot .quick-a11y--header .quick-a11y-panel {
     position: fixed !important;
-    top: 4.25rem !important;
+    top: auto !important;
     right: 0.5rem !important;
+    bottom: calc(9.5rem + env(safe-area-inset-bottom, 0px)) !important;
     left: 0.5rem !important;
     width: auto !important;
-    max-height: calc(100dvh - 5rem) !important;
+    max-height: min(70dvh, calc(100dvh - 11rem)) !important;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 620px) {
+  .quick-a11y-panel,
+  #a11y-shortcut-slot .quick-a11y--header .quick-a11y-panel {
+    top: 0.5rem !important;
+    bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px)) !important;
+    max-height: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-content,
+  .auth-content,
+  .welcome-content,
+  .profile-main,
+  .agenda-main,
+  .scheduling-main {
+    padding-bottom: calc(10rem + env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 
 /* Preferencia global: aumenta a area de contato dos controles sem mudar a funcao deles. */
 :root {
-  --viva-hit-target-min: 3rem;
-  --viva-hit-target-control-min: 3.5rem;
-  --viva-hit-target-card-min: 6rem;
-  --viva-hit-target-card-large-min: 9.5rem;
+  --viva-hit-target-min: 3.25rem;
+  --viva-hit-target-control-min: 4rem;
+  --viva-hit-target-card-min: 7rem;
+  --viva-hit-target-card-large-min: 11rem;
+  --viva-hit-target-service-card-min: 11rem;
   --viva-hit-target-switch-width: 4.75rem;
   --viva-hit-target-switch-height: 2.75rem;
-  --viva-hit-target-padding-block: clamp(0.875rem, 2.5vw, 1.25rem);
-  --viva-hit-target-padding-inline: clamp(1rem, 3vw, 1.5rem);
+  --viva-hit-target-padding-block: clamp(1.05rem, 3vw, 1.5rem);
+  --viva-hit-target-padding-inline: clamp(1.1rem, 3.5vw, 1.65rem);
 }
 
 html[data-large-buttons="true"] :where(
@@ -852,9 +876,9 @@ html[data-large-buttons="true"] :where(
   [role="switch"],
   [tabindex]:not([tabindex="-1"])
 )[data-viva-hit-target="large"] {
-  min-inline-size: var(--viva-hit-target-min);
-  min-block-size: var(--viva-hit-target-min);
-  box-sizing: border-box;
+  min-inline-size: var(--viva-hit-target-min) !important;
+  min-block-size: var(--viva-hit-target-min) !important;
+  box-sizing: border-box !important;
   touch-action: manipulation;
 }
 
@@ -877,19 +901,41 @@ html[data-large-buttons="true"] :where(
   .quick-a11y-support,
   .location-select-button,
   .location-maps-button
-)[data-viva-hit-target="large"] {
-  min-block-size: var(--viva-hit-target-control-min);
-  padding-block: var(--viva-hit-target-padding-block);
-  padding-inline: var(--viva-hit-target-padding-inline);
+)[data-viva-hit-target="large"],
+html[data-large-buttons="true"] :is(
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-secondary-outline,
+  .btn-secondary-small,
+  .btn-text,
+  .btn-back,
+  .btn-toggle-password,
+  .profile-back,
+  .agenda-back,
+  .scheduling-back,
+  .nav-link,
+  .agenda-tab,
+  .quick-a11y-option,
+  .quick-a11y-support,
+  .location-select-button,
+  .location-maps-button
+) {
+  min-block-size: var(--viva-hit-target-control-min) !important;
+  padding-block: var(--viva-hit-target-padding-block) !important;
+  padding-inline: var(--viva-hit-target-padding-inline) !important;
 }
 
 html[data-large-buttons="true"] :where(
   .profile-menu-card,
   .accessibility-card,
   .font-size-card,
+  .color-mode-card,
   .color-option-card,
   .access-card,
   .bubble-option,
+  .service-card,
+  .next-appointment-card,
   .agenda-card,
   .choice-card,
   .item-card,
@@ -897,23 +943,42 @@ html[data-large-buttons="true"] :where(
   .time-card,
   .location-card,
   .professional-card
-)[data-viva-hit-target="large"] {
-  min-block-size: var(--viva-hit-target-card-min);
-  padding-block: var(--viva-hit-target-padding-block);
-  padding-inline: var(--viva-hit-target-padding-inline);
-  gap: clamp(0.875rem, 3vw, 1.25rem);
+)[data-viva-hit-target="large"],
+html[data-large-buttons="true"] :is(
+  .profile-menu-card,
+  .accessibility-card,
+  .font-size-card,
+  .color-mode-card,
+  .color-option-card,
+  .access-card,
+  .bubble-option,
+  .service-card,
+  .next-appointment-card,
+  .agenda-card,
+  .choice-card,
+  .item-card,
+  .date-card,
+  .time-card,
+  .location-card,
+  .professional-card
+) {
+  min-block-size: var(--viva-hit-target-card-min) !important;
+  padding-block: var(--viva-hit-target-padding-block) !important;
+  padding-inline: var(--viva-hit-target-padding-inline) !important;
+  gap: clamp(1rem, 3.2vw, 1.4rem) !important;
 }
 
-html[data-large-buttons="true"] :where(.choice-card)[data-viva-hit-target="large"] {
-  min-block-size: var(--viva-hit-target-card-large-min);
+html[data-large-buttons="true"] :where(.choice-card, .service-card)[data-viva-hit-target="large"],
+html[data-large-buttons="true"] :is(.choice-card, .service-card) {
+  min-block-size: var(--viva-hit-target-service-card-min) !important;
 }
 
 html[data-large-buttons="true"] :where(.switch)[data-viva-hit-target="large"] {
-  min-inline-size: var(--viva-hit-target-switch-width);
-  min-block-size: var(--viva-hit-target-switch-height);
+  min-inline-size: var(--viva-hit-target-switch-width) !important;
+  min-block-size: var(--viva-hit-target-switch-height) !important;
 }
 
 html[data-large-buttons="true"] :where(input, textarea, select)[data-viva-hit-target="large"] {
-  min-block-size: var(--viva-hit-target-control-min);
+  min-block-size: var(--viva-hit-target-control-min) !important;
 }
 

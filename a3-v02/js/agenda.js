@@ -42,7 +42,7 @@
       mostrarEtapa("step-agenda-lista");
     } catch (erro) {
       console.error("Erro ao carregar agenda:", erro);
-      mostrarErroNaTela("Não foi possível carregar sua agenda.");
+      mostrarErroNaTela("Não conseguimos carregar sua agenda agora. Volte para o início e tente novamente em alguns instantes.");
     }
   }
 
@@ -57,6 +57,8 @@
         atualizarTabs();
         renderizarAgenda();
       });
+
+      botao.addEventListener("keydown", moverFocoEntreAbas);
     });
 
     escutarClique("btn-voltar", voltar);
@@ -93,36 +95,75 @@
   }
 
   function atualizarTabs() {
+    const lista = document.getElementById("lista-agendamentos");
+    const tablist = document.querySelector(".agenda-tabs");
+
+    tablist?.setAttribute("role", "tablist");
+
     document.querySelectorAll("[data-tab]").forEach((botao) => {
       const ativa = botao.dataset.tab === estadoAgenda.abaAtual;
       botao.classList.toggle("active", ativa);
       botao.setAttribute("role", "tab");
       botao.setAttribute("aria-selected", ativa ? "true" : "false");
       botao.setAttribute("tabindex", ativa ? "0" : "-1");
+      botao.setAttribute("aria-controls", "lista-agendamentos");
+
+      if (ativa && lista) {
+        lista.setAttribute("aria-labelledby", botao.id);
+      }
     });
+  }
+
+  function moverFocoEntreAbas(evento) {
+    const teclas = ["ArrowLeft", "ArrowRight", "Home", "End"];
+
+    if (!teclas.includes(evento.key)) return;
+
+    const abas = Array.from(document.querySelectorAll("[data-tab]"));
+    const indiceAtual = abas.indexOf(evento.currentTarget);
+    let proximoIndice = indiceAtual;
+
+    if (evento.key === "ArrowRight") proximoIndice = (indiceAtual + 1) % abas.length;
+    if (evento.key === "ArrowLeft") proximoIndice = (indiceAtual - 1 + abas.length) % abas.length;
+    if (evento.key === "Home") proximoIndice = 0;
+    if (evento.key === "End") proximoIndice = abas.length - 1;
+
+    evento.preventDefault();
+    abas[proximoIndice]?.focus();
   }
 
   function renderizarAgenda() {
     const lista = document.getElementById("lista-agendamentos");
 
     if (!lista) {
-      mostrarErroNaTela("Lista de agendamentos não encontrada.");
+      mostrarErroNaTela("Não conseguimos mostrar sua lista de agendamentos. Volte para o início e tente novamente.");
       return;
     }
 
     const agendamentos = filtrarAgendamentosPorAba();
 
     lista.innerHTML = "";
+    lista.setAttribute("role", "tabpanel");
+    lista.setAttribute("aria-live", "polite");
+    lista.setAttribute("aria-busy", "true");
+    lista.setAttribute(
+      "aria-label",
+      `${estadoAgenda.abaAtual === "proximos" ? "Próximos agendamentos" : "Histórico de agendamentos"}. ${agendamentos.length} item${agendamentos.length === 1 ? "" : "s"}.`,
+    );
 
     if (agendamentos.length === 0) {
       lista.innerHTML = montarEstadoVazio();
+      lista.setAttribute("aria-busy", "false");
+      window.vivaA11y?.atualizar(lista);
       return;
     }
 
-    agendamentos.forEach((agendamento) => {
+    agendamentos.forEach((agendamento, indice) => {
       const card = document.createElement("button");
       card.type = "button";
       card.className = "agenda-card";
+      card.setAttribute("aria-posinset", String(indice + 1));
+      card.setAttribute("aria-setsize", String(agendamentos.length));
       card.setAttribute(
         "aria-label",
         `Abrir detalhes de ${obterTituloAgendamento(agendamento)} em ${formatarDataCompleta(agendamento.data)} às ${agendamento.hora}. ${agendamento.unidadeNome || "Unidade não informada"}.`,
@@ -138,6 +179,9 @@
 
       lista.appendChild(card);
     });
+
+    lista.setAttribute("aria-busy", "false");
+    window.vivaA11y?.atualizar(lista);
   }
 
   function filtrarAgendamentosPorAba() {
@@ -196,7 +240,7 @@
     const btnCancelar = document.getElementById("btn-cancelar-agendamento");
 
     if (!container) {
-      mostrarErroNaTela("Área de detalhes não encontrada.");
+      mostrarErroNaTela("Não conseguimos abrir os detalhes deste agendamento. Volte para a Agenda e tente novamente.");
       return;
     }
 
@@ -213,6 +257,7 @@
 
     if (btnCancelar) {
       btnCancelar.hidden = !podeCancelar;
+      btnCancelar.setAttribute("aria-hidden", podeCancelar ? "false" : "true");
     }
 
     container.innerHTML = `
@@ -271,6 +316,10 @@
         </div>
       </article>
     `;
+
+    container.setAttribute("aria-live", "polite");
+    container.querySelector(".appointment-receipt-card")?.setAttribute("role", "group");
+    window.vivaA11y?.atualizar(container);
   }
 
   function abrirConfirmacaoCancelamento() {
@@ -329,14 +378,22 @@
 
     if (encaminhamentoItem) {
       encaminhamentoItem.hidden = !ehConsultaComEspecialista(agendamento);
+      encaminhamentoItem.setAttribute(
+        "aria-hidden",
+        encaminhamentoItem.hidden ? "true" : "false",
+      );
     }
 
     overlay.hidden = false;
+    overlay.setAttribute("aria-hidden", "false");
     document.body.classList.add("has-appointment-reminder-overlay");
 
-    if (botaoContinuar) {
-      botaoContinuar.focus();
-    }
+    window.vivaA11y?.ativarEtapa(
+      overlay,
+      "Antes do atendimento. Confira as orientações e avance para o comprovante.",
+    );
+
+    if (!window.vivaA11y && botaoContinuar) botaoContinuar.focus();
   }
 
   function continuarParaDetalhesAposAviso() {
@@ -349,6 +406,7 @@
 
     if (overlay) {
       overlay.hidden = true;
+      overlay.setAttribute("aria-hidden", "true");
     }
 
     document.body.classList.remove("has-appointment-reminder-overlay");
@@ -390,7 +448,7 @@
     if (!agendamento) return;
 
     if (!window.VivaPDF) {
-      mostrarErroNaTela("Nao foi possivel gerar o PDF do comprovante.");
+      mostrarErroNaTela("Não conseguimos gerar o PDF agora. Seu agendamento continua salvo e pode ser consultado nesta Agenda.");
       return;
     }
 
@@ -424,20 +482,24 @@
     const etapa = document.getElementById(idEtapa);
 
     if (!etapa) {
-      mostrarErroNaTela(`Etapa não encontrada: ${idEtapa}`);
+      mostrarErroNaTela("Não conseguimos abrir a próxima tela. Volte para o início e tente novamente.");
       return;
     }
 
     document.querySelectorAll(".agenda-step").forEach((secao) => {
       secao.hidden = true;
+      secao.setAttribute("aria-hidden", "true");
     });
 
     etapa.hidden = false;
+    etapa.setAttribute("aria-hidden", "false");
 
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
+
+    window.vivaA11y?.ativarEtapa(etapa);
   }
 
   function mostrarErroNaTela(mensagem) {
@@ -453,8 +515,8 @@
   function montarEstadoVazio() {
     const texto =
       estadoAgenda.abaAtual === "proximos"
-        ? "Você não possui agendamentos futuros confirmados."
-        : "Você ainda não possui agendamentos no histórico.";
+        ? "Você ainda não possui agendamentos futuros confirmados. Quando marcar uma consulta, exame ou vacina, ela aparecerá aqui."
+        : "Você ainda não possui agendamentos finalizados ou cancelados. Depois que um atendimento acontecer ou for cancelado, ele aparecerá aqui.";
 
     return `
       <div class="empty-state">

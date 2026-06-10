@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamento - Viva+</title>
 
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/favicon_io/site.webmanifest">
+
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/global.css">
@@ -154,28 +159,38 @@
             </div>
         </section>
 
-        <section class="step mascot-message mascot-message--warning" id="step-bloqueio-clinico-aberto" hidden>
+        <section class="step mascot-message mascot-message--warning" id="step-bloqueio-agendamento-duplicado" hidden>
             <div class="mascot-message-hero">
                 <img src="assets/img/Mascote-Erro.svg" alt="" class="mascot-message-image" aria-hidden="true">
 
                 <div class="mascot-speech" role="alert" aria-live="assertive">
-                    <h1>Você já possui um clínico geral agendado</h1>
-                    <p>Para evitar duplicidade, primeiro acompanhe ou cancele o agendamento atual na sua agenda.</p>
+                    <h1 id="titulo-bloqueio-duplicidade">Você já tem um agendamento ativo</h1>
+                    <p id="texto-bloqueio-duplicidade">
+                        Para cuidar da sua vaga e da vaga de outras pessoas, não é possível manter dois agendamentos
+                        iguais ou dois atendimentos no mesmo horário.
+                    </p>
                 </div>
             </div>
 
             <div class="mascot-message-content">
                 <p class="helper-text">
-                    Após realizar ou cancelar a consulta aberta, você poderá agendar outro clínico geral.
+                    Seu agendamento atual é <strong id="duplicidade-servico">atendimento não informado</strong>,
+                    marcado para <strong id="duplicidade-data">data não informada</strong>,
+                    às <strong id="duplicidade-hora">horário não informado</strong>, com
+                    <strong id="duplicidade-profissional">profissional não informado</strong>.
+                </p>
+
+                <p class="helper-text" id="orientacao-bloqueio-duplicidade">
+                    Escolha outro horário ou libere a vaga atual na sua Agenda antes de tentar novamente.
                 </p>
 
                 <div class="step-actions">
-                    <button type="button" class="btn btn-primary" onclick="window.location.href='agenda.html'">
+                    <button type="button" class="btn btn-primary" id="btn-ver-agenda-duplicidade">
                         Ver minha agenda
                     </button>
 
-                    <button type="button" class="btn-secondary-outline" data-voltar-home>
-                        Voltar para o início
+                    <button type="button" class="btn-secondary-outline" id="btn-voltar-bloqueio-duplicidade">
+                        Voltar e ajustar escolha
                     </button>
                 </div>
             </div>
@@ -306,8 +321,8 @@
                 </div>
                 <div class="success-content">
                     <h1 class="success-title">Agendamento realizado<br>com sucesso!</h1>
-                    <p class="success-text">Você pode baixar o comprovante de agendamento abaixo ou verificar seus
-                        agendamentos na aba “Agenda”.</p>
+                    <p class="success-text">Sua vaga foi reservada. Baixe o comprovante em PDF ou acompanhe os detalhes
+                        pela Agenda. Se não puder comparecer, cancele com antecedência para liberar a vaga.</p>
                     <div class="step-actions">
                         <button type="button" class="btn btn-primary" id="btn-baixar-comprovante">Baixar
                             comprovante em PDF</button>
@@ -327,7 +342,7 @@
                     <div class="confirm-cancel-content">
                         <h1 class="scheduling-title" id="titulo-confirmar-cancelamento">Cancelar este agendamento?</h1>
                         <p class="scheduling-subtitle" id="texto-confirmar-cancelamento">
-                            Se sair agora, as escolhas feitas nesta tela serão perdidas.
+                            Se sair agora, este agendamento não será confirmado e suas escolhas serão apagadas.
                         </p>
                         <div class="step-actions">
                             <button type="button" class="btn btn-primary" id="btn-continuar-agendamento">
@@ -354,7 +369,7 @@
                         </p>
                         <div class="step-actions">
                             <button type="button" class="btn btn-primary" data-voltar-home>
-                                Voltar para o inicio
+                                Voltar para o início
                             </button>
                         </div>
                     </div>

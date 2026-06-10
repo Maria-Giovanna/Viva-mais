@@ -48,7 +48,7 @@ function renderizarProximoAgendamento(usuarioLogado) {
           <span class="badge-status">Agenda</span>
         </div>
         <h3 class="appointment-title">Nenhum agendamento próximo</h3>
-        <p class="appointment-date">Você ainda não possui atendimentos futuros confirmados.</p>
+        <p class="appointment-date">Quando você marcar uma consulta, exame ou vacina, o próximo atendimento aparecerá aqui.</p>
       </div>
       <button class="btn-secondary-small" type="button" onclick="window.location.href='agenda.html'">
         Ver agenda

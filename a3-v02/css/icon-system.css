@@ -499,7 +499,7 @@ html[data-fontsize="small"] .item-card {
     #a11y-shortcut-slot .quick-a11y,
     .quick-a11y.quick-a11y--header,
     .quick-a11y.quick-a11y--floating {
-        display: none !important;
+        display: block !important;
     }
 
     .app-layout,
@@ -582,4 +582,64 @@ html[data-fontsize="small"] .item-card {
     max-width: 760px !important;
     margin-left: auto !important;
     margin-right: auto !important;
+}
+
+@media (max-width: 767px) {
+    .app-content,
+    .profile-main,
+    .agenda-main,
+    .scheduling-main {
+        padding-bottom: calc(10rem + env(safe-area-inset-bottom, 0px)) !important;
+    }
+}
+
+/* Preferência global: quando ativa, aumenta a área real de toque dos cards e botões. */
+html[data-large-buttons="true"] :is(
+    .profile-menu-card,
+    .accessibility-card,
+    .font-size-card,
+    .color-mode-card,
+    .access-card,
+    .bubble-option,
+    .service-card,
+    .agenda-card,
+    .choice-card,
+    .item-card,
+    .date-card,
+    .time-card,
+    .location-card,
+    .professional-card
+) {
+    min-height: var(--viva-hit-target-card-min) !important;
+    padding-block: var(--viva-hit-target-padding-block) !important;
+    padding-inline: var(--viva-hit-target-padding-inline) !important;
+    gap: clamp(1rem, 3.2vw, 1.4rem) !important;
+}
+
+html[data-large-buttons="true"] :is(.service-card, .choice-card) {
+    min-height: var(--viva-hit-target-service-card-min) !important;
+}
+
+html[data-large-buttons="true"] :is(
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-secondary-outline,
+    .btn-secondary-small,
+    .btn-text,
+    .btn-back,
+    .btn-toggle-password,
+    .profile-back,
+    .agenda-back,
+    .scheduling-back,
+    .nav-link,
+    .agenda-tab,
+    .quick-a11y-option,
+    .quick-a11y-support,
+    .location-select-button,
+    .location-maps-button
+) {
+    min-height: var(--viva-hit-target-control-min) !important;
+    padding-block: var(--viva-hit-target-padding-block) !important;
+    padding-inline: var(--viva-hit-target-padding-inline) !important;
 }

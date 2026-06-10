@@ -27,11 +27,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   senhaInput.disabled = true;
   btnSubmit.disabled = true;
+  senhaInput.setAttribute("aria-disabled", "true");
+  btnSubmit.setAttribute("aria-disabled", "true");
+
+  [cpfError, senhaError].forEach((erro) => {
+    erro.setAttribute("role", "alert");
+    erro.setAttribute("aria-live", "assertive");
+    erro.setAttribute("aria-atomic", "true");
+  });
 
   function bloquearSenha() {
     senhaInput.value = "";
     senhaInput.disabled = true;
     btnSubmit.disabled = true;
+    senhaInput.setAttribute("aria-disabled", "true");
+    btnSubmit.setAttribute("aria-disabled", "true");
   }
 
   cpfInput.addEventListener("input", async () => {
@@ -50,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!validarCPF(cpfLimpo)) {
       cpfError.textContent =
-        "Nao conseguimos validar este CPF. Confira se digitou os 11 numeros corretamente, sem pontos ou tracos.";
+        "Não conseguimos validar este CPF. Digite os 11 números e confira se não faltou nenhum dígito.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       bloquearSenha();
@@ -64,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!usuarioEncontrado) {
       cpfError.textContent =
-        "Nao encontramos uma conta ativa com este CPF. Confira os numeros digitados ou crie sua conta se ainda nao tiver cadastro.";
+        "Não encontramos uma conta ativa com este CPF. Confira os números digitados ou escolha “Ativar meu acesso” se ainda não tiver cadastro.";
       cpfError.hidden = false;
       cpfInput.setAttribute("aria-invalid", "true");
       bloquearSenha();
@@ -74,6 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
     cpfError.hidden = true;
     senhaInput.disabled = false;
     btnSubmit.disabled = false;
+    senhaInput.setAttribute("aria-disabled", "false");
+    btnSubmit.setAttribute("aria-disabled", "false");
+    window.vivaA11y?.anunciar("CPF encontrado. Digite sua senha para entrar.");
     senhaInput.focus();
   });
 
@@ -93,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!usuarioEncontrado) {
       cpfError.textContent =
-        "Nao encontramos uma conta ativa com este CPF. Confira os numeros digitados ou crie sua conta se ainda nao tiver cadastro.";
+        "Não encontramos uma conta ativa com este CPF. Confira os números digitados ou escolha “Ativar meu acesso” se ainda não tiver cadastro.";
       cpfError.hidden = false;
       cpfInput.focus();
       return;
@@ -101,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (usuarioEncontrado.senha !== senhaDigitada) {
       senhaError.textContent =
-        "A senha digitada nao confere. Digite novamente sua senha de 8 numeros ou use a opcao de recuperar acesso.";
+        "A senha digitada não confere. Digite novamente sua senha de 8 números ou use “Esqueci minha senha” para criar uma nova.";
       senhaError.hidden = false;
       senhaInput.setAttribute("aria-invalid", "true");
       senhaInput.focus();
