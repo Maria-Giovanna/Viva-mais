@@ -24,7 +24,12 @@ function ordenarUnidadesPorDistancia(unidades, latUsuario, lonUsuario) {
   return unidades
     .map((unidade) => ({
       ...unidade,
-      distanciaKm: calcularDistancia(latUsuario, lonUsuario, unidade.lat, unidade.lon),
+      distanciaKm: calcularDistancia(
+        latUsuario,
+        lonUsuario,
+        unidade.lat,
+        unidade.lon,
+      ),
     }))
     .sort((a, b) => a.distanciaKm - b.distanciaKm);
 }
@@ -63,7 +68,10 @@ function formatarCPF(valor) {
   const apenasNumeros = String(valor).replace(/\D/g, "").slice(0, 11);
 
   if (apenasNumeros.length > 9) {
-    return apenasNumeros.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
+    return apenasNumeros.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{1,2})/,
+      "$1.$2.$3-$4",
+    );
   }
 
   if (apenasNumeros.length > 6) {
@@ -119,14 +127,16 @@ function validarSenhaNumerica(senha) {
   if (!/^\d{8}$/.test(senhaLimpa)) {
     return {
       valida: false,
-      mensagem: "A senha deve ter exatamente 8 números.",
+      mensagem:
+        "A senha deve ter exatamente 8 números, sem letras ou simbolos.",
     };
   }
 
   if (/^(\d)\1{7}$/.test(senhaLimpa) || ehSequenciaNumerica(senhaLimpa)) {
     return {
       valida: false,
-      mensagem: "Por segurança, evite números repetidos ou em sequência.",
+      mensagem:
+        "Por segurança, não use números repetidos ou em sequência como 12345678 e 11111111.",
     };
   }
 
@@ -139,12 +149,14 @@ function mostrarAvisoSomenteNumeros(inputElement) {
 
   if (!spanErro) return;
 
-  const mensagemOriginal = spanErro.dataset.textoOriginal || spanErro.textContent;
+  const mensagemOriginal =
+    spanErro.dataset.textoOriginal || spanErro.textContent;
   spanErro.dataset.textoOriginal = mensagemOriginal;
   spanErro.setAttribute("role", "alert");
   spanErro.setAttribute("aria-live", "assertive");
   spanErro.setAttribute("aria-atomic", "true");
-  spanErro.textContent = "Digite apenas números. A pontuação será aplicada automaticamente.";
+  spanErro.textContent =
+    "Digite apenas números. A pontuação será aplicada automaticamente.";
   spanErro.hidden = false;
 
   window.clearTimeout(spanErro._timerAvisoNumeros);
@@ -171,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleBtn.setAttribute("aria-pressed", senhaEstaOculta ? "true" : "false");
     toggleBtn.setAttribute(
       "aria-label",
-      senhaEstaOculta ? "Ocultar senha" : "Mostrar senha escrita como texto"
+      senhaEstaOculta ? "Ocultar senha" : "Mostrar senha escrita como texto",
     );
     input.focus();
   });
