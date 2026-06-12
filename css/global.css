@@ -48,6 +48,96 @@ body {
 }
 
 /* =========================================
+   ASSINATURA DA DESENVOLVEDORA
+   ========================================= */
+.developer-signature {
+  position: fixed;
+  right: clamp(0.75rem, 2vw, 1.25rem);
+  bottom: clamp(0.75rem, 2vw, 1.25rem);
+  z-index: 90;
+  display: inline-grid;
+  grid-template-columns: 2.35rem auto;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: min(16rem, calc(100vw - 2rem));
+  min-height: 2.5rem;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.16);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.38)),
+    rgba(var(--primary-color-rgb), 0.05);
+  box-shadow: 0 0.45rem 1.4rem rgba(0, 0, 0, 0.08);
+  opacity: 0.48;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.developer-signature::before {
+  content: "";
+  width: 2.35rem;
+  height: 1.35rem;
+  display: block;
+  background: url("../assets/img/logo-minha.svg") center / contain no-repeat;
+  -webkit-user-drag: none;
+}
+
+.developer-signature::after {
+  content: "Maria Giovanna\A Front-end Developer";
+  display: block;
+  white-space: pre;
+  color: var(--text-main);
+  font-size: 0.67rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+
+.developer-signature:hover {
+  opacity: 0.68;
+  transform: translateY(-1px);
+}
+
+html[data-theme="dark"] .developer-signature,
+html[data-theme="high-contrast"] .developer-signature {
+  background:
+    linear-gradient(135deg, rgba(10, 12, 16, 0.78), rgba(10, 12, 16, 0.46)),
+    rgba(var(--primary-color-rgb), 0.12);
+  box-shadow: 0 0.45rem 1.4rem rgba(0, 0, 0, 0.22);
+}
+
+@media (max-width: 767px) {
+  .developer-signature {
+    right: auto;
+    left: 0.75rem;
+    bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    grid-template-columns: 2rem auto;
+    max-width: min(14rem, calc(100vw - 5.25rem));
+    min-height: 2.25rem;
+    padding: 0.32rem 0.5rem;
+    opacity: 0.42;
+  }
+
+  .developer-signature::before {
+    width: 2rem;
+    height: 1.15rem;
+  }
+
+  .developer-signature::after {
+    font-size: 0.6rem;
+  }
+}
+
+@media print {
+  .developer-signature {
+    display: none !important;
+  }
+}
+
+/* =========================================
    CARTÕES DE ACESSIBILIDADE DO CADASTRO
    ========================================= */
 .accessibility-options {
